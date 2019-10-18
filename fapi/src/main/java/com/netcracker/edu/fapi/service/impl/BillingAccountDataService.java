@@ -1,5 +1,5 @@
-package com.netcracker.edu.fapi.service;
-
+package com.netcracker.edu.fapi.service.impl;
+/*
 import com.netcracker.edu.fapi.models.BillingAccountViewModel;
 import org.springframework.http.ResponseEntity;
 
@@ -11,3 +11,4 @@ public interface BillingAccountDataService {
     BillingAccountViewModel saveBillingAccount(BillingAccountViewModel account);
     void deleteBillingAccount(Long id);
 }
+*/
