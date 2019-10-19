@@ -9,15 +9,22 @@ import { AppComponent } from "./app.component";
 import {HttpClientModule} from "@angular/common/http";
 import {Ng4LoadingSpinnerModule} from "ng4-loading-spinner";
 import {RouterModule, Routes} from "@angular/router";
-
+import { SignInComponent } from './modules/components/sign-in/sign-in.component';
+import { RegistrationComponent } from './modules/components/registration/registration.component';
 
 const appRoutes: Routes = [
+  {path: "",component:SignInComponent},
+  {path:"registration",component:RegistrationComponent}
+
+
 
 ];
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    SignInComponent,
+    RegistrationComponent
   ],
   imports: [
     BrowserModule,
