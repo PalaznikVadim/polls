@@ -1,0 +1,59 @@
+<div class="container">
+  <div class="row justify-content-end bg-dark p-2 rounded-bottom ">
+    <div class="col-md-2">
+      <button type="submit" routerLink="/" class="btn_entry btn btn-primary">Sign in</button>
+    </div>
+  </div>
+  <div class="row justify-content-center ">
+    <div class="col-md-5 p-5 bg-light rounded my-5">
+      <form (ngSubmit)="createUser()" #registrForm="ngForm">
+        <h3 class="text-center py-2">Registration</h3>
+        <div class="form-group">
+          <label for="inputName">Name</label>
+          <input id="inputName" [(ngModel)]=user.name type="text" class="form-control" name="name" placeholder="Name" maxlength="20" #name="ngModel"
+                 minlength="2" required>
+          <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
+            Uncorrect lenght field
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputSurname">Surname</label>
+          <input id="inputSurname" [(ngModel)]=user.surname #surname="ngModel" type="text" class="form-control" name="surname" placeholder="Surname"
+                 minlength="2" maxlength="20" required>
+          <div [hidden]="surname.valid || surname.untouched" class="alert alert-danger">
+            Uncorrect lenght field
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputDOB">Date of Birth</label>
+          <input id="inputDOB" [(ngModel)]="user.DOB" name="DOB" type="date" class="form-control">
+        </div>
+        <div class="form-group">
+          <label for="inputEmail">Email</label>
+          <input type="email" id="inputEmail" [(ngModel)]="user.email" class="form-control" #email="ngModel"
+                 name="email" placeholder="Email" required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"/>
+          <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
+            Uncorrect format email
+          </div>
+          <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        </div>
+        <div class="form-group">
+          <label for="inputPassword">Enter password</label>
+          <input id="inputPassword" [(ngModel)]="user.password" #psw="ngModel" type="password" name="password" class="form-control" placeholder="Password"
+                 maxlength="25" minlength="5">
+          <div [hidden]="psw.valid || psw.untouched" class="alert alert-danger">
+            Uncorect lenght field
+          </div>
+          <label for="inputPassword">Repeat password</label>
+          <input type="password" [(ngModel)]="password" #repeatPsw="ngModel" name="repeat_password" class="form-control" placeholder="Repeat password" >
+          <div [hidden]="(psw==repeatPsw)" class="alert alert-danger">
+          Passwords do not match
+          </div>
+        </div>
+
+
+        <button type="submit" class="btn btn-primary mt-5 btn-block" [disabled]="!registrForm.form.valid">Register</button>
+      </form>
+    </div>
+  </div>
+</div>
