@@ -1,0 +1,69 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" (click)="openModal(template)">New poll</button>
+        <!--a class="nav-link"  data-toggle="modal" data-target="#myModal">New poll<span
+          class="sr-only">(current)</span></a-->
+      </li>
+    </ul>
+    <form class="form-inline mt-2 mt-md-0">
+      <select class="browser-default custom-select">
+        <option selected>sort</option>
+        <option value="1">Date of addition</option>
+      </select>
+      <button class="btn btn-success ml-1">Sort</button>
+    </form>
+    <ul class="navbar-nav mr-0 ml-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" routerLink="/">Exit</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="album py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div *ngFor="let item of polls" class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+          <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
+               xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
+               role="img" aria-label="Placeholder: Thumbnail">
+            <title>Placeholder</title>
+            <rect fill="#55595c" width="100%" height="100%" /><text fill="#eceeef" dy=".3em" x="50%"
+                                                                    y="50%">{{item.name}}</text>
+          </svg>
+          <div class="card-body">
+            <p class="card-text">Description: {{item.description}}</p>
+            <p class="card-text">Data:{{item.date.toDateString()}}</p>
+            <small class="text-muted">Ответы: 0</small>
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="btn-group ">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Изменить</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Статистика</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Удалить</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Каким способом Вы хотите создать опрос?</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <button class="btn btn-outline-success my-2 mr-2 my-sm-0">Шаблон опроса</button>
+    <button class="btn btn-outline-success my-2 my-sm-0">Новый опрос</button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Отмена</button>
+  </div>
+</ng-template>

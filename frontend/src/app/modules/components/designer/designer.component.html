@@ -1,0 +1,79 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" routerLink="homePage">Home</button>
+      </li>
+    </ul>
+    <form class="form-inline mt-2 mt-md-0">
+      <button class="btn btn-outline-light ml-1 active">Poll</button>
+      <button class="btn btn-outline-light ml-1">Сollecting answers</button>
+      <button class="btn btn-outline-light ml-1">Results</button>
+    </form>
+    <ul class="navbar-nav mr-0 ml-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" routerLink="/">Exit</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container">
+
+    <div class="row justify-content-center">
+        <div *ngIf="poll.quests.length==0;else unset">
+            <h3 class="mt-5">This page is empty. Create a question!</h3>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-5">
+      <button class="btn btn-outline-info mt-5" (click)="addQuest(modalAddQuest)">Add</button>
+    </div>
+</div>
+
+<ng-template #unset>
+  <div *ngFor="let quest of poll.quests;let i=index;" class="col-10">
+    <div class="block p-3 bg-light mb-2 rounded">
+      <div class="title">
+        <h3>{{i+1}}. {{quest.title}}</h3>
+      </div>
+      <div class="notation">
+        <h6>{{quest.type}}</h6>
+      </div>
+      <div  class="answers">
+        <ul>
+          <li *ngFor="let answer of quest.answers" class="alert alert-info mb-1"><span>{{answer}}</span></li>
+        </ul>
+      </div>
+      <div class="ml-auto col-3">
+        <button class="btn btn-outline-info" (click)="editQuest(i,modalAddQuest)">Edit</button>
+        <button class='btn btn-outline-danger ml-2' (click)="deleteQuest(i)">-</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+
+<ng-template #modalAddQuest>
+  <div class="modal-header">
+    <input [(ngModel)]="quest.title" type="text" class="form-control mr-sm-2" value="Напишите свой вопрос здесь...">
+    <button type="button" class="close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body justify-content-center">
+    <select [(ngModel)]="quest.type" class="custom-select" size="1">
+      <option selected>Select one answer</option>
+      <option>Select some answers</option>
+    </select>
+    <ul >
+      <li *ngFor="let answer of quest.answers;let i = index" class="form-inline">
+        <input type="text" class="form-control mr-sm-2 col-10 " [(ngModel)]="quest.answers[i]">
+        <button class="btn btn-outline-danger my-2 my-sm-0 mr-sm-0 " (click)="deleteAnswer(i)">-</button>
+      </li>
+    </ul>
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="addNewAnswer()">Add answer</button>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="createQuestion()">Create</button>
+  </div>
+</ng-template>
+

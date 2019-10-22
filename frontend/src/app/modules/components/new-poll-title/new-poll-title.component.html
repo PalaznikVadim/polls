@@ -1,0 +1,25 @@
+<div class="container py-5">
+  <div class="row justify-content-center vertical-align-center">
+    <div class="col-md-5 bg-light p-4">
+      <h3>Дайте своему опросу название</h3>
+      <form #form="ngForm">
+        <div class="form-group">
+          <label>Название</label>
+          <input type="text" name="title" id="inputTitle" [(ngModel)]="poll.name" class="form-control" aria-describedby="form-text" placeholder="Название" required #title="ngModel">
+        </div>
+        <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
+          Enter poll title
+        </div>
+        <div class="form-group">
+          <label>Theme</label>
+          <input type="text" [(ngModel)]="poll.theme" name="theme" class="form-control"  placeholder="Theme">
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <textarea class="form-control" [(ngModel)]="poll.description" name="description"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid" (click)="addPoll()">Create</button>
+      </form>
+    </div>
+  </div>
+</div>
