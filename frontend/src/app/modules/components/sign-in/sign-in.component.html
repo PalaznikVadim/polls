@@ -25,7 +25,7 @@
         </div>
         <div class="checkbox mb-3 text-center">
           <label>
-            <input type="checkbox" [(ngModel)]="user.isRemember" value="remember-me"> Remember me
+            <input type="checkbox" [checked]="user.isRemember" > Remember me
           </label>
         </div>
         <button type="submit" (click)="signIn_Click()" [disabled]="!signupForm.form.valid"  class="btn btn-primary btn-block">Sign in</button>

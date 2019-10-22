@@ -15,6 +15,10 @@ import { RegistrationComponent } from './modules/components/registration/registr
 import { HomePageComponent } from './modules/components/home-page/home-page.component';
 import { NewPollTitleComponent } from './modules/components/new-poll-title/new-poll-title.component';
 import { DesignerComponent } from './modules/components/designer/designer.component';
+import { NavComponent } from './modules/components/nav.component/nav.component';
+import { GenerateLinkComponent } from './modules/components/generate-link/generate-link.component';
+import {BillingAccountService} from "./services/billing-account.service";
+
 
 
 
@@ -23,7 +27,8 @@ const appRoutes: Routes = [
   {path:"registration",component:RegistrationComponent},
   {path:"homePage",component:HomePageComponent},
   {path:"titleNewPoll",component:NewPollTitleComponent},
-  {path:"designer",component:DesignerComponent}
+  {path:"designer",component:DesignerComponent},
+  {path:"link",component:GenerateLinkComponent}
 
 
 
@@ -39,6 +44,9 @@ const appRoutes: Routes = [
     HomePageComponent,
     NewPollTitleComponent,
     DesignerComponent,
+    NavComponent,
+    GenerateLinkComponent,
+
 
   ],
   imports: [
@@ -51,7 +59,9 @@ const appRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [],
+  providers: [
+    BillingAccountService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
