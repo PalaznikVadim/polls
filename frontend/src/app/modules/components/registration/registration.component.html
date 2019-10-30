@@ -6,61 +6,55 @@
   </div>
   <div class="row justify-content-center ">
     <div class="col-md-6 p-5 bg-light rounded my-5">
-      <form (ngSubmit)="createUser()" #registrForm="ngForm">
+      <form (ngSubmit)="createUser()" [formGroup]="registrationForm">
         <h3 class="text-center py-2">Registration</h3>
         <div class="form-group">
           <label for="inputName">Name</label>
-          <input id="inputName" [(ngModel)]=user.name type="text" class="form-control" name="name" placeholder="Name" maxlength="20" #name="ngModel"
-                 minlength="2" required>
-          <div [hidden]="name.valid || name.untouched" class="alert alert-danger">
-            Uncorrect lenght field
+          <input id="inputName" type="text" class="form-control" name="name" placeholder="Name" formControlName="name">
+          <div *ngIf="isControlInvalid('name')" class="alert alert-danger">
+            Uncorrect lenght field (2-20 charachter)
           </div>
         </div>
         <div class="form-group">
           <label for="inputSurname">Surname</label>
-          <input id="inputSurname" [(ngModel)]=user.surname #surname="ngModel" type="text" class="form-control" name="surname" placeholder="Surname"
-                 minlength="2" maxlength="20" required>
-          <div [hidden]="surname.valid || surname.untouched" class="alert alert-danger">
-            Uncorrect lenght field
+          <input id="inputSurname" type="text" class="form-control" name="surname" placeholder="Surname" formControlName="surname">
+          <div *ngIf="isControlInvalid('surname')" class="alert alert-danger">
+            Uncorrect lenght field (2-20 charachter)
           </div>
         </div>
         <div class="form-group">
           <label for="inputDOB">Date of Birth</label>
-          <input id="inputDOB" [(ngModel)]="user.DOB" name="DOB" type="date" class="form-control">
+          <input id="inputDOB" formControlName="DOB" name="DOB" type="date" class="form-control " >
         </div>
         <div class="form-group">
           <label for="inputEmail">Email</label>
-          <input type="email" id="inputEmail" [(ngModel)]="user.email" class="form-control" #email="ngModel"
-                 name="email" placeholder="Email" required pattern="[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"/>
-          <div [hidden]="email.valid || email.untouched" class="alert alert-danger">
-            Uncorrect format email
+          <input type="email" id="inputEmail" formControlName="email" class="form-control"
+                 name="email" placeholder="Email"/>
+          <div *ngIf="isControlInvalid('email')" class="alert alert-danger">
+            Uncorrect format email (Example: cat1@gmail.com)
           </div>
           <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
-        <div ngModelGroup="password" #userPassword="ngModelGroup" required >
+        <div formGroupName="passwords">
           <div class="form-group">
             <label for="inputPassword">Enter password</label>
-            <input id="inputPassword" [(ngModel)]="user.password" type="pwd" name="pwd" class="form-control" placeholder="Password"
-                   type="password" maxlength="25" minlength="5">
+            <input id="inputPassword" formControlName="password" type="password" name="pwd" class="form-control" placeholder="Password" #password1>
           </div>
           <div class="form-group">
             <label for="inputPassword">Repeat password</label>
-            <input type="password" ngModel name="confirmPwd" class="form-control" placeholder="Repeat password" >
+            <input type="password" formControlName="confirmPassword" name="confirmPwd" class="form-control" placeholder="Repeat password" #password2>
           </div>
-          <div *ngIf="(userPassword.invalid|| userPassword.value?.pwd != userPassword.value?.confirmPwd) && (userPassword.touched)"
+          <div *ngIf="(isControlInvalid('password', 'passwords')|| isControlInvalid('confirmPassword', 'passwords'))"
                class="alert alert-danger">
-
-            <div *ngIf = "userPassword.invalid; else nomatch">
-              Password needs to be more than 5 characters
-            </div>
-            <ng-template #nomatch >
-              Passwords don't match
-            </ng-template>
+              Password needs to be more than 5 characters(until 20 char)
+          </div>
+          <div class="alert alert-danger" *ngIf="password1.value !== password2.value" >
+            Passwords don't match
           </div>
         </div>
 
 
-        <button type="submit" class="btn btn-primary mt-5 btn-block" [disabled]="!registrForm.form.valid">Register</button>
+        <button type="submit" class="btn btn-primary mt-5 btn-block" [disabled]="((!registrationForm.valid) || (password1.value !== password2.value))">Register</button>
       </form>
     </div>
   </div>

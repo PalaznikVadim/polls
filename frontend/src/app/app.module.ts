@@ -3,7 +3,7 @@ import { NgModule } from "@angular/core";
 import { BsDropdownModule } from "ngx-bootstrap/dropdown";
 import { TooltipModule } from "ngx-bootstrap/tooltip";
 import { ModalModule } from "ngx-bootstrap/modal";
-import { FormsModule } from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 
 
 import { AppComponent } from "./app.component";
@@ -17,7 +17,12 @@ import { NewPollTitleComponent } from './modules/components/new-poll-title/new-p
 import { DesignerComponent } from './modules/components/designer/designer.component';
 import { NavComponent } from './modules/components/nav.component/nav.component';
 import { GenerateLinkComponent } from './modules/components/generate-link/generate-link.component';
-import {BillingAccountService} from "./services/billing-account.service";
+import {PollService} from "./services/poll.service";
+import { PollComponent } from './modules/components/poll/poll.component';
+import {ButtonsModule} from "ngx-bootstrap";
+import { FirstPagePollComponent } from './modules/components/first-page-poll/first-page-poll.component';
+import { LastPagePollComponent } from './modules/components/last-page-poll/last-page-poll.component';
+import { StatsComponent } from './modules/components/stats/stats.component';
 
 
 
@@ -28,7 +33,11 @@ const appRoutes: Routes = [
   {path:"homePage",component:HomePageComponent},
   {path:"titleNewPoll",component:NewPollTitleComponent},
   {path:"designer",component:DesignerComponent},
-  {path:"link",component:GenerateLinkComponent}
+  {path:"link",component:GenerateLinkComponent},
+  {path:'poll',component:PollComponent},
+  {path:'firstPagePoll',component:FirstPagePollComponent},
+  {path:'lastPagePoll',component:LastPagePollComponent},
+  {path:'stats',component:StatsComponent}
 
 
 
@@ -46,6 +55,10 @@ const appRoutes: Routes = [
     DesignerComponent,
     NavComponent,
     GenerateLinkComponent,
+    PollComponent,
+    FirstPagePollComponent,
+    LastPagePollComponent,
+    StatsComponent,
 
 
   ],
@@ -58,9 +71,11 @@ const appRoutes: Routes = [
     TooltipModule.forRoot(),
     ModalModule.forRoot(),
     RouterModule.forRoot(appRoutes),
+    ReactiveFormsModule,
+    ButtonsModule.forRoot()
   ],
   providers: [
-    BillingAccountService
+    PollService
   ],
   bootstrap: [AppComponent]
 })

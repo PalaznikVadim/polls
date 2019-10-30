@@ -17,8 +17,9 @@ public class PollDataController {
     @RequestMapping
     public List<PollModel> getAllPolls() {
         List<PollModel> list=new ArrayList<>();
-        list.add((new PollModel(1,"poll1",new Date())));
-        list.add((new PollModel(2,"poll2",new Date())));
+        list.add(new PollModel(1,"Poll1","Theme1",new Date(),""));
+        list.add(new PollModel(2,"Poll2","Theme2",new Date()," fdsfdsfsdfsfdsfsfsdfsdf"));
+        list.add(new PollModel(2,"Poll3","Theme2",new Date()," fdsfdsfsdfsfd"));
 
         return  list;
     }

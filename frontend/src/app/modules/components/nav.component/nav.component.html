@@ -2,13 +2,13 @@
   <div class="collapse navbar-collapse" id="navbarCollapse">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <button type="button" class="btn btn-outline-light" routerLink="homePage">Home</button>
+        <button type="button" class="btn btn-outline-light" routerLink="/homePage">Home</button>
       </li>
     </ul>
     <form class="form-inline mt-2 mt-md-0">
       <button [ngClass]={active:activePoll} class="btn btn-outline-light ml-1" routerLink="/designer">Poll</button>
       <button [ngClass]={active:activeLink} class="btn btn-outline-light ml-1" routerLink="/link">Сollecting answers</button>
-      <button  class="btn btn-outline-light ml-1">Results</button>
+      <button [ngClass]={active:activeStats} class="btn btn-outline-light ml-1" routerLink="/stats">Results</button>
     </form>
     <ul class="navbar-nav mr-0 ml-auto">
       <li class="nav-item active">

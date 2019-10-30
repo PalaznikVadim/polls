@@ -1,2 +1,12 @@
+
+
 /* You can add global styles to this file, and also import other style files */
 @import '~bootstrap/dist/css/bootstrap.min.css';
+
+body{
+  width: auto;
+  min-height: 100vh;
+  background: radial-gradient(at bottom, #FEFFFF, #A7CECC);
+  height: auto;
+}
+

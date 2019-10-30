@@ -17,6 +17,7 @@ export class NavComponent implements OnInit {
   ngOnInit() {
     this.activePoll=(this.router.url=="/designer");
     this.activeLink=(this.router.url=="/link");
+    this.activeStats=(this.router.url=="/stats")
 
   }
 

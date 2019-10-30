@@ -26,14 +26,13 @@
             <h3 class="mt-5">This page is empty. Create a question!</h3>
         </div>
     </div>
-    <div class="row justify-content-center mb-5">
-      <button class="btn btn-outline-info mt-5" (click)="addQuest(modalAddQuest)">Add</button>
+    <div class="row justify-content-center pb-5 mt-5">
+      <button class="btn btn-outline-info" (click)="addQuest(modalAddQuest)">Add</button>
     </div>
 </div>
 
 <ng-template #unset>
-  <div *ngFor="let quest of poll.quests;let i=index;" class="col-10">
-    <div class="block p-3 bg-light mb-2 rounded">
+  <div *ngFor="let quest of poll.quests;let i=index;" class="col-10 block p-3 bg-light mb-2 rounded">
       <div class="title">
         <h3>{{i+1}}. {{quest.title}}</h3>
       </div>
@@ -50,7 +49,6 @@
         <button class='btn btn-outline-danger ml-2' (click)="deleteQuest(i)">-</button>
       </div>
     </div>
-  </div>
 </ng-template>
 
 <ng-template #modalAddQuest>

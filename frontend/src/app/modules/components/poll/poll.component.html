@@ -1,0 +1,30 @@
+<div class="container p-5">
+  <div class="row justify-content-center">
+    <div class="col-10 block p-3 bg-light mb-2 rounded mt-3" *ngFor="let quest of quests;let i=index;">
+      <div class="title">
+        <h3>{{i + 1}}. {{quest.title}}</h3>
+      </div>
+      <div class="notation">
+        <h6>{{quest.type}}</h6>
+      </div>
+      <div class="answers ">
+        <div class="btn-group btn-group-vertical col-12 p-3">
+          <div class="btn-block" *ngIf="quest.type=='checkbox'">
+            <label *ngFor="let answer of quest.answers;let j=index;" uncheckable class="btn btn-outline-info text-left"
+                   [(ngModel)]="quest.user_answer[j]"
+                   btnCheckbox>{{answer}}</label>
+          </div>
+          <div class="btn-block" *ngIf="quest.type=='radio'">
+            <div btnRadioGroup [(ngModel)]="quest.user_answer[0]">
+              <label *ngFor="let answer of quest.answers; let j=index;" class="btn btn-outline-info" uncheckable
+                     btnRadio="{{answer}}">{{answer}}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-4">
+    <button class="btn btn-outline-info" (click)="submit()" routerLink="/lastPagePoll">Submit poll</button>
+  </div>
+</div>

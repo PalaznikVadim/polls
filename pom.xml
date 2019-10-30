@@ -10,7 +10,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>be</module>
+        <module>backend</module>
         <module>fapi</module>
     </modules>
 </project>

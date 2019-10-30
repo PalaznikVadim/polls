@@ -22,7 +22,7 @@
   </div>
 </nav>
 
-<div class="album py-5 bg-light">
+<div class="album py-5 bg-transparent">
   <div class="container">
     <div class="row">
       <div *ngFor="let item of polls" class="col-md-4">
@@ -32,17 +32,17 @@
                role="img" aria-label="Placeholder: Thumbnail">
             <title>Placeholder</title>
             <rect fill="#55595c" width="100%" height="100%" /><text fill="#eceeef" dy=".3em" x="50%"
-                                                                    y="50%">{{item.name}}</text>
+                                                                    y="50%">{{item.title}}</text>
           </svg>
           <div class="card-body">
             <p class="card-text">Description: {{item.description}}</p>
-            <p class="card-text">Data:{{item.date.toDateString()}}</p>
+            <p class="card-text">Data:{{item.dateAdding}}</p>
             <small class="text-muted">Ответы: 0</small>
             <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group ">
-                <button type="button" class="btn btn-sm btn-outline-secondary">Изменить</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Статистика</button>
-                <button type="button" class="btn btn-sm btn-outline-secondary">Удалить</button>
+              <div class="btn-group btn-block">
+                <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Stats</button>
+                <button type="button" class="btn btn-sm btn-outline-secondary">Delete</button>
               </div>
             </div>
           </div>
@@ -54,18 +54,19 @@
 
 <ng-template #template>
   <div class="modal-header">
-    <h4 class="modal-title pull-left">Каким способом Вы хотите создать опрос?</h4>
+    <h4 class="modal-title pull-left">How do you want to create a poll?</h4>
     <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
   </div>
   <div class="modal-body">
-    <button class="btn btn-outline-success my-2 mr-2 my-sm-0">Шаблон опроса</button>
-    <button class="btn btn-outline-success my-2 my-sm-0">Новый опрос</button>
+    <button class="btn btn-outline-success my-2 mr-2 my-sm-0">Poll template</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" routerLink="/titleNewPoll" (click)="modalRef.hide()">New poll</button>
   </div>
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Отмена</button>
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Cancel</button>
   </div>
 </ng-template>
 
-{{date | async | json}}
+<!--{{{date | async | json}}
+-->

@@ -6,13 +6,13 @@ import {PollModel} from "../modules/models/poll.model";
 
 @Injectable()
 // Data service
-export class BillingAccountService { //todo create interface
+export class PollService { //todo create interface
 
   constructor(private http: HttpClient) {
   }
 
   // Ajax request for billing account data
-  getBillingAccounts(): Observable<PollModel[]> {
+  getPolls(): Observable<PollModel[]> {
     return this.http.get<PollModel[]>('/api/ba');
   }
 }
