@@ -23,6 +23,8 @@ import {ButtonsModule} from "ngx-bootstrap";
 import { FirstPagePollComponent } from './modules/components/first-page-poll/first-page-poll.component';
 import { LastPagePollComponent } from './modules/components/last-page-poll/last-page-poll.component';
 import { StatsComponent } from './modules/components/stats/stats.component';
+import { AdminHomePageComponent } from './modules/components/administrator/admin-home-page/admin-home-page.component';
+import { UserListComponent } from './modules/components/administrator/user-list/user-list.component';
 
 
 
@@ -59,6 +61,8 @@ const appRoutes: Routes = [
     FirstPagePollComponent,
     LastPagePollComponent,
     StatsComponent,
+    AdminHomePageComponent,
+    UserListComponent,
 
 
   ],

@@ -1,23 +1,27 @@
 package com.netcracker.edu.backend.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import com.netcracker.edu.backend.entity.enums.Shared;
+import com.netcracker.edu.backend.entity.enums.Status;
+
+import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 public class Poll {
     private int id;
     private String name;
-    private int idUser;
-    private int idTheme;
     private String description;
     private String link;
     private Timestamp dataTime;
-    private String status;
-    private String shared;
+    @Enumerated(EnumType.STRING)
+    private Status status;
+    @Enumerated(EnumType.STRING)
+    private Shared shared;
+    private User userByIdUser;
+    private Theme themeByIdTheme;
+    private Collection<Question> questionsById;
 
     @Id
     @Column(name = "id")
@@ -37,26 +41,6 @@ public class Poll {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Basic
-    @Column(name = "id_user")
-    public int getIdUser() {
-        return idUser;
-    }
-
-    public void setIdUser(int idUser) {
-        this.idUser = idUser;
-    }
-
-    @Basic
-    @Column(name = "id_theme")
-    public int getIdTheme() {
-        return idTheme;
-    }
-
-    public void setIdTheme(int idTheme) {
-        this.idTheme = idTheme;
     }
 
     @Basic
@@ -91,21 +75,21 @@ public class Poll {
 
     @Basic
     @Column(name = "status")
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 
     @Basic
     @Column(name = "shared")
-    public String getShared() {
+    public Shared getShared() {
         return shared;
     }
 
-    public void setShared(String shared) {
+    public void setShared(Shared shared) {
         this.shared = shared;
     }
 
@@ -115,8 +99,6 @@ public class Poll {
         if (o == null || getClass() != o.getClass()) return false;
         Poll poll = (Poll) o;
         return id == poll.id &&
-                idUser == poll.idUser &&
-                idTheme == poll.idTheme &&
                 Objects.equals(name, poll.name) &&
                 Objects.equals(description, poll.description) &&
                 Objects.equals(link, poll.link) &&
@@ -127,6 +109,35 @@ public class Poll {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, idUser, idTheme, description, link, dataTime, status, shared);
+        return Objects.hash(id, name, description, link, dataTime, status, shared);
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_user", referencedColumnName = "id", nullable = false)
+    public User getUserByIdUser() {
+        return userByIdUser;
+    }
+
+    public void setUserByIdUser(User userByIdUser) {
+        this.userByIdUser = userByIdUser;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_theme", referencedColumnName = "id", nullable = false)
+    public Theme getThemeByIdTheme() {
+        return themeByIdTheme;
+    }
+
+    public void setThemeByIdTheme(Theme themeByIdTheme) {
+        this.themeByIdTheme = themeByIdTheme;
+    }
+
+    @OneToMany(mappedBy = "pollByIdPoll")
+    public Collection<Question> getQuestionsById() {
+        return questionsById;
+    }
+
+    public void setQuestionsById(Collection<Question> questionsById) {
+        this.questionsById = questionsById;
     }
 }

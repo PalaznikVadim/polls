@@ -1,18 +1,17 @@
 package com.netcracker.edu.backend.entity;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 public class Question {
     private int id;
     private String textTitle;
-    private int idType;
     private String required;
-    private int idPoll;
+    private Collection<Answer> answersById;
+    private TypeQuestion typeQuestionByIdType;
+    private Poll pollByIdPoll;
 
     @Id
     @Column(name = "id")
@@ -35,16 +34,6 @@ public class Question {
     }
 
     @Basic
-    @Column(name = "id_type")
-    public int getIdType() {
-        return idType;
-    }
-
-    public void setIdType(int idType) {
-        this.idType = idType;
-    }
-
-    @Basic
     @Column(name = "required")
     public String getRequired() {
         return required;
@@ -54,30 +43,47 @@ public class Question {
         this.required = required;
     }
 
-    @Basic
-    @Column(name = "id_poll")
-    public int getIdPoll() {
-        return idPoll;
-    }
-
-    public void setIdPoll(int idPoll) {
-        this.idPoll = idPoll;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Question question = (Question) o;
         return id == question.id &&
-                idType == question.idType &&
-                idPoll == question.idPoll &&
                 Objects.equals(textTitle, question.textTitle) &&
                 Objects.equals(required, question.required);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, textTitle, idType, required, idPoll);
+        return Objects.hash(id, textTitle, required);
+    }
+
+    @OneToMany(mappedBy = "questionByIdQuestion")
+    public Collection<Answer> getAnswersById() {
+        return answersById;
+    }
+
+    public void setAnswersById(Collection<Answer> answersById) {
+        this.answersById = answersById;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_type", referencedColumnName = "id", nullable = false)
+    public TypeQuestion getTypeQuestionByIdType() {
+        return typeQuestionByIdType;
+    }
+
+    public void setTypeQuestionByIdType(TypeQuestion typeQuestionByIdType) {
+        this.typeQuestionByIdType = typeQuestionByIdType;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "id_poll", referencedColumnName = "id", nullable = false)
+    public Poll getPollByIdPoll() {
+        return pollByIdPoll;
+    }
+
+    public void setPollByIdPoll(Poll pollByIdPoll) {
+        this.pollByIdPoll = pollByIdPoll;
     }
 }
