@@ -1,12 +1,15 @@
+import {PollModel} from "./poll.model";
+
 export class UserModel {
 
+    public id:number;
     public name:string;
     public surname:string;
-    public DOB:Date;
+    public role:string;
+    public dateOfBirth:Date;
     public email:string;
     public password:string;
-    public isRemember:boolean;
+    public polls:PollModel[];
 
     constructor(){}
-
 }

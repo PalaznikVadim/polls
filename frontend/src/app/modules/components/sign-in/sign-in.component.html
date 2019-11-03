@@ -27,7 +27,8 @@
             <input type="checkbox" btnCheckbox name="isRemember"  formControlName="isRemember"> Remember me
           </label>
         </div>
-        <button type="submit" (click)="signIn_Click()" [disabled]="!signinForm.valid"  class="btn btn-primary btn-block" >Sign in</button>
+        <div  *ngIf="errorMassage!=null" class="alert alert-danger">{{errorMassage}}</div>
+        <button type="submit" (click)="signInClick()" [disabled]="!signinForm.valid"  class="btn btn-primary btn-block" >Sign in</button>
       </form>
     </div>
   </div>

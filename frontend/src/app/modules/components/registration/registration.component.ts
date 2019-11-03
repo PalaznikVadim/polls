@@ -1,6 +1,9 @@
 import {Component, OnInit} from '@angular/core';
 import {UserModel} from "../../models/user.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UserService} from "../../../services/user.service";
+import {rootRoute} from "@angular/router/src/router_module";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-registration',
@@ -13,7 +16,7 @@ export class RegistrationComponent implements OnInit {
   registrationForm: FormGroup;
 
 
-  constructor() {
+  constructor(private  userService: UserService,private router: Router) {
   }
 
   ngOnInit() {
@@ -47,18 +50,9 @@ export class RegistrationComponent implements OnInit {
             Validators.minLength(5),
             Validators.maxLength(20)
           ])
-        }, {},
-        // this.equalValidator
+        }
       ),
-
-
     })
-  }
-
-  equalValidator({value}: FormGroup): { [key: string]: any } {
-    const [first, ...rest] = Object.keys(value || {});
-    const valid = rest.every(v => value[v] === value[first]);
-    return valid ? null : {equal: true};
   }
 
   isControlInvalid(controlName: string, groupName?: string): boolean {
@@ -67,6 +61,26 @@ export class RegistrationComponent implements OnInit {
   }
 
   createUser() {
+    this.user={
+      id: null,
+      name:this.registrationForm.controls['name'].value,
+      surname:this.registrationForm.controls['surname'].value,
+      dateOfBirth:this.registrationForm.controls['DOB'].value,
+      email:this.registrationForm.controls['email'].value,
+      password:this.registrationForm.controls['passwords'].controls['password'].value,
+      role:'user',
+      polls: null,
+    }
+    console.log(this.user);
+    this.userService.saveUser(this.user).subscribe(user => {
+
+        this.user = user as UserModel;
+        if(this.user!==null){
+          console.log(user);
+          this.router.navigate(['/']);
+        }
+      }
+    )
     console.log(this.registrationForm);
   }
 }

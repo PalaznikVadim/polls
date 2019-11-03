@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -15,15 +16,20 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/email={email}&password={password}", method = RequestMethod.GET)
-    public ResponseEntity<User> getUserByEmailAndPassword(@PathVariable(name = "email") String email,@PathVariable(name = "password") String password) {
+    @RequestMapping(value = "/email", method = RequestMethod.GET)
+    public ResponseEntity<User> getUserByEmailAndPassword(@RequestParam String email,@RequestParam String password) {
         User user = userService.findByEmailAndPassword(email,password);
         return ResponseEntity.ok(user);
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<User> getAllUsers() {
-        return userService.findAll();
+        return (List<User>) userService.findAll();
+    }
+
+    @RequestMapping(value = "id", method = RequestMethod.GET)
+    public Optional<User> getUserById(@RequestParam String id) {
+        return userService.findUserById(Integer.valueOf(id));
     }
 
     @RequestMapping(method = RequestMethod.POST)

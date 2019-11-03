@@ -4,17 +4,17 @@ import com.netcracker.edu.backend.entity.enums.Shared;
 import com.netcracker.edu.backend.entity.enums.Status;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 public class Poll {
     private int id;
-    private String name;
+    private String title;
     private String description;
     private String link;
-    private Timestamp dataTime;
+    private Date date;
     @Enumerated(EnumType.STRING)
     private Status status;
     @Enumerated(EnumType.STRING)
@@ -36,11 +36,11 @@ public class Poll {
     @Basic
     @Column(name = "name")
     public String getName() {
-        return name;
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setName(String title) {
+        this.title = title;
     }
 
     @Basic
@@ -65,12 +65,12 @@ public class Poll {
 
     @Basic
     @Column(name = "data_time")
-    public Timestamp getDataTime() {
-        return dataTime;
+    public Date getDataTime() {
+        return date;
     }
 
-    public void setDataTime(Timestamp dataTime) {
-        this.dataTime = dataTime;
+    public void setDataTime(Date date) {
+        this.date = date;
     }
 
     @Basic
@@ -99,17 +99,17 @@ public class Poll {
         if (o == null || getClass() != o.getClass()) return false;
         Poll poll = (Poll) o;
         return id == poll.id &&
-                Objects.equals(name, poll.name) &&
+                Objects.equals(title, poll.title) &&
                 Objects.equals(description, poll.description) &&
                 Objects.equals(link, poll.link) &&
-                Objects.equals(dataTime, poll.dataTime) &&
+                Objects.equals(date, poll.date) &&
                 Objects.equals(status, poll.status) &&
                 Objects.equals(shared, poll.shared);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, description, link, dataTime, status, shared);
+        return Objects.hash(id, title, description, link, date, status, shared);
     }
 
     @ManyToOne

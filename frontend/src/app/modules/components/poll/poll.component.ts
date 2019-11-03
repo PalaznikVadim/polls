@@ -1,6 +1,5 @@
 import {Component, OnInit} from '@angular/core';
 import {QuestionModel} from "../../models/question.model";
-import {User_answerModel} from "../../models/user_answer.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({

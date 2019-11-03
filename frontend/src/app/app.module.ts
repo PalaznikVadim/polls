@@ -25,6 +25,7 @@ import { LastPagePollComponent } from './modules/components/last-page-poll/last-
 import { StatsComponent } from './modules/components/stats/stats.component';
 import { AdminHomePageComponent } from './modules/components/administrator/admin-home-page/admin-home-page.component';
 import { UserListComponent } from './modules/components/administrator/user-list/user-list.component';
+import {UserService} from "./services/user.service";
 
 
 
@@ -79,7 +80,8 @@ const appRoutes: Routes = [
     ButtonsModule.forRoot()
   ],
   providers: [
-    PollService
+    PollService,
+    UserService
   ],
   bootstrap: [AppComponent]
 })

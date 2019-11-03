@@ -6,7 +6,6 @@ import com.netcracker.edu.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,8 +20,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll() {
-        return (List<User>) userRepository.findAll();
+    public Iterable<User> findAll() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -31,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
+    public Optional<User> findUserById(Integer id) {
         return userRepository.findById(id);
     }
 }

@@ -1,6 +1,7 @@
 package com.netcracker.edu.backend.entity;
 
-import com.netcracker.edu.backend.entity.enums.Role;
+
+
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
@@ -14,11 +15,11 @@ public class User {
     private String name;
     private String surname;
     private Date dateOfBirth;
-    @Enumerated(EnumType.STRING)
-    private Role role;
     private String email;
     private String password;
     private Collection<Poll> pollsById;
+
+    private Role role;
 
     public User() {
     }
@@ -74,7 +75,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "role")
     public Role getRole() {
         return role;
@@ -85,8 +86,7 @@ public class User {
     }
 
     @Basic
-    @UniqueElements
-    @Column(name = "email")
+    @Column(name = "email",unique = true)
     public String getEmail() {
         return email;
     }
@@ -132,4 +132,10 @@ public class User {
     public void setPollsById(Collection<Poll> pollsById) {
         this.pollsById = pollsById;
     }
+
+    public enum Role {
+        admin,
+        user
+    }
+
 }

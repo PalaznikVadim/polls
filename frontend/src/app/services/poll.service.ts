@@ -3,6 +3,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {PollModel} from "../modules/models/poll.model";
+import {UserModel} from "../modules/models/user.model";
 
 @Injectable()
 // Data service
@@ -12,8 +13,12 @@ export class PollService { //todo create interface
   }
 
   // Ajax request for billing account data
-  getPolls(): Observable<PollModel[]> {
-    return this.http.get<PollModel[]>('/api/ba');
+  getPollsByUser(user:UserModel): Observable<PollModel[]> {
+    return this.http.get<PollModel[]>('/api/poll'+'?user='+user);
+  }
+
+  getPollById(id:number){
+    return this.http.get<PollModel>('/api/poll/id'+'?id='+id);
   }
 }
 /*
