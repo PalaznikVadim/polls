@@ -25,9 +25,9 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public List<Poll> findAllByUser(User user) {
+    public List<Poll> findAllByUserId(Integer userId) {
         RestTemplate restTemplate = new RestTemplate();
-        Poll[] polls=restTemplate.getForObject(backendServerUrl+"api/poll/userId?userId="+user,Poll[].class);
+        Poll[] polls=restTemplate.getForObject(backendServerUrl+"api/poll/user?userId="+userId,Poll[].class);
         return polls == null ? Collections.emptyList() : Arrays.asList(polls);
     }
 

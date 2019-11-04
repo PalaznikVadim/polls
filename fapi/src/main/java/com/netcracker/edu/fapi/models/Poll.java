@@ -8,7 +8,7 @@ public class Poll {
     private String title;
     private String description;
     private String link;
-    private Date dateAdding;
+    private Date date;
     private String status;
     private String shared;
     private User user;
@@ -18,12 +18,12 @@ public class Poll {
     public Poll() {
     }
 
-    public Poll(int id, String title, String description, String link, Date dateAdding, String status, String shared, User user, Theme theme, Collection<Question> question) {
+    public Poll(int id, String title, String description, String link, Date date, String status, String shared, User user, Theme theme, Collection<Question> question) {
         this.id = id;
         this.title = title;
         this.description = description;
         this.link = link;
-        this.dateAdding = dateAdding;
+        this.date = date;
         this.status = status;
         this.shared = shared;
         this.user = user;
@@ -64,11 +64,11 @@ public class Poll {
     }
 
     public Date getDateAdding() {
-        return dateAdding;
+        return date;
     }
 
-    public void setDateAdding(Date dateAdding) {
-        this.dateAdding = dateAdding;
+    public void setDateAdding(Date date) {
+        this.date = date;
     }
 
     public String getStatus() {
@@ -118,7 +118,7 @@ public class Poll {
                 ", title='" + title + '\'' +
                 ", description='" + description + '\'' +
                 ", link='" + link + '\'' +
-                ", dateAdding=" + dateAdding +
+                ", dateAdding=" + date +
                 ", status='" + status + '\'' +
                 ", shared='" + shared + '\'' +
                 ", user=" + user +

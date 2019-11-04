@@ -13,7 +13,6 @@ import {UserService} from "../../../services/user.service";
 export class HomePageComponent implements OnInit,OnDestroy {
 
   private sub:any;
-  poll=new PollModel();
 
   polls:PollModel[];
 
@@ -29,18 +28,10 @@ export class HomePageComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
-    // this.userService.getUserById(6).subscribe(user=> {
-    //   this.sub = this.pollService.getPollsByUser(user).subscribe(value => {
-    //     this.polls = value;
-    //     console.log(this.polls)
-    //   });
-    // });
-
-    this.pollService.getPollById(1).subscribe(poll=>{
-      console.log(poll)
-    });
-
-
+      this.sub = this.pollService.getPollsByUserId(this.userService.currUser.id).subscribe(value => {
+        this.polls = value;
+        console.log(this.polls)
+      });
   }
 
   ngOnDestroy(): void {

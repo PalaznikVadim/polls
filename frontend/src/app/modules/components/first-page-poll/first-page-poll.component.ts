@@ -14,22 +14,22 @@ export class FirstPagePollComponent implements OnInit {
 
   ngOnInit() {
     this.poll=new PollModel();
-    this.poll={
-      id: 0,
-      title:"poll1",
-      theme:"theme1",
-      description:"dfssfdsfdsfsdfdsfsdfsdf fsdfdsfdg fgdgfdgd ",
-      dateAdding:new Date(),
-      quests:[{
-        id:1,
-        title:"quest1",
-        type:"radio",
-        answers:["answer1","answer2"],
-        user_answer:null,
-        required:true
-      }],
-
-    }
+    // this.poll={
+    //   id: 0,
+    //   title:"poll1",
+    //   theme:"theme1",
+    //   description:"dfssfdsfdsfsdfdsfsdfsdf fsdfdsfdg fgdgfdgd ",
+    //   date:new Date(),
+    //   quests:[{
+    //     id:1,
+    //     title:"quest1",
+    //     type:"radio",
+    //     answers:["answer1","answer2"],
+    //     user_answer:null,
+    //     required:true
+    //   }],
+    //
+    // }
   }
 
 }

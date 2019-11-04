@@ -8,7 +8,7 @@ import java.util.List;
 public interface PollService {
 
     Poll findById(Integer id);
-    List<Poll> findAllByUser(User user);
+    List<Poll> findAllByUserId(Integer userId);
     Poll save(Poll poll);
     void deletePoll(Integer id);
 }

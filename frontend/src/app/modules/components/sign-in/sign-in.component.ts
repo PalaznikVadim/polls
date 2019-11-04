@@ -3,6 +3,7 @@ import {UserModel} from "../../models/user.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {PollService} from "../../../services/poll.service";
 import {UserService} from "../../../services/user.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-sign-in',
@@ -12,15 +13,15 @@ import {UserService} from "../../../services/user.service";
 export class SignInComponent implements OnInit,OnDestroy {
 
   errorMassage:string;
-  user = new UserModel();
+  user :UserModel;
   sub: any;
-  signinForm: FormGroup;
+  signInForm: FormGroup;
 
-  constructor(private  userService: UserService) {
+  constructor(private  userService: UserService,private router: Router) {
   }
 
   ngOnInit() {
-    this.signinForm = new FormGroup({
+    this.signInForm = new FormGroup({
       email: new FormControl("", [
           Validators.required,
           Validators.pattern("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
@@ -40,36 +41,25 @@ export class SignInComponent implements OnInit,OnDestroy {
   }
 
   isControlInvalid(controlName: string): boolean {
-    const control = this.signinForm.controls[controlName];
+    const control = this.signInForm.controls[controlName];
     const result = control.invalid && control.touched;
     return result;
   }
 
   signInClick() {
 
-    this.sub = this.userService.getUserByEmailAndPassword(this.signinForm.controls['email'].value,this.signinForm.controls['password'].value).subscribe(value => {
+    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,this.signInForm.controls['password'].value).subscribe(value => {
 
-      this.user = value as UserModel;
+      this.userService.currUser=value as UserModel;
 
-      if(this.user!==null){
-        this.errorMassage=null;
+      if(this.userService.currUser!==null){
+        this.router.navigate(['/homePage']);
       }else{
         this.errorMassage='Incorrect data. Recheck entered data'
       }
-      console.log(this.user);
+
+      console.log(this.userService.currUser);
 
     });
-
-    /*this.user={
-      DOB: undefined,
-      name: "",
-      surname: "",
-      email:this.signinForm.controls['email'].value,
-      password:this.signinForm.controls['password'].value,
-      isRemember:this.signinForm.controls['isRemember'].value
-    };*/
-
-
-
   }
 }

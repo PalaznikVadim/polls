@@ -17,9 +17,9 @@ public class PollController {
     @Autowired
     private PollService pollService;
 
-    @RequestMapping(value = "/userId", method = RequestMethod.GET)
-    public ResponseEntity<List<Poll>> getAllPollsByUserId(@RequestParam User user) {
-        List<Poll> polls = pollService.findAllByUser(user);
+    @RequestMapping(value = "/user",method = RequestMethod.GET)
+    public ResponseEntity<List<Poll>> getAllPollByUserId(@RequestParam String userId){
+        List<Poll> polls = pollService.findAllByUSerId(Integer.valueOf(userId));
         return ResponseEntity.ok(polls);
     }
 

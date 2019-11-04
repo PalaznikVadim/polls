@@ -26,6 +26,7 @@ import { StatsComponent } from './modules/components/stats/stats.component';
 import { AdminHomePageComponent } from './modules/components/administrator/admin-home-page/admin-home-page.component';
 import { UserListComponent } from './modules/components/administrator/user-list/user-list.component';
 import {UserService} from "./services/user.service";
+import {ThemeService} from "./services/theme.service";
 
 
 
@@ -81,7 +82,8 @@ const appRoutes: Routes = [
   ],
   providers: [
     PollService,
-    UserService
+    UserService,
+    ThemeService
   ],
   bootstrap: [AppComponent]
 })

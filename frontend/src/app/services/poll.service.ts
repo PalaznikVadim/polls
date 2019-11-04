@@ -13,12 +13,16 @@ export class PollService { //todo create interface
   }
 
   // Ajax request for billing account data
-  getPollsByUser(user:UserModel): Observable<PollModel[]> {
-    return this.http.get<PollModel[]>('/api/poll'+'?user='+user);
+  getPollsByUserId(userId:number): Observable<PollModel[]> {
+    return this.http.get<PollModel[]>('/api/poll'+'?userId='+userId);
   }
 
   getPollById(id:number){
     return this.http.get<PollModel>('/api/poll/id'+'?id='+id);
+  }
+
+  savePoll(poll:PollModel):Observable<PollModel>{
+    return this.http.post<PollModel>('/api/poll',poll);
   }
 }
 /*

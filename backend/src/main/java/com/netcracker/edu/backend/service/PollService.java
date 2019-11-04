@@ -8,7 +8,7 @@ import java.util.Optional;
 
 public interface PollService {
     Optional<Poll> findPollById(Integer id);
-    List<Poll> findAllByUser(User user);
+    List<Poll> findAllByUSerId(Integer userId);
     Poll save(Poll poll);
 
 

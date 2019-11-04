@@ -22,8 +22,8 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public List<Poll> findAllByUser(User user) {
-        return (List<Poll>) pollRepository.findAllByUserByIdUser(user);
+    public List<Poll> findAllByUSerId(Integer userId) {
+        return (List<Poll>) pollRepository.findPollByUserByIdUser_Id(userId);
     }
 
     @Override
