@@ -5,12 +5,12 @@ import java.sql.Date;
 import java.util.Objects;
 
 @Entity
-@Table(name = "user_answer", schema = "mydb", catalog = "")
+@Table(name = "user_answer", schema = "mydb")
 public class UserAnswer {
     private int id;
     private int idQuestion;
     private int idAnswer;
-    private Date dateTime;
+    private Date date;
 
     @Id
     @Column(name = "id")
@@ -45,11 +45,11 @@ public class UserAnswer {
     @Basic
     @Column(name = "date_time")
     public Date getDateTime() {
-        return dateTime;
+        return date;
     }
 
     public void setDateTime(Date dateTime) {
-        this.dateTime = dateTime;
+        this.date = dateTime;
     }
 
     @Override
@@ -60,11 +60,11 @@ public class UserAnswer {
         return id == that.id &&
                 idQuestion == that.idQuestion &&
                 idAnswer == that.idAnswer &&
-                Objects.equals(dateTime, that.dateTime);
+                Objects.equals(date, that.date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, idQuestion, idAnswer, dateTime);
+        return Objects.hash(id, idQuestion, idAnswer, date);
     }
 }

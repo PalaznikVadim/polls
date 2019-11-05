@@ -8,35 +8,23 @@ import java.util.Collection;
 public class User {
     private int id;
     private String name;
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-    private String role;
     private String surname;
     private Date dateOfBirth;
+    private String role;
     private String email;
     private String password;
-    private Collection<Poll> pollsById;
-
 
     public User() {
     }
 
-    public User(int id, String name, String role, String surname, Date dateOfBirth, String email, String password, Collection<Poll> pollsById) {
+    public User(int id, String name, String surname, Date dateOfBirth, String role, String email, String password) {
         this.id = id;
         this.name = name;
-        this.role = role;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
+        this.role = role;
         this.email = email;
         this.password = password;
-        this.pollsById = pollsById;
     }
 
     public int getId() {
@@ -71,6 +59,14 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    public String getRole() {
+        return role;
+    }
+
+    public void setRole(String role) {
+        this.role = role;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -87,14 +83,6 @@ public class User {
         this.password = password;
     }
 
-    public Collection<Poll> getPollsById() {
-        return pollsById;
-    }
-
-    public void setPollsById(Collection<Poll> pollsById) {
-        this.pollsById = pollsById;
-    }
-
     @Override
     public String toString() {
         return "User{" +
@@ -102,9 +90,9 @@ public class User {
                 ", name='" + name + '\'' +
                 ", surname='" + surname + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
+                ", role='" + role + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", pollsById=" + pollsById +
                 '}';
     }
 }

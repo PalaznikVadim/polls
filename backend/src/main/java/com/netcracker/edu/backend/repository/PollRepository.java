@@ -8,5 +8,5 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.Collection;
 
 public interface PollRepository extends CrudRepository<Poll,Integer> {
-    Collection<Poll> findPollByUserByIdUser_Id(Integer id);
+    Collection<Poll> findPollsByIdUser(Integer idUser);
 }

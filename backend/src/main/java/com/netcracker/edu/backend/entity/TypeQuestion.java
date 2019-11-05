@@ -1,13 +1,15 @@
 package com.netcracker.edu.backend.entity;
 
+import com.netcracker.edu.backend.entity.enums.Type;
+
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "type_question", schema = "mydb")
+@Table(name = "type_question", schema = "mydb", catalog = "")
 public class TypeQuestion {
     private int id;
-    private String type;
+    private Type type;
 
     @Id
     @Column(name = "id")
@@ -20,12 +22,13 @@ public class TypeQuestion {
     }
 
     @Basic
+    @Enumerated(EnumType.STRING)
     @Column(name = "type")
-    public String getType() {
+    public Type getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Type type) {
         this.type = type;
     }
 

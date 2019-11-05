@@ -61,16 +61,13 @@ export class RegistrationComponent implements OnInit {
   }
 
   createUser() {
-    this.user={
-      id: null,
-      name:this.registrationForm.controls['name'].value,
-      surname:this.registrationForm.controls['surname'].value,
-      dateOfBirth:this.registrationForm.controls['DOB'].value,
-      email:this.registrationForm.controls['email'].value,
-      password:this.registrationForm.controls['passwords'].controls['password'].value,
-      role:'user',
-      polls: null,
-    }
+      this.user.name=this.registrationForm.controls['name'].value,
+      this.user.surname=this.registrationForm.controls['surname'].value,
+      this.user.dateOfBirth=this.registrationForm.controls['DOB'].value,
+      this.user.email=this.registrationForm.controls['email'].value,
+      this.user.password=this.registrationForm.controls['passwords'].controls['password'].value,
+      this.user.role='user';
+
     console.log(this.user);
     this.userService.saveUser(this.user).subscribe(user => {
 
@@ -80,7 +77,7 @@ export class RegistrationComponent implements OnInit {
           this.router.navigate(['/']);
         }
       }
-    )
+    );
     console.log(this.registrationForm);
   }
 }

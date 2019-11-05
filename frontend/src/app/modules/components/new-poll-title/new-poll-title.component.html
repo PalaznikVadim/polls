@@ -5,7 +5,7 @@
       <form #form="ngForm">
         <div class="form-group">
           <label>Название</label>
-          <input type="text" name="title" id="inputTitle" [(ngModel)]="poll.title" class="form-control" aria-describedby="form-text" placeholder="Название" required #title="ngModel">
+          <input type="text" name="title" id="inputTitle" [(ngModel)]="poll.name" class="form-control" aria-describedby="form-text" placeholder="Название" required #title="ngModel">
         </div>
         <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
           Enter poll title
@@ -20,7 +20,7 @@
           <label>Description</label>
           <textarea class="form-control" [(ngModel)]="poll.description" name="description"></textarea>
         </div>
-        <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid" (click)="addPoll()" routerLink="/designer">Create</button>
+        <button type="submit" class="btn btn-primary" [disabled]="!form.form.valid" (click)="addPoll()">Create</button>
       </form>
     </div>
   </div>

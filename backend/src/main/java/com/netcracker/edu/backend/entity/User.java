@@ -1,12 +1,9 @@
 package com.netcracker.edu.backend.entity;
 
-
-
-import org.hibernate.validator.constraints.UniqueElements;
+import com.netcracker.edu.backend.entity.enums.Role;
 
 import javax.persistence.*;
 import java.sql.Date;
-import java.util.Collection;
 import java.util.Objects;
 
 @Entity
@@ -15,25 +12,9 @@ public class User {
     private String name;
     private String surname;
     private Date dateOfBirth;
+    private Role role;
     private String email;
     private String password;
-    private Collection<Poll> pollsById;
-
-    private Role role;
-
-    public User() {
-    }
-
-    public User(int id, String name, String surname, Date dateOfBirth, Role role, String email, String password, Collection<Poll> pollsById) {
-        this.id = id;
-        this.name = name;
-        this.surname = surname;
-        this.dateOfBirth = dateOfBirth;
-        this.role = role;
-        this.email = email;
-        this.password = password;
-        this.pollsById = pollsById;
-    }
 
     @Id
     @Column(name = "id")
@@ -75,6 +56,7 @@ public class User {
         this.dateOfBirth = dateOfBirth;
     }
 
+    @Basic
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     public Role getRole() {
@@ -86,7 +68,7 @@ public class User {
     }
 
     @Basic
-    @Column(name = "email",unique = true)
+    @Column(name = "email")
     public String getEmail() {
         return email;
     }
@@ -124,18 +106,16 @@ public class User {
         return Objects.hash(id, name, surname, dateOfBirth, role, email, password);
     }
 
-    @OneToMany(mappedBy = "userByIdUser")
-    public Collection<Poll> getPollsById() {
-        return pollsById;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", role=" + role +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
-
-    public void setPollsById(Collection<Poll> pollsById) {
-        this.pollsById = pollsById;
-    }
-
-    public enum Role {
-        admin,
-        user
-    }
-
 }

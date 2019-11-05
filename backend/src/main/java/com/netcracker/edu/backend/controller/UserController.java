@@ -34,6 +34,7 @@ public class UserController {
 
     @RequestMapping(method = RequestMethod.POST)
     public User saveUser(@RequestBody User user) {
+        System.out.println(user.toString());
         return userService.save(user);
     }
 }

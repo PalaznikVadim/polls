@@ -27,6 +27,7 @@ public class UserController {
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = "application/json")
     public User saveUser(@RequestBody User user){
+        System.out.println(user.toString());
         return userService.save(user);
     }
 

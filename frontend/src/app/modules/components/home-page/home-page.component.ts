@@ -29,12 +29,20 @@ export class HomePageComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
       this.sub = this.pollService.getPollsByUserId(this.userService.currUser.id).subscribe(value => {
-        this.polls = value;
+        this.polls = value as PollModel[];
         console.log(this.polls)
       });
   }
 
   ngOnDestroy(): void {
     //this.sub.unsubscribe();
+  }
+
+  deletePoll(id: number,i:number) {
+    this.pollService.deletePoll(id.toString()).subscribe(value=>{
+      this.polls.splice(i,1);
+      console.log("Poll with id="+id+"deleted");
+    });
+
   }
 }

@@ -22,12 +22,17 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public List<Poll> findAllByUSerId(Integer userId) {
-        return (List<Poll>) pollRepository.findPollByUserByIdUser_Id(userId);
+    public List<Poll> findAllByUserId(Integer userId) {
+        return (List<Poll>) pollRepository.findPollsByIdUser(userId);
     }
 
     @Override
     public Poll save(Poll poll) {
         return pollRepository.save(poll);
+    }
+
+    @Override
+    public void delete(Integer id) {
+         pollRepository.deleteById(id);
     }
 }

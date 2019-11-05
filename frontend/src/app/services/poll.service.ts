@@ -7,14 +7,23 @@ import {UserModel} from "../modules/models/user.model";
 
 @Injectable()
 // Data service
-export class PollService { //todo create interface
+export class PollService {
+  get currPoll(): PollModel {
+    return this._currPoll;
+  }
+
+  set currPoll(value: PollModel) {
+    this._currPoll = value;
+  } //todo create interface
+
+  private _currPoll:PollModel;
 
   constructor(private http: HttpClient) {
   }
 
   // Ajax request for billing account data
   getPollsByUserId(userId:number): Observable<PollModel[]> {
-    return this.http.get<PollModel[]>('/api/poll'+'?userId='+userId);
+    return this.http.get<PollModel[]>('/api/poll/user'+'?userId='+userId);
   }
 
   getPollById(id:number){
@@ -23,6 +32,10 @@ export class PollService { //todo create interface
 
   savePoll(poll:PollModel):Observable<PollModel>{
     return this.http.post<PollModel>('/api/poll',poll);
+  }
+
+  deletePoll(id: string): Observable<void> {
+    return this.http.delete<void>('/api/poll/id?id=' + id);
   }
 }
 /*

@@ -2,6 +2,7 @@ import {Component, OnInit, TemplateRef} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {PollModel} from "../../models/poll.model";
 import {QuestionModel} from "../../models/question.model";
+import {AnswerModel} from "../../models/answer.model";
 
 
 
@@ -20,45 +21,44 @@ export class DesignerComponent implements OnInit {
     animated: true
   };
 
-  poll=new PollModel();
   quest: QuestionModel;
+  answers:AnswerModel[];
 
   constructor(private modalService: BsModalService) { }
 
   ngOnInit() {
-    this.poll.quests=[];
+
   }
 
 
   addQuest(template: TemplateRef<any>){
     this.quest=new QuestionModel();
-    this.quest.title='Enter question title';
-    this.quest.type='Select one answer';
-    this.quest.answers=["Answer1","Answer2","Answer3"]
+    this.quest.textTitle='Enter question title';
+    this.answers=[]
     this.modalRef = this.modalService.show(template);
   }
 
   addNewAnswer() {
-    this.quest.answers.push("Answer");
+    // this.quest.answers.push("Answer");
   }
 
   deleteAnswer(index:number) {
-    this.quest.answers.splice(index,1);
+    // this.quest.answers.splice(index,1);
   }
 
   createQuestion() {
-    this.poll.quests.push(this.quest);
-    console.log(this.poll);
-    this.modalRef.hide()
+    // this.poll.quests.push(this.quest);
+    // console.log(this.poll);
+    // this.modalRef.hide()
   }
 
   deleteQuest(i: number) {
-    this.poll.quests.splice(i,1);
+    // this.poll.quests.splice(i,1);
   }
 
   editQuest(i: number,template) {
-    this.quest=this.poll.quests[i];
-    this.poll.quests.splice(i,1);
-    this.modalRef = this.modalService.show(template);
+    // this.quest=this.poll.quests[i];
+    // this.poll.quests.splice(i,1);
+    // this.modalRef = this.modalService.show(template);
   }
 }

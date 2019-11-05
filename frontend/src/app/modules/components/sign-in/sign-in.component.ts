@@ -13,11 +13,10 @@ import {Router} from "@angular/router";
 export class SignInComponent implements OnInit,OnDestroy {
 
   errorMassage:string;
-  user :UserModel;
   sub: any;
   signInForm: FormGroup;
 
-  constructor(private  userService: UserService,private router: Router) {
+  constructor(private  userService: UserService,private router: Router,private pollService:PollService) {
   }
 
   ngOnInit() {
@@ -37,7 +36,7 @@ export class SignInComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-   // this.sub.unsubscribe();
+    this.sub.unsubscribe();
   }
 
   isControlInvalid(controlName: string): boolean {

@@ -16,31 +16,31 @@ export class PollComponent implements OnInit {
 
   ngOnInit() {
 
-    this.quests = [
-      {
-        id:1,
-        title: "Quest1",
-        type: "radio",
-        answers: ['answer1', 'answer2'],
-        user_answer: [null],
-        required:true
-      },
-      {
-        id:2,
-        title: "Quest2",
-        type: "checkbox",
-        answers: ['answer1', 'answer2', 'answwer3vvvvvvvvvvv'],
-        user_answer: [false,false,false],
-        required:null
-      },
-      {
-        id:2,
-        title:"quest 4",
-        type:"radio" ,
-        answers:['answer 2','sfdfdsfsdf',"gfdfdfgdg"],
-        user_answer:[null],
-        required:true
-      }];
+    // this.quests = [
+    //   {
+    //     id:1,
+    //     title: "Quest1",
+    //     type: "radio",
+    //     answers: ['answer1', 'answer2'],
+    //     user_answer: [null],
+    //     required:true
+    //   },
+    //   {
+    //     id:2,
+    //     title: "Quest2",
+    //     type: "checkbox",
+    //     answers: ['answer1', 'answer2', 'answwer3vvvvvvvvvvv'],
+    //     user_answer: [false,false,false],
+    //     required:null
+    //   },
+    //   {
+    //     id:2,
+    //     title:"quest 4",
+    //     type:"radio" ,
+    //     answers:['answer 2','sfdfdsfsdf',"gfdfdfgdg"],
+    //     user_answer:[null],
+    //     required:true
+    //   }];
 
 
   }

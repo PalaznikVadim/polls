@@ -1,13 +1,16 @@
 package com.netcracker.edu.backend.entity;
 
-import javax.persistence.*;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 import java.util.Objects;
 
 @Entity
 public class Answer {
     private int id;
     private String text;
-    private Question questionByIdQuestion;
+    private int idQuestion;
 
     @Id
     @Column(name = "id")
@@ -29,27 +32,28 @@ public class Answer {
         this.text = text;
     }
 
+    @Basic
+    @Column(name = "id_question")
+    public int getIdQuestion() {
+        return idQuestion;
+    }
+
+    public void setIdQuestion(int idQuestion) {
+        this.idQuestion = idQuestion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Answer answer = (Answer) o;
         return id == answer.id &&
+                idQuestion == answer.idQuestion &&
                 Objects.equals(text, answer.text);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, text);
-    }
-
-    @ManyToOne
-    @JoinColumn(name = "id_question", referencedColumnName = "id", nullable = false)
-    public Question getQuestionByIdQuestion() {
-        return questionByIdQuestion;
-    }
-
-    public void setQuestionByIdQuestion(Question questionByIdQuestion) {
-        this.questionByIdQuestion = questionByIdQuestion;
+        return Objects.hash(id, text, idQuestion);
     }
 }
