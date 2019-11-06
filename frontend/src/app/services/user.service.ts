@@ -5,15 +5,6 @@ import {UserModel} from "../modules/models/user.model";
 
 @Injectable()
 export class UserService{
-  get currUser(): UserModel {
-    return this._currUser;
-  }
-
-  set currUser(value: UserModel) {
-    this._currUser = value;
-  }
-
-  private _currUser:UserModel;
 
   constructor(private http: HttpClient){}
 

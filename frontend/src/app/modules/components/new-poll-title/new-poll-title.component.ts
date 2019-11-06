@@ -23,22 +23,28 @@ export class NewPollTitleComponent implements OnInit {
   ngOnInit() {
     this.themeService.getAllTheme().subscribe(value=>{
       this.themes=value as ThemeModel[];
-      console.log(this.userService.currUser);
-      console.log(this.themes);
     })
   }
 
   addPoll() {
-    this.themeService.getThemeByName(this.themeStr).subscribe(theme=>{
-      this.poll.idUser=this.userService.currUser.id;
-      this.poll.idTheme=theme.id;
+
+      this.poll.idUser=Number(localStorage.getItem("idCurrUser"));
+      this.poll.idTheme=this.getIdThemeByName(this.themeStr,this.themes);
       this.poll.shared='Yes';
       this.poll.status='active';
       this.pollService.savePoll(this.poll).subscribe(value => {
-        this.pollService.currPoll=value as PollModel;
-        console.log(this.pollService.currPoll);
+        localStorage.setItem('idCurrPoll',value.id.toString());
+        //this.pollService.currPoll=value as PollModel;
+        //console.log(this.pollService.currPoll);
         this.router.navigate(['/designer']);
       });
-    });
+  }
+
+  getIdThemeByName(name:string,list:ThemeModel[]):number{
+    for(let i=0;i<list.length;i++){
+      if(list[i].name===name)
+        return list[i].id;
+      return null;
+    }
   }
 }

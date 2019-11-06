@@ -49,15 +49,14 @@ export class SignInComponent implements OnInit,OnDestroy {
 
     this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,this.signInForm.controls['password'].value).subscribe(value => {
 
-      this.userService.currUser=value as UserModel;
-
-      if(this.userService.currUser!==null){
+      if(value!==null){
+        localStorage.setItem("idCurrUser",value.id.toString());
         this.router.navigate(['/homePage']);
       }else{
-        this.errorMassage='Incorrect data. Recheck entered data'
+        this.errorMassage='Incorrect data. Recheck entered data';
       }
 
-      console.log(this.userService.currUser);
+      console.log(Number(localStorage.getItem("idCurrUser")));
 
     });
   }

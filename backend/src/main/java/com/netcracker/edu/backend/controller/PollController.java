@@ -30,7 +30,6 @@ public class PollController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Poll saveUser(@RequestBody Poll poll) {
-        System.out.println(poll.toString());
         return pollService.save(poll);
     }
 
