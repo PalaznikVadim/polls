@@ -1,3 +1,4 @@
+import {QuestionModel} from "./question.model";
 
 export class PollModel {
 
@@ -10,6 +11,7 @@ export class PollModel {
   public dataTime:Date;
   public status:string;
   public shared:string;
+  public questions:QuestionModel[];
 
   constructor() {}
 

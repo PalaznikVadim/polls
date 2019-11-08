@@ -36,7 +36,8 @@ export class SignInComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    if(this.sub!=null)
+      this.sub.unsubscribe();
   }
 
   isControlInvalid(controlName: string): boolean {

@@ -23,8 +23,8 @@ public class PollDataController {
         return ResponseEntity.ok(pollService.findAllByUserId(Integer.valueOf(userId)));
     }
 
-    @RequestMapping
-    public ResponseEntity<Poll> getPollById(@PathVariable String id) {
+    @RequestMapping("/id")
+    public ResponseEntity<Poll> getPollById(@RequestParam String id) {
         return ResponseEntity.ok(pollService.findById(Integer.valueOf(id)));
     }
 
@@ -33,14 +33,12 @@ public class PollDataController {
         if (poll != null) {
             System.out.println(poll.toString());
             poll.setDataTime(new Date());
-
-            System.out.println(poll.getDataTime());
             return ResponseEntity.ok(pollService.save(poll));
         }
         return null;
     }
 
-    @RequestMapping(value = "/id", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void deletePoll(@RequestParam String id) {
         pollService.deletePoll(Integer.valueOf(id));
     }

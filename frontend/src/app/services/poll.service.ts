@@ -35,7 +35,7 @@ export class PollService {
   }
 
   deletePoll(id: string): Observable<void> {
-    return this.http.delete<void>('/api/poll/id?id=' + id);
+    return this.http.delete<void>('/api/poll/delete?id=' + id);
   }
 }
 /*

@@ -22,7 +22,7 @@ public class PollController {
         return ResponseEntity.ok(polls);
     }
 
-    @RequestMapping(value = "", method = RequestMethod.GET)
+    @RequestMapping(value = "/id", method = RequestMethod.GET)
     public Optional<Poll> getPollById(@RequestParam String id) {
         return pollService.findPollById(Integer.valueOf(id));
     }
@@ -33,7 +33,7 @@ public class PollController {
         return pollService.save(poll);
     }
 
-    @RequestMapping(value = "/id",method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
     public void deletePoll(@RequestParam String id) {
         pollService.delete(Integer.valueOf(id));
     }

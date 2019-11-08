@@ -29,7 +29,9 @@ public class QuestionController {
 
     @RequestMapping(value = "",method = RequestMethod.POST)
     public Question saveQuestion(@RequestBody Question question){
-        return questionService.save(question);
+        Question quest=questionService.save(question);
+        System.out.println(quest.toString());
+        return quest;
     }
 
     @RequestMapping(value = "/delete",method = RequestMethod.DELETE)

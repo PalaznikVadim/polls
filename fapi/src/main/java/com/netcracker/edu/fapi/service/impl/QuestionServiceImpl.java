@@ -34,6 +34,7 @@ public class QuestionServiceImpl implements QuestionService {
     public Question save(Question question) {
         RestTemplate restTemplate = new RestTemplate();
         Question quest=restTemplate.postForEntity(backendServerUrl+"/api/question",question,Question.class).getBody();
+        System.out.println(quest.toString());
         return quest;
     }
 

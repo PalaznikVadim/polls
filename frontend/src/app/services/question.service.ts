@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {QuestionModel} from "../modules/models/question.model";
 import {HttpClient} from "@angular/common/http";
+import {PollModel} from "../modules/models/poll.model";
 
 @Injectable()
 export class QuestionService {
@@ -9,7 +10,14 @@ export class QuestionService {
   constructor(private http:HttpClient){}
 
   getAllQuestionByPollId(idPoll:number):Observable<QuestionModel[]>{
-    return this.http.get<QuestionModel[]>('/api/question/idPoll?idPoll='+idPoll);
+    return this.http.get<QuestionModel[]>('/api/question/poll?idPoll='+idPoll);
+  }
 
+  saveQuestion(question:QuestionModel):Observable<QuestionModel>{
+    return this.http.post<QuestionModel>('/api/question',question);
+  }
+
+  deleteQuestion(id: number):Observable<void> {
+    return this.http.delete<void>('api/question/delete?id='+id);
   }
 }

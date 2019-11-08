@@ -3,6 +3,7 @@ import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import {PollModel} from "../../models/poll.model";
 import {PollService} from "../../../services/poll.service";
 import {UserService} from "../../../services/user.service";
+import {Router} from "@angular/router";
 
 
 @Component({
@@ -13,7 +14,8 @@ import {UserService} from "../../../services/user.service";
 export class HomePageComponent implements OnInit,OnDestroy {
 
   private sub:any;
-
+  indexCurrPoll:number;
+  idCurrPoll:number;
   polls:PollModel[];
 
   modalRef: BsModalRef;
@@ -21,7 +23,7 @@ export class HomePageComponent implements OnInit,OnDestroy {
     animated: true
   };
 
-  constructor(private modalService: BsModalService,private  pollService:PollService,private userService:UserService) {}
+  constructor(private modalService: BsModalService,private  pollService:PollService,private router: Router) {}
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
@@ -41,8 +43,19 @@ export class HomePageComponent implements OnInit,OnDestroy {
   deletePoll(id: number,i:number) {
     this.pollService.deletePoll(id.toString()).subscribe(value=>{
       this.polls.splice(i,1);
+      this.modalRef.hide();
       console.log("Poll with id="+id+"deleted");
     });
+  }
 
+  confirm(template: TemplateRef<any>,id:number,index:number){
+    this.idCurrPoll=id;
+    this.indexCurrPoll=index;
+    this.modalRef = this.modalService.show(template);
+  }
+
+  editPoll(id:number){
+    localStorage.setItem("idCurrPoll",id.toString());
+    this.router.navigate(['/designer']);
   }
 }

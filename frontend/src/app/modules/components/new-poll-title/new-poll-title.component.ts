@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {PollModel} from "../../models/poll.model";
 import {ThemeService} from "../../../services/theme.service";
 import {ThemeModel} from "../../models/theme.model";
@@ -11,40 +11,51 @@ import {Router} from "@angular/router";
   templateUrl: './new-poll-title.component.html',
   styleUrls: ['./new-poll-title.component.css']
 })
-export class NewPollTitleComponent implements OnInit {
+export class NewPollTitleComponent implements OnInit,OnDestroy {
 
   themeStr:string;
   poll = new PollModel();
   themes:ThemeModel[];
+  subTheme:any;
+  subPoll:any;
 
   constructor(private themeService:ThemeService,private pollService:PollService,private userService:UserService,private router: Router) {
   }
 
   ngOnInit() {
-    this.themeService.getAllTheme().subscribe(value=>{
+    this.subTheme=this.themeService.getAllTheme().subscribe(value=>{
       this.themes=value as ThemeModel[];
-    })
+      this.themeStr=this.themes[0].name;
+    });
+
   }
 
   addPoll() {
+console.log(this.themeStr);
 
       this.poll.idUser=Number(localStorage.getItem("idCurrUser"));
       this.poll.idTheme=this.getIdThemeByName(this.themeStr,this.themes);
       this.poll.shared='Yes';
       this.poll.status='active';
-      this.pollService.savePoll(this.poll).subscribe(value => {
+      this.subPoll=this.pollService.savePoll(this.poll).subscribe(value => {
         localStorage.setItem('idCurrPoll',value.id.toString());
-        //this.pollService.currPoll=value as PollModel;
-        //console.log(this.pollService.currPoll);
         this.router.navigate(['/designer']);
+       // this.pollService.currPoll=value as PollModel;
+       // console.log(this.pollService.currPoll);
       });
   }
 
   getIdThemeByName(name:string,list:ThemeModel[]):number{
-    for(let i=0;i<list.length;i++){
-      if(list[i].name===name)
+    for(let i=0;i<list.length+1;i++){
+      if(list[i].name==name) {
         return list[i].id;
-      return null;
+      }
     }
+    return null;
+  }
+
+  ngOnDestroy(): void {
+    this.subTheme.unsubscribe();
+    this.subPoll.unsubscribe();
   }
 }

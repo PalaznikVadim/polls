@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserModel} from "../../models/user.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../../services/user.service";
@@ -10,10 +10,11 @@ import {Router} from "@angular/router";
   templateUrl: './registration.component.html',
   styleUrls: ['./registration.component.css']
 })
-export class RegistrationComponent implements OnInit {
+export class RegistrationComponent implements OnInit,OnDestroy {
 
   user = new UserModel();
   registrationForm: FormGroup;
+  sub:any;
 
 
   constructor(private  userService: UserService,private router: Router) {
@@ -69,7 +70,7 @@ export class RegistrationComponent implements OnInit {
       this.user.role='user';
 
     console.log(this.user);
-    this.userService.saveUser(this.user).subscribe(user => {
+    this.sub=this.userService.saveUser(this.user).subscribe(user => {
 
         this.user = user as UserModel;
         if(this.user!==null){
@@ -79,5 +80,10 @@ export class RegistrationComponent implements OnInit {
       }
     );
     console.log(this.registrationForm);
+  }
+
+  ngOnDestroy(): void {
+    if(this.sub!=null)
+      this.sub.unsubscribe();
   }
 }

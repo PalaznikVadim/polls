@@ -27,6 +27,9 @@ import { AdminHomePageComponent } from './modules/components/administrator/admin
 import { UserListComponent } from './modules/components/administrator/user-list/user-list.component';
 import {UserService} from "./services/user.service";
 import {ThemeService} from "./services/theme.service";
+import {QuestionService} from "./services/question.service";
+import {AnswerService} from "./services/answer.service";
+import {TypesService} from "./services/types.service";
 
 
 
@@ -83,7 +86,10 @@ const appRoutes: Routes = [
   providers: [
     PollService,
     UserService,
-    ThemeService
+    ThemeService,
+    QuestionService,
+    AnswerService,
+    TypesService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,7 +1,6 @@
 package com.netcracker.edu.fapi.service.impl;
 
 import com.netcracker.edu.fapi.models.Poll;
-import com.netcracker.edu.fapi.models.User;
 import com.netcracker.edu.fapi.service.PollService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll findById(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
-        Poll poll=restTemplate.getForObject(backendServerUrl+"api/poll?id="+id,Poll.class);
+        Poll poll=restTemplate.getForObject(backendServerUrl+"api/poll/id?id="+id,Poll.class);
         return poll;
     }
 
@@ -40,7 +39,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public void deletePoll(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + "/api/poll/id?id=" + id);
+        restTemplate.delete(backendServerUrl + "/api/poll/delete?id=" + id);
     }
 
 

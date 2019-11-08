@@ -10,8 +10,22 @@ import java.util.Objects;
 public class TypeQuestion {
     private int id;
     private Type type;
+    private String description;
+
+    @Basic
+    @Column(name = "description")
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+
 
     @Id
+    @GeneratedValue(strategy =GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -44,5 +58,14 @@ public class TypeQuestion {
     @Override
     public int hashCode() {
         return Objects.hash(id, type);
+    }
+
+    @Override
+    public String toString() {
+        return "TypeQuestion{" +
+                "id=" + id +
+                ", type=" + type +
+                ", description='" + description + '\'' +
+                '}';
     }
 }
