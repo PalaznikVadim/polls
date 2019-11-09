@@ -1,4 +1,4 @@
-<app-nav></app-nav>
+<!--<app-nav></app-nav>-->
 
 <div class="container">
 
@@ -18,7 +18,7 @@
         <h3>{{i+1}}<span *ngIf="quest.required=='Yes'">*</span> . {{quest.textTitle}}</h3>
       </div>
       <div class="notation">
-        <h6>{{findDescriptionTypeById(quest.idType)}}</h6>
+        <h6>{{typesService.findDescriptionTypeById(quest.idType)}}</h6>
       </div>
       <div  class="answers">
         <ul>
@@ -41,7 +41,7 @@
   </div>
   <div class="modal-body justify-content-center">
     <select [(ngModel)]="strTypeQuestion" class="custom-select" size="1">
-      <option *ngFor="let type of types">{{type.description}}</option>
+      <option *ngFor="let type of typesService.types">{{type.description}}</option>
     </select>
     <div class="btn-group mt-2 mb-2">Required:
       <label class="btn btn-outline-info ml-2" [(ngModel)]="quest.required"

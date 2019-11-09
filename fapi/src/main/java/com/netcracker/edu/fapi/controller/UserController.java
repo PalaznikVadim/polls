@@ -35,4 +35,7 @@ public class UserController {
     public User getUserById(@RequestParam String id){
         return userService.findById(Integer.valueOf(id));
     }
+
+    @GetMapping("/all")
+    public User[] getAll(){return userService.getAll();}
 }

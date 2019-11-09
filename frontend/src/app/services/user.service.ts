@@ -19,4 +19,8 @@ export class UserService{
   saveUser(user:UserModel):Observable<UserModel>{
     return this.http.post<UserModel>('/api/user/registration', user);
   }
+
+  getAllUsers():Observable<UserModel[]>{
+    return this.http.get<UserModel[]>('/api/user/all');
+  }
 }

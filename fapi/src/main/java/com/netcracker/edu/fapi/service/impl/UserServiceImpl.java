@@ -43,4 +43,10 @@ public class UserServiceImpl implements UserService {
         User user=restTemplate.getForObject(backendServerUrl+"api/user/id?id="+id,User.class);
         return user;
     }
+
+    @Override
+    public User[] getAll() {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/user/all",User[].class);
+    }
 }

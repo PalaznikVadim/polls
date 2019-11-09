@@ -52,7 +52,9 @@ export class SignInComponent implements OnInit,OnDestroy {
 
       if(value!==null){
         localStorage.setItem("idCurrUser",value.id.toString());
+        localStorage.setItem('currRole',value.role);
         this.router.navigate(['/homePage']);
+
       }else{
         this.errorMassage='Incorrect data. Recheck entered data';
       }

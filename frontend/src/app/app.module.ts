@@ -30,23 +30,27 @@ import {ThemeService} from "./services/theme.service";
 import {QuestionService} from "./services/question.service";
 import {AnswerService} from "./services/answer.service";
 import {TypesService} from "./services/types.service";
+import {UserAnswerService} from "./services/user-answer.service";
+import { UserHomeComponent } from './modules/components/user-home/user-home.component';
+import { ViewUserPollComponent } from './modules/components/administrator/view-user-poll/view-user-poll.component';
 
 
-
+// const pollRoutes:Routes=[
+//   {path:"designer",component:DesignerComponent},
+//   {path:'stats',component:StatsComponent},
+//   {path:"link",component:GenerateLinkComponent}
+// ]
 
 const appRoutes: Routes = [
   {path: "",component:SignInComponent},
   {path:"registration",component:RegistrationComponent},
   {path:"homePage",component:HomePageComponent},
   {path:"titleNewPoll",component:NewPollTitleComponent},
-  {path:"designer",component:DesignerComponent},
-  {path:"link",component:GenerateLinkComponent},
   {path:'poll',component:PollComponent},
   {path:'firstPagePoll',component:FirstPagePollComponent},
   {path:'lastPagePoll',component:LastPagePollComponent},
-  {path:'stats',component:StatsComponent}
-
-
+  {path:'viewUserPoll',component:ViewUserPollComponent},
+  {path:'constructorPoll',component:NavComponent}
 
 
 
@@ -68,6 +72,8 @@ const appRoutes: Routes = [
     StatsComponent,
     AdminHomePageComponent,
     UserListComponent,
+    UserHomeComponent,
+    ViewUserPollComponent,
 
 
   ],
@@ -89,7 +95,8 @@ const appRoutes: Routes = [
     ThemeService,
     QuestionService,
     AnswerService,
-    TypesService
+    TypesService,
+    UserAnswerService
   ],
   bootstrap: [AppComponent]
 })

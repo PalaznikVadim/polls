@@ -9,6 +9,7 @@ export class UserModel {
     public dateOfBirth:Date;
     public email:string;
     public password:string;
+    public polls:PollModel[];
 
     constructor(){}
 

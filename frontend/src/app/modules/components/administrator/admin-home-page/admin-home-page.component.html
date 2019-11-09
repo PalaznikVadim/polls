@@ -1,0 +1,15 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <form class="form-inline mt-2 mt-md-0">
+      <button [class.active]="tabs[0]" type="button" class="btn btn-outline-light ml-2" (click)="changeContent(0)">Users</button>
+      <button [class.active]="tabs[1]" type="button" class="btn btn-outline-light ml-2" (click)="changeContent(1)">myPolls</button>
+      <button [class.active]="tabs[2]" type="button" class="btn btn-outline-light ml-2" (click)="changeContent(2)">Templates</button>
+    </form>
+    <ul class="navbar-nav mr-0 ml-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" routerLink="/">Exit</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+<app-user-list *ngIf="tabs[0]"></app-user-list>

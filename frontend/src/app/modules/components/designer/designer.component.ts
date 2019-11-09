@@ -27,7 +27,7 @@ export class DesignerComponent implements OnInit,OnDestroy {
   poll:PollModel;
   quest: QuestionModel;
   strTypeQuestion:string;
-  types:TypeQuestionModel[];
+  //types:TypeQuestionModel[];
   answer:AnswerModel;
 
   idCurrQuest:number;
@@ -43,9 +43,9 @@ export class DesignerComponent implements OnInit,OnDestroy {
     this.quest.answers=[];
     this.subs=[];
     this.subs[this.countSub++]=this.typesService.getAllTypes().subscribe(types=>{
-      this.types=[];
-      this.types=types as TypeQuestionModel[];
-      this.strTypeQuestion=this.types[0].description;
+      //this.types=[];
+      this.typesService.types=types as TypeQuestionModel[];
+      this.strTypeQuestion=this.typesService.types[0].description;
     });
     this.poll=new PollModel();
     this.poll.id=Number(localStorage.getItem('idCurrPoll'));
@@ -67,7 +67,7 @@ export class DesignerComponent implements OnInit,OnDestroy {
 
 
   addQuest(template: TemplateRef<any>){
-console.log(this.strTypeQuestion+'='+this.convertType(this.strTypeQuestion));
+console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(this.strTypeQuestion));
     this.isNew=true;
     this.quest=new QuestionModel();
     this.quest.textTitle='Enter question title';
@@ -85,8 +85,8 @@ console.log(this.strTypeQuestion+'='+this.convertType(this.strTypeQuestion));
   }
 
   createQuestion() {
-    console.log(this.strTypeQuestion+'='+this.convertType(this.strTypeQuestion));
-    this.quest.idType=this.convertType(this.strTypeQuestion);
+    console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(this.strTypeQuestion));
+    this.quest.idType=this.typesService.findIdTypeByDescription(this.strTypeQuestion);
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
       if(quest!=null){
         //this.quest=quest as QuestionModel;
@@ -136,13 +136,6 @@ console.log(this.strTypeQuestion+'='+this.convertType(this.strTypeQuestion));
 
   }
 
-  convertType(typeQuestion:string):number{
-    for(let i=0;i<this.types.length;i++)
-      if(typeQuestion==this.types[i].description)
-        return this.types[i].id;
-
-  }
-
   openModal(template: TemplateRef<any>,id:number,i:number) {
     this.idCurrQuest=id;
     this.indexCurQuest=i;
@@ -156,7 +149,7 @@ console.log(this.strTypeQuestion+'='+this.convertType(this.strTypeQuestion));
   }
 
   updateQuestion() {
-    this.quest.idType=this.convertType(this.strTypeQuestion);
+    this.quest.idType=this.typesService.findIdTypeByDescription(this.strTypeQuestion);
     this.subs[this.countSub++]=this.questionService.saveQuestion(this.quest).subscribe(quest => {
       if (quest != null) {
         //this.quest = quest as QuestionModel;
@@ -171,11 +164,5 @@ console.log(this.strTypeQuestion+'='+this.convertType(this.strTypeQuestion));
       }
     });
     this.modalRef.hide();
-  }
-
-  findDescriptionTypeById(id:number):string{
-    for(let i=0;i<this.types.length;i++)
-      if(id==this.types[i].id)
-        return this.types[i].description;
   }
 }

@@ -8,17 +8,24 @@ import {Router} from "@angular/router";
 })
 export class NavComponent implements OnInit {
 
-  activePoll:boolean;
-  activeLink:boolean;
-  activeStats:boolean;
+  tabs:boolean[];
 
   constructor(private router: Router) { }
 
   ngOnInit() {
-    this.activePoll=(this.router.url=="/designer");
-    this.activeLink=(this.router.url=="/link");
-    this.activeStats=(this.router.url=="/stats")
+    if(localStorage.getItem('index')!=null){
+      this.tabs=[false,false,false];
+      this.tabs[Number(localStorage.getItem('index'))]=true;
+    }else{
+      this.tabs=[true,false,false];
+    }
+    console.log(this.tabs);
+  }
 
+  changeTab(index:number):void{
+    for(let i=0;i<this.tabs.length;i++)
+      this.tabs[i]=false;
+    this.tabs[index]=true;
   }
 
 }

@@ -11,51 +11,15 @@ import {Router} from "@angular/router";
   templateUrl: './home-page.component.html',
   styleUrls: ['./home-page.component.css']
 })
-export class HomePageComponent implements OnInit,OnDestroy {
+export class HomePageComponent implements OnInit {
 
-  private sub:any;
-  indexCurrPoll:number;
-  idCurrPoll:number;
-  polls:PollModel[];
+  role:string;
 
-  modalRef: BsModalRef;
-  config = {
-    animated: true
-  };
-
-  constructor(private modalService: BsModalService,private  pollService:PollService,private router: Router) {}
-
-  openModal(template: TemplateRef<any>) {
-    this.modalRef = this.modalService.show(template);
+  constructor() {
   }
 
-  ngOnInit() {
-      this.sub = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser"))).subscribe(value => {
-        this.polls = value as PollModel[];
-        console.log(this.polls)
-      });
+  ngOnInit(): void {
+    this.role=localStorage.getItem('currRole');
   }
 
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
-  }
-
-  deletePoll(id: number,i:number) {
-    this.pollService.deletePoll(id.toString()).subscribe(value=>{
-      this.polls.splice(i,1);
-      this.modalRef.hide();
-      console.log("Poll with id="+id+"deleted");
-    });
-  }
-
-  confirm(template: TemplateRef<any>,id:number,index:number){
-    this.idCurrPoll=id;
-    this.indexCurrPoll=index;
-    this.modalRef = this.modalService.show(template);
-  }
-
-  editPoll(id:number){
-    localStorage.setItem("idCurrPoll",id.toString());
-    this.router.navigate(['/designer']);
-  }
 }

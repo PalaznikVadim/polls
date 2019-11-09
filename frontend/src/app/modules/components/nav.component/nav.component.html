@@ -6,9 +6,9 @@
       </li>
     </ul>
     <form class="form-inline mt-2 mt-md-0">
-      <button [ngClass]={active:activePoll} class="btn btn-outline-light ml-1" routerLink="/designer">Poll</button>
-      <button [ngClass]={active:activeLink} class="btn btn-outline-light ml-1" routerLink="/link">Сollecting answers</button>
-      <button [ngClass]={active:activeStats} class="btn btn-outline-light ml-1" routerLink="/stats">Results</button>
+      <button [ngClass]={active:tabs[0]} class="btn btn-outline-light ml-1" (click)="changeTab(0)">Poll</button>
+      <button [ngClass]={active:tabs[1]} class="btn btn-outline-light ml-1" (click)="changeTab(1)">Сollecting answers</button>
+      <button [ngClass]={active:tabs[2]} class="btn btn-outline-light ml-1" (click)="changeTab(2)">Results</button>
     </form>
     <ul class="navbar-nav mr-0 ml-auto">
       <li class="nav-item active">
@@ -17,3 +17,7 @@
     </ul>
   </div>
 </nav>
+
+<app-designer *ngIf="tabs[0]"></app-designer>
+<app-generate-link *ngIf="tabs[1]"></app-generate-link>
+<app-stats *ngIf="tabs[2]"></app-stats>

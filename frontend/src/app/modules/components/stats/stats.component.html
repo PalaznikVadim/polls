@@ -1,27 +1,32 @@
-<app-nav></app-nav>
+<!--<app-nav></app-nav>-->
 <div class="container">
-  <div class="row justify-content-center">
-
-    <div class="col-8">
-      <div class="mt-3 p-2 rounded bg-light" *ngFor="let quest of poll.quests;let i=index;" >
-      <h4>{{i+1}}. {{quest.title}}</h4>
-        <table class="table table-striped">
-          <thead>
-            <th scope="col">#</th>
-            <th scope="col">Answer option</th>
-            <th scope="col">Answers</th>
-            <th scope="col">%</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let answer of quest.answers;let j=index;">
-              <th class="row"></th>
-              <th>{{answer}}</th>
-              <th>{{quest.user_answer[j]}}</th>
-              <th>{{quest.user_answer/quest.answers.length}}</th>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+  <div class="row justify-content-center mb-5">
+    <div class="col-10 text-center" *ngIf="questions==null||questions.length==0;else unset">
+      <h3 class="mt-5">Poll's empty. Statistics collection has not started!</h3>
     </div>
   </div>
 </div>
+
+<ng-template #unset>
+  <div class="col-10">
+    <div class="mt-3 p-2 rounded bg-light" *ngFor="let quest of questions;let i=index;" >
+      <h4>{{i+1}}. {{quest.textTitle}}</h4>
+      <table class="table table-striped">
+        <thead>
+        <th scope="col">#</th>
+        <th scope="col">Answer option</th>
+        <th scope="col">Answers</th>
+        <th scope="col">%</th>
+        </thead>
+        <tbody>
+        <tr *ngFor="let answer of quest.answers;let j=index;">
+          <th class="row justify-content-center">{{j+1}}</th>
+          <th>{{answer.text}}</th>
+          <th>{{quest.answers[j].countSelected}}</th>
+          <th>{{quest.answers[j].countSelected/quest.countUserAnswers*100|number}}</th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</ng-template>

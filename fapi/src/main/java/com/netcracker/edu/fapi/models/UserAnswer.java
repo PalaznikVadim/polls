@@ -1,6 +1,6 @@
 package com.netcracker.edu.fapi.models;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class UserAnswer {
     private int id;

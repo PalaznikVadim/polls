@@ -1,4 +1,5 @@
 import {AnswerModel} from "./answer.model";
+import {UserAnswerModel} from "./user-answer.model";
 
 export class QuestionModel{
   public id:number;
@@ -7,6 +8,8 @@ export class QuestionModel{
   public required:string;
   public idPoll:number;
   public answers:AnswerModel[];
+  public countUserAnswers:number;
+  public user_answers:any;
 
   constructor(){}
 

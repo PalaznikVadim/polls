@@ -16,14 +16,15 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   themeStr:string;
   poll = new PollModel();
   themes:ThemeModel[];
-  subTheme:any;
-  subPoll:any;
+  subs:any[];
+  countSubs=0;
 
   constructor(private themeService:ThemeService,private pollService:PollService,private userService:UserService,private router: Router) {
   }
 
   ngOnInit() {
-    this.subTheme=this.themeService.getAllTheme().subscribe(value=>{
+    this.subs=[];
+    this.subs[this.countSubs++]=this.themeService.getAllTheme().subscribe(value=>{
       this.themes=value as ThemeModel[];
       this.themeStr=this.themes[0].name;
     });
@@ -37,11 +38,10 @@ console.log(this.themeStr);
       this.poll.idTheme=this.getIdThemeByName(this.themeStr,this.themes);
       this.poll.shared='Yes';
       this.poll.status='active';
-      this.subPoll=this.pollService.savePoll(this.poll).subscribe(value => {
+      this.subs[this.countSubs++]=this.pollService.savePoll(this.poll).subscribe(value => {
         localStorage.setItem('idCurrPoll',value.id.toString());
-        this.router.navigate(['/designer']);
-       // this.pollService.currPoll=value as PollModel;
-       // console.log(this.pollService.currPoll);
+        localStorage.setItem('index',null);
+        this.router.navigate(['/constructorPoll']);
       });
   }
 
@@ -55,7 +55,9 @@ console.log(this.themeStr);
   }
 
   ngOnDestroy(): void {
-    this.subTheme.unsubscribe();
-    this.subPoll.unsubscribe();
+    if(this.subs!=null)
+      for (let i=0;i<this.subs.length;i++)
+        this.subs[i].unsubscribe();
+
   }
 }
