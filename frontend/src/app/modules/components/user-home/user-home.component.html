@@ -31,26 +31,24 @@
 </div>
 
 <ng-template #unset>
-  <div *ngFor="let item of polls;let i=index;" class="col-md-4">
-    <div class="card mb-4 shadow-sm">
-      <svg class="bd-placeholder-img card-img-top" width="100%" height="225"
-           xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false"
-           role="img" aria-label="Placeholder: Thumbnail">
-        <title>Placeholder</title>
-        <rect fill="#55595c" width="100%" height="100%" /><text fill="#eceeef" dy=".3em" x="50%"
-                                                                y="50%">{{item.name}}</text>
-      </svg>
-      <div class="card-body">
-        <p class="card-text">Description: {{item.description}}</p>
-        <p class="card-text">Date:  {{item.dataTime}}</p>
-        <small class="text-muted">Ответы: 0</small>
-        <div class="d-flex justify-content-between align-items-center">
-          <div class="btn-group btn-block">
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="editPoll(item.id)">Edit</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" (click)="transferToStats(item.id)">Stats</button>
-            <button type="button" class="btn btn-sm btn-outline-secondary" name="deletePoll" (click)="confirm(templateConfirm,item.id,i)" >Delete</button>
+  <div class="col-4 pr-2"  *ngFor="let poll of polls;let i=index;">
+    <div class="card border-info  mb-3" style="max-width: 18rem;">
+      <div class="card-header color-card border-info"><h5>{{poll.name}}</h5></div>
+        <div class="card-body">
+          <h6 class="card-text">Theme: {{poll.theme}}</h6>
+          <p class="card-text">Description: {{poll.description}}</p>
+          <div *ngIf="poll.status!='blocked'" class="alert alert-success">Status: {{poll.status}}</div>
+          <div *ngIf="poll.status=='blocked'" class="alert alert-danger">Status: {{poll.status}}</div>
+          <div class="float-right">
+            <span>{{poll.date|date}}</span>
           </div>
         </div>
+        <div class="card-footer color-card  border-info">
+          <div class="btn-group btn-block">
+            <button type="button" class="btn btn-sm btn-light" (click)="editPoll(poll.id)">Edit</button>
+            <button type="button" class="btn btn-sm btn-light" (click)="transferToStats(poll.id)">Stats</button>
+            <button type="button" class="btn btn-sm btn-danger" name="deletePoll" (click)="confirm(templateConfirm,poll.id,i)" >Delete</button>
+          </div>
       </div>
     </div>
   </div>
@@ -65,7 +63,7 @@
   </div>
   <div class="modal-body">
     <button class="btn btn-outline-success my-2 mr-2 my-sm-0">Poll template</button>
-    <button class="btn btn-outline-success my-2 my-sm-0" routerLink="/titleNewPoll" (click)="modalRef.hide()">New poll</button>
+    <button class="btn btn-outline-success my-2 my-sm-0" (click)="createNewPoll()">New poll</button>
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-primary" (click)="modalRef.hide()">Cancel</button>

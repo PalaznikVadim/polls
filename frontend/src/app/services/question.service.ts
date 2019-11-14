@@ -2,7 +2,7 @@ import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {QuestionModel} from "../modules/models/question.model";
 import {HttpClient} from "@angular/common/http";
-import {PollModel} from "../modules/models/poll.model";
+
 
 @Injectable()
 export class QuestionService {

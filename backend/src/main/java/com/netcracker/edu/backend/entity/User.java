@@ -1,6 +1,7 @@
 package com.netcracker.edu.backend.entity;
 
 import com.netcracker.edu.backend.entity.enums.Role;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Entity
 public class User {
+
     private int id;
     private String name;
     private String surname;
@@ -15,6 +17,7 @@ public class User {
     private Role role;
     private String email;
     private String password;
+
 
     @Id
     @GeneratedValue(strategy =GenerationType.IDENTITY)
@@ -69,7 +72,8 @@ public class User {
     }
 
     @Basic
-    @Column(name = "email")
+
+    @Column(name = "email",unique = true)
     public String getEmail() {
         return email;
     }

@@ -19,4 +19,8 @@ export class ThemeService{
     return this.http.get<ThemeModel>('/api/theme/name'+'?name='+name);
   }
 
+  save(titleTheme:string):Observable<ThemeModel>{
+    return this.http.post<ThemeModel>('/api/theme/save',titleTheme);
+  }
+
 }

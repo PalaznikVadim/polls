@@ -1,7 +1,10 @@
 package com.netcracker.edu.fapi.service.impl;
 
+import com.netcracker.edu.fapi.converters.AnswerConverter;
 import com.netcracker.edu.fapi.models.Answer;
+import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.service.AnswerService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -15,6 +18,9 @@ public class AnswerServiceImpl implements AnswerService {
     @Value("${backend.server.url}")
     private String backendServerUrl;
 
+    @Autowired
+    private AnswerConverter answerConverter;
+
     @Override
     public List<Answer> getAllAnswerByQuestionId(Integer idQuestion) {
 
@@ -25,9 +31,11 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Answer saveAnswer(Answer answer) {
+
         RestTemplate restTemplate = new RestTemplate();
         Answer ans=restTemplate.postForEntity(backendServerUrl + "/api/answer", answer, Answer.class).getBody();
-        return ans;
+
+        return answer;
     }
 
     @Override

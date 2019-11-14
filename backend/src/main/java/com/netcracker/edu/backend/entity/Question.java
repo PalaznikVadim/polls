@@ -81,4 +81,15 @@ public class Question {
     public int hashCode() {
         return Objects.hash(id, textTitle, idType, required, idPoll);
     }
+
+    @Override
+    public String toString() {
+        return "Question{" +
+                "id=" + id +
+                ", textTitle='" + textTitle + '\'' +
+                ", idType=" + idType +
+                ", required=" + required +
+                ", idPoll=" + idPoll +
+                '}';
+    }
 }

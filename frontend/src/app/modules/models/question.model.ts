@@ -4,11 +4,10 @@ import {UserAnswerModel} from "./user-answer.model";
 export class QuestionModel{
   public id:number;
   public textTitle:string;
-  public idType:number;
+  public type:string;
   public required:string;
   public idPoll:number;
   public answers:AnswerModel[];
-  public countUserAnswers:number;
   public user_answers:any;
 
   constructor(){}

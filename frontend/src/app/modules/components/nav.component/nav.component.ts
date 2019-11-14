@@ -9,10 +9,12 @@ import {Router} from "@angular/router";
 export class NavComponent implements OnInit {
 
   tabs:boolean[];
+  role:string;
 
   constructor(private router: Router) { }
 
   ngOnInit() {
+    this.role=localStorage.getItem('currRole');
     if(localStorage.getItem('index')!=null){
       this.tabs=[false,false,false];
       this.tabs[Number(localStorage.getItem('index'))]=true;

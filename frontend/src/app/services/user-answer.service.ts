@@ -9,8 +9,8 @@ import {Observable} from "rxjs";
 export class UserAnswerService {
   constructor(private http:HttpClient){}
 
-  saveUserAnswer(userAnswer:UserAnswerModel):Observable<UserAnswerModel>{
-    return this.http.post<UserAnswerModel>('/api/userAnswer',userAnswer);
+  saveAllUserAnswer(userAnswers:UserAnswerModel[]):Observable<UserAnswerModel[]>{
+    return this.http.post<UserAnswerModel[]>('/api/userAnswer/all',userAnswers);
   }
 
   countSelected(idAnswer:number):Observable<number>{

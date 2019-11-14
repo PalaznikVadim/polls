@@ -13,12 +13,13 @@ export class AdminHomePageComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.tabs=[true,false,false];
+    this.tabs=[true,false];
   }
 
   changeContent(index:number):void{
     for(let i=0;i<this.tabs.length;i++)
       this.tabs[i]=false;
     this.tabs[index]=true;
+    console.log(this.tabs);
   }
 }

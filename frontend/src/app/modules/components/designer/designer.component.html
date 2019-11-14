@@ -1,15 +1,19 @@
 <!--<app-nav></app-nav>-->
 
-<div class="container">
-
-    <div class="row justify-content-center">
-        <div *ngIf="poll.questions==null||poll.questions.length==0;else unset">
-            <h3 class="mt-5">This page is empty. Create a question!</h3>
-        </div>
+<div class="container justify-content-center">
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <div class="btn btn-success float-right" routerLink="/titleNewPoll">Update poll description</div>
     </div>
-    <div class="row justify-content-center pb-5 mt-5">
-      <button class="btn btn-outline-info" (click)="addQuest(modalAddQuest)">Add</button>
+  </div>
+  <div class="row justify-content-center mt-2">
+    <div *ngIf="poll.questions==null||poll.questions.length==0;else unset">
+      <h3 class="mt-5">This page is empty. Create a question!</h3>
     </div>
+  </div>
+  <div class="row justify-content-center pb-5">
+    <button class="btn btn-outline-info" (click)="addQuest(modalAddQuest)">Add</button>
+  </div>
 </div>
 
 <ng-template #unset>
@@ -18,7 +22,8 @@
         <h3>{{i+1}}<span *ngIf="quest.required=='Yes'">*</span> . {{quest.textTitle}}</h3>
       </div>
       <div class="notation">
-        <h6>{{typesService.findDescriptionTypeById(quest.idType)}}</h6>
+        <h6 *ngIf="quest.type=='radio'">Select one answer</h6>
+        <h6 *ngIf="quest.type=='checkbox'">Select some answers</h6>
       </div>
       <div  class="answers">
         <ul>
@@ -40,8 +45,9 @@
     </button>
   </div>
   <div class="modal-body justify-content-center">
-    <select [(ngModel)]="strTypeQuestion" class="custom-select" size="1">
-      <option *ngFor="let type of typesService.types">{{type.description}}</option>
+    <select [(ngModel)]="quest.type" class="custom-select" size="1">
+      <option value="radio" selected>Select one answer</option>
+      <option value="checkbox">Select some answers</option>
     </select>
     <div class="btn-group mt-2 mb-2">Required:
       <label class="btn btn-outline-info ml-2" [(ngModel)]="quest.required"

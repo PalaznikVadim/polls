@@ -30,7 +30,9 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Theme save(Theme theme) {
-        return themeRepository.save(theme);
+    public Theme save(String theme) {
+        Theme themeEntity=new Theme();
+        themeEntity.setName(theme);
+        return themeRepository.save(themeEntity);
     }
 }

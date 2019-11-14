@@ -6,17 +6,18 @@
         <h3>{{i + 1}}<span *ngIf="quest.required=='Yes'">*</span> . {{quest.textTitle}}</h3>
       </div>
       <div class="notation">
-        <h6>{{typesService.findDescriptionTypeById(quest.idType)}}</h6>
+        <h6 *ngIf="quest.type=='radio'">Select one answer</h6>
+        <h6 *ngIf="quest.type=='checkbox'">Select some answer</h6>
       </div>
       <div class="answers ">
         <div class="btn-group btn-group-vertical col-12 p-3">
-          <div class="btn-block" *ngIf="typesService.findTypeById(quest.idType)=='checkbox'">
+          <div class="btn-block" *ngIf="quest.type=='checkbox'">
             <label *ngFor="let answer of quest.answers;let j=index;" uncheckable class="btn btn-outline-info text-left"
                    [(ngModel)]="quest.user_answers[j]"
                    btnCheckbox>{{answer.text}}</label>
           </div>
-          <div class="btn-block" *ngIf="typesService.findTypeById(quest.idType)=='radio'">
-            <div btnRadioGroup [(ngModel)]="quest.user_answers">
+          <div class="btn-block" *ngIf="quest.type=='radio'">
+            <div btnRadioGroup [(ngModel)]="quest.user_answers[0]">
               <label *ngFor="let answer of quest.answers; let j=index;" class="btn btn-outline-info text-left" uncheckable
                      btnRadio="{{answer.id}}">{{answer.text}}</label>
             </div>

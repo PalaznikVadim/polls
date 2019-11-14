@@ -63,4 +63,10 @@ export class UserHomeComponent implements OnInit,OnDestroy {
     localStorage.setItem("idCurrPoll",id.toString());
     this.router.navigate(['/constructorPoll']);
   }
+
+  createNewPoll() {
+    localStorage.setItem('idCurrPoll',null);
+    this.modalRef.hide();
+    this.router.navigate(['titleNewPoll']);
+  }
 }

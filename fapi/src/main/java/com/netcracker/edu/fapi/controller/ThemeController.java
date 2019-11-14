@@ -26,10 +26,10 @@ public class ThemeController {
     @GetMapping("/name")
     public Theme getThemeByName(@RequestParam String name){ return themeService.findThemeByName(name);}
 
-    @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Theme> save(@RequestBody Theme theme /*todo server validation*/) {
-        if (theme != null) {
-            return ResponseEntity.ok(themeService.save(theme));
+    @RequestMapping(value = "/save",method = RequestMethod.POST)
+    public ResponseEntity<Theme> save(@RequestBody String titleTheme /*todo server validation*/) {
+        if (titleTheme != null) {
+            return ResponseEntity.ok(themeService.save(titleTheme));
         }
         return null;
     }

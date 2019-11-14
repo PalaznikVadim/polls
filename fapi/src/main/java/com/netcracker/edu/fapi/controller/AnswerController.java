@@ -1,6 +1,7 @@
 package com.netcracker.edu.fapi.controller;
 
 import com.netcracker.edu.fapi.models.Answer;
+import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,9 +25,9 @@ public class AnswerController {
     @RequestMapping(value = "",method = RequestMethod.POST)
     public Answer saveAnswer(@RequestBody Answer answer){
         System.out.println(answer.toString());
-        Answer answ=answerService.saveAnswer(answer);
+        answer=answerService.saveAnswer(answer);
 
-        return answ;
+        return answer;
     }
 
 //    @RequestMapping(value = "/all",method = RequestMethod.POST)

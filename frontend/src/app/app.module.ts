@@ -33,6 +33,10 @@ import {TypesService} from "./services/types.service";
 import {UserAnswerService} from "./services/user-answer.service";
 import { UserHomeComponent } from './modules/components/user-home/user-home.component';
 import { ViewUserPollComponent } from './modules/components/administrator/view-user-poll/view-user-poll.component';
+import {StatsService} from "./services/stats.service";
+import { ProfileComponent } from './modules/components/administrator/profile/profile.component';
+import { TemplatesComponent } from './modules/components/administrator/templates/templates.component';
+import { ListTemplatesComponent } from './modules/components/list-templates/list-templates.component';
 
 
 // const pollRoutes:Routes=[
@@ -50,7 +54,9 @@ const appRoutes: Routes = [
   {path:'firstPagePoll',component:FirstPagePollComponent},
   {path:'lastPagePoll',component:LastPagePollComponent},
   {path:'viewUserPoll',component:ViewUserPollComponent},
-  {path:'constructorPoll',component:NavComponent}
+  {path:'constructorPoll',component:NavComponent},
+  {path:'profile',component:ProfileComponent},
+  {path:'templates',component:TemplatesComponent}
 
 
 
@@ -74,6 +80,9 @@ const appRoutes: Routes = [
     UserListComponent,
     UserHomeComponent,
     ViewUserPollComponent,
+    ProfileComponent,
+    TemplatesComponent,
+    ListTemplatesComponent,
 
 
   ],
@@ -96,7 +105,8 @@ const appRoutes: Routes = [
     QuestionService,
     AnswerService,
     TypesService,
-    UserAnswerService
+    UserAnswerService,
+    StatsService
   ],
   bootstrap: [AppComponent]
 })

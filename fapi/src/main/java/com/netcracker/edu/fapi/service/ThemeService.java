@@ -6,5 +6,5 @@ public interface ThemeService {
     Iterable<Theme> findAll();
     Theme findThemeById(Integer id);
     Theme findThemeByName(String name);
-    Theme save(Theme theme);
+    Theme save(String theme);
 }

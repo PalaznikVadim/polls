@@ -5,10 +5,10 @@ export class PollModel {
   public id:number;
   public name: string;
   public idUser:number;
-  public idTheme:number;
+  public theme:string;
   public description:string;
   public link:string;
-  public dataTime:Date;
+  public date:Date;
   public status:string;
   public shared:string;
   public questions:QuestionModel[];

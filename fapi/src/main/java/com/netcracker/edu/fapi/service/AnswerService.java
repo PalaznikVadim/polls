@@ -1,6 +1,7 @@
 package com.netcracker.edu.fapi.service;
 
 import com.netcracker.edu.fapi.models.Answer;
+import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 
 import java.util.List;
 

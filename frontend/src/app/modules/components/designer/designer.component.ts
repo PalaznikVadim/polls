@@ -42,25 +42,15 @@ export class DesignerComponent implements OnInit,OnDestroy {
     this.quest=new QuestionModel();
     this.quest.answers=[];
     this.subs=[];
-    this.subs[this.countSub++]=this.typesService.getAllTypes().subscribe(types=>{
-      //this.types=[];
-      this.typesService.types=types as TypeQuestionModel[];
-      this.strTypeQuestion=this.typesService.types[0].description;
-    });
+    // this.subs[this.countSub++]=this.typesService.getAllTypes().subscribe(types=>{
+    //   this.typesService.types=types as TypeQuestionModel[];
+    //   this.strTypeQuestion=this.typesService.types[0].description;
+    // });
     this.poll=new PollModel();
     this.poll.id=Number(localStorage.getItem('idCurrPoll'));
-    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.poll.id).subscribe(value => {
-      this.poll.questions=value as QuestionModel[];
-      if(this.poll.questions.length!=0){
-        for(let i=0;i<this.poll.questions.length;i++){
-          this.poll.questions[i].answers=[];
-          this.subs[this.countSub++]=this.answerService.getAllAnswerByIdQuestion(this.poll.questions[i].id).subscribe(answers=>{
-            if(answers!=null)
-              this.poll.questions[i].answers=answers as AnswerModel[];
-            else this.poll.questions[i].answers=[];
-          })
-        }
-      }else this.poll.questions=[];
+    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.poll.id).subscribe(questions => {
+      this.poll.questions=questions as QuestionModel[];
+
       console.log(this.poll);
     });
   }
@@ -72,6 +62,7 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
     this.quest=new QuestionModel();
     this.quest.textTitle='Enter question title';
     this.quest.required='No';
+    this.quest.type='radio';
     this.quest.idPoll=Number(localStorage.getItem('idCurrPoll'));
     this.quest.answers=[] as AnswerModel[];
     for(let i=0;i<3;i++) {
@@ -85,20 +76,13 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   createQuestion() {
-    console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(this.strTypeQuestion));
-    this.quest.idType=this.typesService.findIdTypeByDescription(this.strTypeQuestion);
+    console.log(this.quest);
+    //this.quest.type="Select one answer"?'radio':'checkbox';
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
       if(quest!=null){
         //this.quest=quest as QuestionModel;
         console.log(quest);
-        this.quest.id=quest.id;
         this.poll.questions.push(this.quest);}
-      for(let i=0;i<this.quest.answers.length;i++) {
-        this.quest.answers[i].idQuestion=quest.id;
-        this.subs[this.countSub++]=this.answerService.saveAnswer(this.quest.answers[i]).subscribe(answer=>{
-          this.quest.answers[i]=answer;
-        });
-      }
       }
     );
     this.modalRef.hide()
@@ -125,14 +109,15 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   deleteAnswer(index:number) {
-    if(this.quest.answers[index].id!=null){
-      console.log(this.quest.answers[index].id);
-    this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
-      this.quest.answers.splice(index,1);
-    });
-    }else{
-      this.quest.answers.splice(index,1);
-    }
+    this.quest.answers.splice(index,1);
+    // if(this.quest.answers[index].id!=null){
+    //   console.log(this.quest.answers[index].id);
+    // this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
+    //   this.quest.answers.splice(index,1);
+    // });
+    // }else{
+    //   this.quest.answers.splice(index,1);
+    // }
 
   }
 
@@ -149,17 +134,10 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   updateQuestion() {
-    this.quest.idType=this.typesService.findIdTypeByDescription(this.strTypeQuestion);
+    this.quest.type="Select one answer"?'radio':'checkbox';
     this.subs[this.countSub++]=this.questionService.saveQuestion(this.quest).subscribe(quest => {
       if (quest != null) {
-        //this.quest = quest as QuestionModel;
-        for(let i=0;i<this.quest.answers.length;i++){
-          this.quest.answers[i].idQuestion=this.quest.id;
-          this.subs[this.countSub++]=this.answerService.saveAnswer(this.quest.answers[i]).subscribe(value => {
-            this.quest.answers[i]=value;
-            console.log(this.quest);
-          });
-        }
+        this.quest = quest as QuestionModel;
         console.log(this.quest);
       }
     });

@@ -25,7 +25,10 @@ public class AnswerController {
 
     @RequestMapping(value = "",method = RequestMethod.POST)
     public Answer saveAnswer(@RequestBody Answer answer){
-        return answerService.saveAnswer(answer);
+        System.out.println(answer.toString());
+        Answer answ=answerService.saveAnswer(answer);
+
+        return answ;
     }
 
     @RequestMapping(value = "/all",method = RequestMethod.POST)

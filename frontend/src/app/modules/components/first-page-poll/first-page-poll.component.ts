@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {PollModel} from "../../models/poll.model";
+import {PollService} from "../../../services/poll.service";
 
 @Component({
   selector: 'app-first-page-poll',
@@ -9,27 +10,16 @@ import {PollModel} from "../../models/poll.model";
 export class FirstPagePollComponent implements OnInit {
 
   poll:PollModel;
+  subs:any[];
+  countSubs=0;
 
-  constructor() { }
+  constructor(private pollService:PollService) { }
 
   ngOnInit() {
-    this.poll=new PollModel();
-    // this.poll={
-    //   id: 0,
-    //   title:"poll1",
-    //   theme:"theme1",
-    //   description:"dfssfdsfdsfsdfdsfsdfsdf fsdfdsfdg fgdgfdgd ",
-    //   date:new Date(),
-    //   quests:[{
-    //     id:1,
-    //     title:"quest1",
-    //     type:"radio",
-    //     answers:["answer1","answer2"],
-    //     user_answer:null,
-    //     required:true
-    //   }],
-    //
-    // }
+    this.subs=[];
+    this.subs[this.countSubs++]=this.pollService.getPollById(Number(localStorage.getItem('idCurrPoll'))).subscribe(poll=>{
+      this.poll=poll;
+    })
   }
 
 }

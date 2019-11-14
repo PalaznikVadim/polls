@@ -18,4 +18,18 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.getForObject(backendServerUrl+"/api/type",TypeQuestion[].class);
     }
+
+    @Override
+    public TypeQuestion getById(Integer id) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"api/type/id?id="+id,TypeQuestion.class);
+    }
+
+    @Override
+    public Integer getIdByType(String type) {
+        RestTemplate restTemplate=new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/type/type?type="+type,Integer.class);
+    }
+
+
 }

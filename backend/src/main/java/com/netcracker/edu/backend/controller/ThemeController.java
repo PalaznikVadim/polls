@@ -31,7 +31,7 @@ public class ThemeController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public Theme saveTheme(@RequestBody Theme theme) {
+    public Theme saveTheme(@RequestBody String theme) {
         return themeService.save(theme);
     }
 

@@ -13,9 +13,11 @@ import {Router} from "@angular/router";
   templateUrl: './poll.component.html',
   styleUrls: ['./poll.component.css']
 })
-export class PollComponent implements OnInit,OnDestroy {
+export class PollComponent implements OnInit,OnDestroy
+{
 
   quests: QuestionModel[];
+  userAnswers:UserAnswerModel[];
   userAnswer: UserAnswerModel;
   subs: any[];
   countSubs = 0;
@@ -26,46 +28,47 @@ export class PollComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.subs = [];
-    this.subs[this.countSubs++] = this.typesService.getAllTypes().subscribe(types => {
-      this.typesService.types = types;
+    this.userAnswers=[];
+    // this.subs[this.countSubs++] = this.typesService.getAllTypes().subscribe(types => {
+    //   this.typesService.types = types;
 
       this.questionService.getAllQuestionByPollId(Number(localStorage.getItem('idCurrPoll'))).subscribe(quest => {
         this.quests = quest;
 
         for (let i = 0; i < this.quests.length; i++) {
-
-          this.subs[this.countSubs++] = this.answerService.getAllAnswerByIdQuestion(this.quests[i].id).subscribe(answers => {
-            this.quests[i].answers = answers;
-
-            if (this.typesService.findTypeById(this.quests[i].idType) == 'radio') {
-
-            } else {
-              this.quests[i].user_answers = [];
-              for (let j = 0; j < answers.length; j++) {
-                this.quests[i].user_answers[j] = false;
-              }
+          if ((this.quests[i].type) == 'radio') {
+            this.quests[i].user_answers = [null];
+          } else {
+            this.quests[i].user_answers = [];
+            for (let j = 0; j < this.quests[i].answers.length; j++) {
+              this.quests[i].user_answers[j] = false;
             }
-          });
+          }
         }
-        console.log(this.quests)
-      });
     });
   }
 
   submit() {
     if (this.checkRequiredAnswers()) {
+      console.log(this.quests)
       for (let i = 0; i < this.quests.length; i++) {
-        this.saveAnswer(this.quests[i]);
+        this.handleAnswer(this.quests[i]);
       }
+    this.userAnswerService.saveAllUserAnswer(this.userAnswers).subscribe(event=>{
+      console.log(this.userAnswers);
       this.router.navigate(['/lastPagePoll']);
+    });
+
+
+
     }
   }
 
   checkRequiredAnswers(): boolean {
     for (let i = 0; i < this.quests.length; i++) {
       if (this.quests[i].required == 'Yes') {
-        if (this.typesService.findTypeById(this.quests[i].idType) == 'radio') {
-          if (this.quests[i].user_answers != null) {
+        if (this.quests[i].type == 'radio') {
+          if (this.quests[i].user_answers[0] != null) {
             continue;
           } else {
             this.errorMessage = 'Question# ' + (i + 1) + ' is mandatory question!';
@@ -94,23 +97,20 @@ export class PollComponent implements OnInit,OnDestroy {
     return false;
   }
 
-  saveAnswer(quest: QuestionModel): void {
-    if (this.typesService.findTypeById(quest.idType) == 'radio' && quest.user_answers != null) {
-      this.userAnswer = new UserAnswerModel();
-      this.userAnswer.idAnswer = quest.user_answers as number;
-      this.userAnswer.idQuestion = quest.id;
-      this.subs[this.countSubs++] = this.userAnswerService.saveUserAnswer(this.userAnswer).subscribe(userAnswer => {
 
-      });
-    } else if (this.typesService.findTypeById(quest.idType) == 'checkbox') {
+  handleAnswer(quest: QuestionModel): void {
+    if (quest.type == 'radio' && quest.user_answers[0] != null) {
+      this.userAnswer = new UserAnswerModel();
+      this.userAnswer.idAnswer = Number(quest.user_answers[0]);
+      this.userAnswer.idQuestion = quest.id;
+      this.userAnswers.push(this.userAnswer);
+    } else if (quest.type == 'checkbox') {
       for (let i = 0; i < (quest.user_answers as boolean[]).length; i++) {
         if (quest.user_answers[i]) {
           this.userAnswer = new UserAnswerModel();
           this.userAnswer.idAnswer = quest.answers[i].id;
           this.userAnswer.idQuestion = quest.id;
-          this.subs[this.countSubs++] = this.userAnswerService.saveUserAnswer(this.userAnswer).subscribe(userAnswer => {
-
-          });
+          this.userAnswers.push(this.userAnswer);
         }
       }
     }

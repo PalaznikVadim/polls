@@ -9,7 +9,7 @@
           <th scope="col">Name</th>
           <th scope="col">Surname</th>
           <th scope="col">Date of birth</th>
-          <th scope="col">Polls</th>
+          <th scope="col">Profile</th>
           </thead>
           <tbody>
           <tr *ngFor="let user of users;let j=index;">
@@ -18,12 +18,7 @@
             <th>{{user.surname}}</th>
             <th>{{user.dateOfBirth}}</th>
             <th>
-              <ul class="list-group">
-                <li class="list-group-item list-group-item-action mt-1" *ngFor="let poll of user.polls;let i=index;" (click)="transferToPoll(poll.id)">
-                  {{poll.name}}
-                </li>
-              </ul>
-
+              <div class="btn btn-outline-info" (click)="goTo(user.id)">Go to</div>
             </th>
           </tr>
           </tbody>

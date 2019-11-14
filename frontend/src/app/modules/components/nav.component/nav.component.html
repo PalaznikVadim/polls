@@ -5,9 +5,9 @@
         <button type="button" class="btn btn-outline-light" routerLink="/homePage">Home</button>
       </li>
     </ul>
-    <form class="form-inline mt-2 mt-md-0">
+    <form *ngIf="role!='admin'" class="form-inline mt-2 mt-md-0">
       <button [ngClass]={active:tabs[0]} class="btn btn-outline-light ml-1" (click)="changeTab(0)">Poll</button>
-      <button [ngClass]={active:tabs[1]} class="btn btn-outline-light ml-1" (click)="changeTab(1)">Сollecting answers</button>
+      <button  [ngClass]={active:tabs[1]} class="btn btn-outline-light ml-1" (click)="changeTab(1)">Сollecting answers</button>
       <button [ngClass]={active:tabs[2]} class="btn btn-outline-light ml-1" (click)="changeTab(2)">Results</button>
     </form>
     <ul class="navbar-nav mr-0 ml-auto">

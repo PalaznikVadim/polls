@@ -22,8 +22,14 @@
         <tr *ngFor="let answer of quest.answers;let j=index;">
           <th class="row justify-content-center">{{j+1}}</th>
           <th>{{answer.text}}</th>
-          <th>{{quest.answers[j].countSelected}}</th>
-          <th>{{quest.answers[j].countSelected/quest.countUserAnswers*100|number}}</th>
+          <th>
+            <span *ngIf="answer.stats==null">0</span>
+            <span *ngIf="answer.stats!=null">{{answer.stats.count}}</span>
+          </th>
+          <th>
+            <span *ngIf="answer.stats==null">0</span>
+            <span *ngIf="answer.stats!=null">{{answer.stats.percent}}</span>
+          </th>
         </tr>
         </tbody>
       </table>

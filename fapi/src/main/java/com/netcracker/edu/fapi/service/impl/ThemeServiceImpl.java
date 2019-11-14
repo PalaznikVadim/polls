@@ -36,7 +36,7 @@ public class ThemeServiceImpl implements ThemeService {
 
 
     @Override
-    public Theme save(Theme theme) {
+    public Theme save(String theme) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForEntity(backendServerUrl + "/api/theme", theme, Theme.class).getBody();
     }

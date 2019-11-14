@@ -22,17 +22,13 @@ export class UserListComponent implements OnInit {
     this.subs=[];
     this.subs[this.countSubs++]=this.userService.getAllUsers().subscribe(users=>{
       this.users=users;
-      for(let i=0;i<users.length;i++){
-        this.subs[this.countSubs++]=this.pollService.getPollsByUserId(users[i].id).subscribe(polls=>{
-          this.users[i].polls=polls;
-        });
-      }
     });
 
   }
 
-  transferToPoll(id: number) {
-    localStorage.setItem('idCurrPoll',id.toString());
-    this.router.navigate(['viewUserPoll']);
+
+  goTo(id: number) {
+    localStorage.setItem('idSelectedUser',id.toString());
+    this.router.navigate(['profile'])
   }
 }
