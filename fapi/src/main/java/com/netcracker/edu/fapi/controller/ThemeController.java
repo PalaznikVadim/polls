@@ -33,4 +33,9 @@ public class ThemeController {
         }
         return null;
     }
+
+    @RequestMapping(value = "/template",method = RequestMethod.GET)
+    public String[] getTemplateThemes(){
+        return themeService.findAllTemplateThemes();
+    }
 }

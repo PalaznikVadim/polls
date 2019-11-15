@@ -19,7 +19,7 @@ import { NavComponent } from './modules/components/nav.component/nav.component';
 import { GenerateLinkComponent } from './modules/components/generate-link/generate-link.component';
 import {PollService} from "./services/poll.service";
 import { PollComponent } from './modules/components/poll/poll.component';
-import {ButtonsModule} from "ngx-bootstrap";
+import {AccordionModule, ButtonsModule, TabsModule} from "ngx-bootstrap";
 import { FirstPagePollComponent } from './modules/components/first-page-poll/first-page-poll.component';
 import { LastPagePollComponent } from './modules/components/last-page-poll/last-page-poll.component';
 import { StatsComponent } from './modules/components/stats/stats.component';
@@ -56,7 +56,8 @@ const appRoutes: Routes = [
   {path:'viewUserPoll',component:ViewUserPollComponent},
   {path:'constructorPoll',component:NavComponent},
   {path:'profile',component:ProfileComponent},
-  {path:'templates',component:TemplatesComponent}
+  {path:'templates',component:TemplatesComponent},
+  {path:"creatingByTemplate",component:ListTemplatesComponent}
 
 
 
@@ -96,7 +97,9 @@ const appRoutes: Routes = [
     ModalModule.forRoot(),
     RouterModule.forRoot(appRoutes),
     ReactiveFormsModule,
-    ButtonsModule.forRoot()
+    ButtonsModule.forRoot(),
+    AccordionModule.forRoot(),
+    TabsModule.forRoot()
   ],
   providers: [
     PollService,

@@ -11,6 +11,7 @@ export class UserModel {
     public password:string;
     public polls:PollModel[];
 
+
     constructor(){}
 
 

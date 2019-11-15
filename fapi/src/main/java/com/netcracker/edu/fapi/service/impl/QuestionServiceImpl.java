@@ -1,9 +1,14 @@
 package com.netcracker.edu.fapi.service.impl;
 
 import com.netcracker.edu.fapi.converters.QuestionConverter;
+import com.netcracker.edu.fapi.models.Answer;
 import com.netcracker.edu.fapi.models.Question;
+import com.netcracker.edu.fapi.models.Stats;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
+import com.netcracker.edu.fapi.service.AnswerService;
 import com.netcracker.edu.fapi.service.QuestionService;
+import com.netcracker.edu.fapi.service.StatsService;
+import com.netcracker.edu.fapi.service.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,13 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Value("${backend.server.url}")
     private String backendServerUrl;
+
+    @Autowired
+    private AnswerService answerService;
+    @Autowired
+    private UserAnswerService userAnswerService;
+    @Autowired
+    private StatsService statsService;
 
     @Override
     public List<Question> getAllQuestionByIdPoll(Integer idPoll) {
@@ -47,5 +59,21 @@ public class QuestionServiceImpl implements QuestionService {
     public void delete(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(backendServerUrl+"/api/question/delete?id="+id);
+    }
+
+    @Override
+    public void updateStatsQuestion(Integer id) {
+        List<Answer> answers=answerService.getAllAnswerByQuestionId(id);
+        for (Answer answer : answers) {
+            Stats stats = statsService.getByIdAnswer(answer.getId());
+            if (stats == null)
+                stats = new Stats();
+            stats.setIdAnswer(answer.getId());
+            stats.setCount(userAnswerService.countSelected(answer.getId()));
+
+            double percent = Math.round((double)stats.getCount()/ userAnswerService.countAllSelected(id) * 100*100)/100D;
+            stats.setPercent(percent);
+            statsService.save(stats);
+        }
     }
 }

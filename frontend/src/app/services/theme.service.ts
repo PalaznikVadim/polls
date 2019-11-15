@@ -23,4 +23,8 @@ export class ThemeService{
     return this.http.post<ThemeModel>('/api/theme/save',titleTheme);
   }
 
+  getAllTemplateThemes():Observable<string[]>{
+    return this.http.get<string[]>('/api/theme/template');
+  }
+
 }

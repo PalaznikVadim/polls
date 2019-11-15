@@ -44,6 +44,12 @@ public class AnswerServiceImpl implements AnswerService {
         restTemplate.delete(backendServerUrl + "/api/answer/delete?id=" + id);
     }
 
+    @Override
+    public Answer getById(Integer id) {
+        RestTemplate restTemplate=new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/answer/id?id="+id,Answer.class);
+    }
+
 //    @Override
 //    public Iterable<Answer> saveAllAnswers(List<Answer> answers) {
 //        RestTemplate restTemplate = new RestTemplate();

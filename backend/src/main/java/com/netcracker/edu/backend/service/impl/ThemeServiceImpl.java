@@ -30,6 +30,11 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
+    public String[] findAllTemplateThemes() {
+        return themeRepository.findAllTemplateTheme();
+    }
+
+    @Override
     public Theme save(String theme) {
         Theme themeEntity=new Theme();
         themeEntity.setName(theme);

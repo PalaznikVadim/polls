@@ -6,6 +6,7 @@ import com.netcracker.edu.fapi.models.Stats;
 import com.netcracker.edu.fapi.models.User;
 import com.netcracker.edu.fapi.models.UserAnswer;
 import com.netcracker.edu.fapi.service.AnswerService;
+import com.netcracker.edu.fapi.service.QuestionService;
 import com.netcracker.edu.fapi.service.StatsService;
 import com.netcracker.edu.fapi.service.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,11 +24,10 @@ import java.util.Set;
 public class UserAnswerController {
 
     @Autowired
-    private StatsService statsService;
+    private QuestionService questionService;
     @Autowired
     private UserAnswerService userAnswerService;
-    @Autowired
-    private AnswerService answerService;
+
 
     @RequestMapping(value = "/all",method = RequestMethod.POST)
     ResponseEntity<UserAnswer[]> save(@RequestBody List<UserAnswer> userAnswers){
@@ -40,18 +40,7 @@ public class UserAnswerController {
         ResponseEntity<UserAnswer[]> userAnswerList=userAnswerService.saveAll(userAnswers);
 
         for(int id:questionIds) {//вынести в метод и запускать асинхронно
-            List<Answer> answers=answerService.getAllAnswerByQuestionId(id);
-            for (Answer answer : answers) {
-                Stats stats = statsService.getByIdAnswer(answer.getId());
-                if (stats == null)
-                    stats = new Stats();
-                stats.setIdAnswer(answer.getId());
-                stats.setCount(userAnswerService.countSelected(answer.getId()));
-
-                double percent = Math.round((double)stats.getCount()/ userAnswerService.countAllSelected(id) * 100*100)/100D;
-                stats.setPercent(percent);
-                statsService.save(stats);
-            }
+            questionService.updateStatsQuestion(id);
         }
 
         return userAnswerList;

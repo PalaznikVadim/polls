@@ -34,6 +34,12 @@ public class ThemeServiceImpl implements ThemeService {
         return restTemplate.getForObject(backendServerUrl+"api/theme/name?name="+name, Theme.class);
     }
 
+    @Override
+    public String[] findAllTemplateThemes() {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/theme/template",String[].class);
+    }
+
 
     @Override
     public Theme save(String theme) {

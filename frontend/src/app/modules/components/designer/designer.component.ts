@@ -42,10 +42,6 @@ export class DesignerComponent implements OnInit,OnDestroy {
     this.quest=new QuestionModel();
     this.quest.answers=[];
     this.subs=[];
-    // this.subs[this.countSub++]=this.typesService.getAllTypes().subscribe(types=>{
-    //   this.typesService.types=types as TypeQuestionModel[];
-    //   this.strTypeQuestion=this.typesService.types[0].description;
-    // });
     this.poll=new PollModel();
     this.poll.id=Number(localStorage.getItem('idCurrPoll'));
     this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.poll.id).subscribe(questions => {
@@ -76,11 +72,8 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   createQuestion() {
-    console.log(this.quest);
-    //this.quest.type="Select one answer"?'radio':'checkbox';
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
       if(quest!=null){
-        //this.quest=quest as QuestionModel;
         console.log(quest);
         this.poll.questions.push(this.quest);}
       }
@@ -109,15 +102,14 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   deleteAnswer(index:number) {
-    this.quest.answers.splice(index,1);
-    // if(this.quest.answers[index].id!=null){
-    //   console.log(this.quest.answers[index].id);
-    // this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
-    //   this.quest.answers.splice(index,1);
-    // });
-    // }else{
-    //   this.quest.answers.splice(index,1);
-    // }
+    if(this.quest.answers[index].id!=null){
+      console.log(this.quest.answers[index].id);
+    this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
+      this.quest.answers.splice(index,1);
+    });
+    }else{
+      this.quest.answers.splice(index,1);
+    }
 
   }
 

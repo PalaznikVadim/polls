@@ -18,6 +18,20 @@
   </div>
 </nav>
 
+<!--<div class="container">-->
+<!--  <div class="row justify-content-center">-->
+<!--    <div class="col-10 justify-content-center">-->
+<!--      <div>-->
+<!--        <tabset class="mb-3">-->
+<!--          <tab heading="Poll" id="tab1"><app-designer></app-designer></tab>-->
+<!--          <tab heading="Сollecting answers"><app-generate-link></app-generate-link></tab>-->
+<!--          <tab heading="Results"><app-stats></app-stats></tab>-->
+<!--        </tabset>-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
+<!--</div>-->
+
 <app-designer *ngIf="tabs[0]"></app-designer>
 <app-generate-link *ngIf="tabs[1]"></app-generate-link>
 <app-stats *ngIf="tabs[2]"></app-stats>

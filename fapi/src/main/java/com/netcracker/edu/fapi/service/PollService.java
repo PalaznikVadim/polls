@@ -6,6 +6,7 @@ public interface PollService {
 
     Poll findById(Integer id);
     Poll[] findAllByUserId(Integer userId);
+    Poll[] findAllTemplateByTheme(String theme);
     Poll save(Poll poll);
     void deletePoll(Integer id);
 }

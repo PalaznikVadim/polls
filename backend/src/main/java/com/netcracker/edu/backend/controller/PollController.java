@@ -37,4 +37,9 @@ public class PollController {
     public void deletePoll(@RequestParam String id) {
         pollService.delete(Integer.valueOf(id));
     }
+
+    @RequestMapping(value = "template",method = RequestMethod.GET)
+    public List<Poll> getAllTemplateByTheme(@RequestParam String theme){
+        return pollService.findAllTemplateByTheme(theme);
+    }
 }

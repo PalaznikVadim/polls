@@ -3,8 +3,12 @@ package com.netcracker.edu.fapi.controller;
 
 import com.netcracker.edu.fapi.converters.PollConverter;
 import com.netcracker.edu.fapi.converters.QuestionConverter;
+import com.netcracker.edu.fapi.models.Answer;
 import com.netcracker.edu.fapi.models.Poll;
+import com.netcracker.edu.fapi.models.Question;
+import com.netcracker.edu.fapi.models.viewModels.ClonePoll;
 import com.netcracker.edu.fapi.models.viewModels.ViewPoll;
+import com.netcracker.edu.fapi.service.AnswerService;
 import com.netcracker.edu.fapi.service.PollService;
 import com.netcracker.edu.fapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +30,7 @@ public class PollDataController {
     @Autowired
     private PollConverter pollConverter;
     @Autowired
-    private QuestionConverter questionConverter;
+    private AnswerService answerService;
     @Autowired
     private QuestionService questionService;
 
@@ -61,9 +65,43 @@ public class PollDataController {
         return null;
     }
 
+    @RequestMapping(value = "/template",method = RequestMethod.GET)
+    public List<ViewPoll> getAllTemplateByTheme(@RequestParam String theme){
+        Poll[] polls=pollService.findAllTemplateByTheme(theme);
+        List<ViewPoll> viewPolls=new ArrayList<>();
+        for(Poll poll:polls){
+            viewPolls.add(pollConverter.convertPollToViewPoll(poll));
+        }
+        return viewPolls;
+    }
+
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void deletePoll(@RequestParam String id) {
         pollService.deletePoll(Integer.valueOf(id));
+    }
+
+    @RequestMapping(value = "/clone",method = RequestMethod.POST)
+    public ViewPoll clone(@RequestBody ClonePoll clonePoll){
+        Poll poll=pollService.findById(clonePoll.getId());
+        List<Question> questions =questionService.getAllQuestionByIdPoll(clonePoll.getId());
+
+        poll.setId(0);
+        poll.setIdUser(clonePoll.getIdUser());
+        poll.setShared("No");
+
+        poll=pollService.save(poll);
+
+        for(Question question:questions){
+            List<Answer> answers=answerService.getAllAnswerByQuestionId(question.getId());
+            question.setIdPoll(poll.getId());
+            question.setId(0);
+            question=questionService.save(question);
+            for(Answer answer:answers){
+                answer.setIdQuestion(question.getId());
+                answerService.saveAnswer(answer);
+            }
+        }
+        return pollConverter.convertPollToViewPoll(poll);
     }
 
 }

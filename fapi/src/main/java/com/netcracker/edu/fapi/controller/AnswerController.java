@@ -3,6 +3,7 @@ package com.netcracker.edu.fapi.controller;
 import com.netcracker.edu.fapi.models.Answer;
 import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.service.AnswerService;
+import com.netcracker.edu.fapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,8 @@ public class AnswerController {
 
     @Autowired
     private AnswerService answerService;
+    @Autowired
+    private QuestionService questionService;
 
     @RequestMapping(value = "/question",method = RequestMethod.GET)
     public ResponseEntity<List<Answer>> getAllAnswersByQuestionId(@RequestParam String id){
@@ -30,14 +33,11 @@ public class AnswerController {
         return answer;
     }
 
-//    @RequestMapping(value = "/all",method = RequestMethod.POST)
-//    public Iterable<Answer> saveAllAnswer(@RequestBody List<Answer> answers){
-//        return answerService.saveAllAnswers(answers);
-//    }
-
     @RequestMapping(value = "delete",method = RequestMethod.DELETE)
-    public void deleteAnswer(@RequestParam String id){
-        answerService.deleteById(Integer.valueOf(id));
+    public void deleteAnswer(@RequestParam Integer id){
+        Answer answer =answerService.getById(id);
+        answerService.deleteById(id);
+        questionService.updateStatsQuestion(answer.getIdQuestion());
     }
 
 }

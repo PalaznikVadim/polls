@@ -35,6 +35,10 @@ public class ThemeController {
         return themeService.save(theme);
     }
 
+    @RequestMapping(value = "/template",method = RequestMethod.GET)
+    public String[] getTemplateThemes(){
+        return  themeService.findAllTemplateThemes();
+    }
 
 
 }

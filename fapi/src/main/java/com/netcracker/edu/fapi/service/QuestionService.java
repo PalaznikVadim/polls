@@ -10,4 +10,5 @@ public interface QuestionService {
     Question getById(Integer id);
     Question save(Question question);
     void delete(Integer id);
+    void updateStatsQuestion(Integer id);
 }

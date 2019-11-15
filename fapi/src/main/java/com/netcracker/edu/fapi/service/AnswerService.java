@@ -9,5 +9,6 @@ public interface AnswerService {
     List<Answer> getAllAnswerByQuestionId(Integer idQuestion);
     Answer saveAnswer(Answer answer);
     void deleteById(Integer id);
+    Answer getById(Integer id);
 //    Iterable<Answer> saveAllAnswers(List<Answer> answers);
 }

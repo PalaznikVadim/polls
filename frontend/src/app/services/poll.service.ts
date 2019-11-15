@@ -4,6 +4,8 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {PollModel} from "../modules/models/poll.model";
 import {UserModel} from "../modules/models/user.model";
+import {ThemeModel} from "../modules/models/theme.model";
+import {ClonePollModel} from "../modules/models/clonePoll.model";
 
 @Injectable()
 // Data service
@@ -37,21 +39,12 @@ export class PollService {
   deletePoll(id: string): Observable<void> {
     return this.http.delete<void>('/api/poll/delete?id=' + id);
   }
+
+  getAllTemplatesByTheme(theme:string):Observable<PollModel[]>{
+    return this.http.get<PollModel[]>('/api/poll/template?theme='+theme);
+  }
+
+  clonePoll(clonePoll:ClonePollModel):Observable<PollModel>{
+    return this.http.post<PollModel>('/api/poll/clone',clonePoll);
+  }
 }
-/*
-  saveBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-    return this.http.post<BillingAccount>('/api/ba', billingAccount);
-  }
-
-  deleteBillingAccount(billingAccountId: string): Observable<void> {
-    return this.http.delete<void>('/api/ba/' + billingAccountId);
-  }
-
-  getBillingAccountById(id: string): Observable<BillingAccount> {
-    return this.http.get<BillingAccount>('/api/ba/' + id);
-  }
-
-}
-
-
- */

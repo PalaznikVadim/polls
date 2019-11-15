@@ -1,17 +1,17 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
   <div class="collapse navbar-collapse" id="navbarCollapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <button type="button" class="btn btn-outline-light" (click)="openModal(template)">New poll</button>
-      </li>
-    </ul>
-    <form class="form-inline mt-2 mt-md-0">
-      <select class="browser-default custom-select">
-        <option selected>sort</option>
-        <option value="1">Date of addition</option>
-      </select>
-      <button class="btn btn-success ml-1">Sort</button>
-    </form>
+<!--    <ul class="navbar-nav mr-auto">-->
+<!--      <li class="nav-item active">-->
+<!--        <button type="button" class="btn btn-outline-light" (click)="openModal(template)">New poll</button>-->
+<!--      </li>-->
+<!--    </ul>-->
+<!--    <form class="form-inline mt-2 mt-md-0">-->
+<!--      <select class="browser-default custom-select">-->
+<!--        <option selected>sort</option>-->
+<!--        <option value="1">Date of addition</option>-->
+<!--      </select>-->
+<!--      <button class="btn btn-success ml-1">Sort</button>-->
+<!--    </form>-->
     <ul class="navbar-nav mr-0 ml-auto">
       <li class="nav-item active">
         <button type="button" class="btn btn-outline-light" routerLink="/">Exit</button>
@@ -20,8 +20,22 @@
   </div>
 </nav>
 
-<div class="album py-5 bg-transparent">
+<div class="album py-2 bg-transparent">
   <div class="container">
+    <div class="row mb-4">
+      <div class="col-3">
+        <button type="button" class="btn btn-success float-left" (click)="openModal(template)">New poll</button>
+      </div>
+      <div class="col-7 ">
+        <form class="form-inline justify-content-center">
+          <select class="browser-default custom-select">
+            <option selected>sort</option>
+            <option value="1">Date of addition</option>
+          </select>
+          <button class="btn btn-success ml-1">Sort</button>
+        </form>
+      </div>
+    </div>
     <div class="row justify-content-center">
       <div *ngIf="polls!=null&&polls.length==0;else unset">
         <h3 class="mt-5">This page is empty. Create a poll!</h3>
@@ -31,7 +45,7 @@
 </div>
 
 <ng-template #unset>
-  <div class="col-4 pr-2"  *ngFor="let poll of polls;let i=index;">
+  <div class="col-4 "  *ngFor="let poll of polls;let i=index;">
     <div class="card border-info  mb-3" style="max-width: 18rem;">
       <div class="card-header color-card border-info"><h5>{{poll.name}}</h5></div>
         <div class="card-body">
@@ -62,7 +76,7 @@
     </button>
   </div>
   <div class="modal-body">
-    <button class="btn btn-outline-success my-2 mr-2 my-sm-0">Poll template</button>
+    <button class="btn btn-outline-success my-2 mr-2 my-sm-0" (click)="goToTemplates()">Poll by template</button>
     <button class="btn btn-outline-success my-2 my-sm-0" (click)="createNewPoll()">New poll</button>
   </div>
   <div class="modal-footer">

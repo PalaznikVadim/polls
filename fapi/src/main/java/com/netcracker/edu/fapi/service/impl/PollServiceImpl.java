@@ -34,6 +34,12 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
+    public Poll[] findAllTemplateByTheme(String theme) {
+        RestTemplate restTemplate=new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/poll/template?theme="+theme,Poll[].class);
+    }
+
+    @Override
     public Poll save(Poll poll) {
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForEntity(backendServerUrl + "/api/poll", poll, Poll.class).getBody();

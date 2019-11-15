@@ -9,6 +9,7 @@ import java.util.Optional;
 public interface PollService {
     Optional<Poll> findPollById(Integer id);
     List<Poll> findAllByUserId(Integer userId);
+    List<Poll> findAllTemplateByTheme(String theme);
     Poll save(Poll poll);
     void delete(Integer id);
 

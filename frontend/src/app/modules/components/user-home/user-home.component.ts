@@ -69,4 +69,9 @@ export class UserHomeComponent implements OnInit,OnDestroy {
     this.modalRef.hide();
     this.router.navigate(['titleNewPoll']);
   }
+
+  goToTemplates() {
+    this.modalRef.hide();
+    this.router.navigate(['creatingByTemplate']);
+  }
 }

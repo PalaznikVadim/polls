@@ -27,6 +27,11 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
+    public List<Poll> findAllTemplateByTheme(String theme) {
+        return (List<Poll>) pollRepository.findAllTemplateByTheme(theme);
+    }
+
+    @Override
     public Poll save(Poll poll) {
         return pollRepository.save(poll);
     }

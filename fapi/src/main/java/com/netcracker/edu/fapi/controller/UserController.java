@@ -2,7 +2,12 @@ package com.netcracker.edu.fapi.controller;
 
 import com.netcracker.edu.fapi.models.User;
 import com.netcracker.edu.fapi.service.UserService;
+import com.netcracker.edu.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +19,8 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserValidator userValidator;
 
     @GetMapping
     public List<User> getAllUsers(){
@@ -26,9 +33,20 @@ public class UserController {
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = "application/json")
-    public User saveUser(@RequestBody User user){
-        System.out.println(user.toString());
-        return userService.save(user);
+    public ResponseEntity<?> saveUser(@RequestBody User user, Errors errors){
+        DataBinder dataBinder=new DataBinder(user);
+        dataBinder.addValidators(userValidator);
+        dataBinder.validate();
+
+        if(dataBinder.getBindingResult().hasErrors()){
+            List<ObjectError> errorList=  dataBinder.getBindingResult().getAllErrors();
+
+            return ResponseEntity.ok(errorList);
+        }
+        else{
+            return ResponseEntity.ok(userService.save(user));
+
+        }
     }
 
     @GetMapping("/id")

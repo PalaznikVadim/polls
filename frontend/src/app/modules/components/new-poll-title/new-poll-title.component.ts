@@ -34,14 +34,15 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
     this.role=localStorage.getItem('currRole');
     this.subs[this.countSubs++]=this.themeService.getAllTheme().subscribe(value=> {
       this.themes = value as ThemeModel[];
-      if (localStorage.getItem('idCurrPoll') == null) {
+
+      if (localStorage.getItem('idCurrPoll') == 'null') {
         this.poll = new PollModel();
         this.poll.theme = this.themes[0].name;
       } else {
         this.pollService.getPollById(Number(localStorage.getItem('idCurrPoll'))).subscribe(poll => {
           this.poll = poll;
           console.log(this.poll);
-        })
+        });
       }
     });
   }

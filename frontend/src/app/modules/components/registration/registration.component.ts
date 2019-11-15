@@ -26,7 +26,7 @@ export class RegistrationComponent implements OnInit,OnDestroy {
         Validators.required,
         //Validators.pattern("[A-za-z]"),
         Validators.minLength(2),
-        Validators.maxLength(20)
+        Validators.maxLength(26)
       ]),
       surname: new FormControl('', [
         Validators.required,
@@ -70,12 +70,14 @@ export class RegistrationComponent implements OnInit,OnDestroy {
       this.user.role='user';
 
     console.log(this.user);
-    this.sub=this.userService.saveUser(this.user).subscribe(user => {
+    this.sub=this.userService.saveUser(this.user).subscribe(event => {
 
-        this.user = user as UserModel;
+
+      console.log(event);
+        this.user = event as UserModel;
         if(this.user!==null){
-          console.log(user);
-          this.router.navigate(['/']);
+          console.log(this.user);
+          //this.router.navigate(['/']);
         }
       }
     );
