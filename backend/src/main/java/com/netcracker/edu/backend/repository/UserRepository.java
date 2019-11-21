@@ -2,12 +2,14 @@ package com.netcracker.edu.backend.repository;
 
 import com.netcracker.edu.backend.entity.User;
 import com.netcracker.edu.backend.entity.enums.Role;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-import java.util.List;
 
 
-public interface UserRepository extends CrudRepository<User,Integer> {
+
+public interface UserRepository extends PagingAndSortingRepository<User, Integer> {
     User findByEmailAndPassword(String email,String password);
-    List<User> findAllByRole(Role role);
+    Page<User> findAllByRole(Role role, Pageable pageable);
 }

@@ -8,8 +8,12 @@ import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import com.netcracker.edu.fapi.service.AnswerService;
 import com.netcracker.edu.fapi.service.QuestionService;
+import com.netcracker.edu.fapi.validators.AnswerValidator;
+import com.netcracker.edu.fapi.validators.QuestionValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -28,6 +32,10 @@ public class QuestionController {
     private AnswerService answerService;
     @Autowired
     private AnswerConverter answerConverter;
+    @Autowired
+    private QuestionValidator questionValidator;
+    @Autowired
+    private AnswerValidator answerValidator;
 
     @RequestMapping(value = "/poll",method = RequestMethod.GET)
     public ResponseEntity<List<ViewQuestion>> getAllQuestionsByPollId(@RequestParam String idPoll){
@@ -50,17 +58,40 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "",method = RequestMethod.POST)
-    public ViewQuestion saveQuestion(@RequestBody ViewQuestion viewQuestion){
+    public ResponseEntity saveQuestion(@RequestBody ViewQuestion viewQuestion){
 
-        List<ViewAnswer> viewAnswers=viewQuestion.getAnswers();
-        Question question=questionConverter.convertViewQuestToQuestion(viewQuestion);
-        question=questionService.save(question);
+        List<ObjectError> errorList=new ArrayList<>();
+        List<ViewAnswer> viewAnswers = viewQuestion.getAnswers();
+
+
+        DataBinder dataBinder=new DataBinder(viewQuestion);
+        dataBinder.addValidators(questionValidator);
+        dataBinder.validate();
+
+        if(dataBinder.getBindingResult().hasErrors())
+            errorList.addAll(dataBinder.getBindingResult().getAllErrors());
 
         for(ViewAnswer viewAnswer:viewAnswers){
-            answerService.saveAnswer(answerConverter.convertViewAnswerToAnswer(viewAnswer,question.getId()));
+            dataBinder=new DataBinder(viewAnswer);
+            dataBinder.addValidators(answerValidator);
+            dataBinder.validate();
+            if(dataBinder.getBindingResult().hasErrors())
+                errorList.addAll(dataBinder.getBindingResult().getAllErrors());
         }
 
-        return questionConverter.convertQuestionToViewQuestionWithAnswer(question);
+
+        if(errorList.size()!=0){
+            return ResponseEntity.badRequest().body(errorList);
+        }else {
+            Question question = questionConverter.convertViewQuestToQuestion(viewQuestion);
+            question = questionService.save(question);
+
+            for (ViewAnswer viewAnswer : viewAnswers) {
+                answerService.saveAnswer(answerConverter.convertViewAnswerToAnswer(viewAnswer, question.getId()));
+            }
+
+            return ResponseEntity.ok(questionConverter.convertQuestionToViewQuestionWithAnswer(question));
+        }
     }
 
     @RequestMapping(value = "/delete",method = RequestMethod.DELETE)

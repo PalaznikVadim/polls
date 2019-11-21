@@ -37,9 +37,14 @@
       </div>
     </div>
     <div class="row justify-content-center">
-      <div *ngIf="polls!=null&&polls.length==0;else unset">
+      <div *ngIf="polls.length==0;else unset">
         <h3 class="mt-5">This page is empty. Create a poll!</h3>
       </div>
+    </div>
+    <div *ngIf="polls.length!=0" class="row justify-content-center mt-5 ">
+        <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
+                    previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+        </pagination>
     </div>
   </div>
 </div>
@@ -59,8 +64,8 @@
         </div>
         <div class="card-footer color-card  border-info">
           <div class="btn-group btn-block">
-            <button type="button" class="btn btn-sm btn-light" (click)="editPoll(poll.id)">Edit</button>
-            <button type="button" class="btn btn-sm btn-light" (click)="transferToStats(poll.id)">Stats</button>
+            <button type="button" class="btn btn-sm btn-light" (click)="editPoll(poll.id,i)">Edit</button>
+            <button type="button" class="btn btn-sm btn-light" (click)="transferToStats(poll.id,i)">Stats</button>
             <button type="button" class="btn btn-sm btn-danger" name="deletePoll" (click)="confirm(templateConfirm,poll.id,i)" >Delete</button>
           </div>
       </div>

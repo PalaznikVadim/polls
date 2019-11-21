@@ -7,6 +7,11 @@ import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 
 @Service
 public class UserValidator implements Validator {
@@ -18,7 +23,6 @@ public class UserValidator implements Validator {
 
     @Override
     public void validate(Object obj, Errors errors) {
-        ValidationUtils.rejectIfEmptyOrWhitespace(errors,"password","Password is empty or has whitespace");
         User user=(User) obj;
 
 
@@ -31,14 +35,34 @@ public class UserValidator implements Validator {
         if(user.getEmail().length()>25){
             errors.rejectValue("email",null,"Incorrect field email length!(length < 25 letter)");
         }
-        if(user.getName().length()>20){
+
+        if(user.getName().length()>20||user.getName().length()<2)
             errors.rejectValue("name",null,"Incorrect field length( < 20 letter)!");
+        if(user.getName().contains(" "))
+            errors.rejectValue("name",null,"Field has whitespace!");
+
+        DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+        try {
+            if(user.getDateOfBirth().before(formatter.parse("01-01-1950"))||user.getDateOfBirth().after(new Date())){
+                errors.rejectValue("dateOfBirth",null,"Invalid date range!");
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        if(user.getSurname().length()>20){
+
+
+        if(user.getSurname().length()>20||user.getSurname().length()<2)
             errors.rejectValue("surname",null,"Incorrect field length( < 20 letter)!");
-        }
-        if(user.getPassword().length()>25){
+        if(user.getSurname().contains(" "))
+            errors.rejectValue("surname",null,"Field has whitespace!");
+
+
+        if(user.getPassword().length()>25||user.getPassword().length()<2){
             errors.rejectValue("password",null,"Incorrect field length( < 25 letter)!");
         }
+        if(user.getPassword().contains(" "))
+            errors.rejectValue("password",null,"Field has whitespace!");
+
     }
 }

@@ -7,6 +7,9 @@ import {QuestionService} from "../../../services/question.service";
 import {AnswerService} from "../../../services/answer.service";
 import {TypesService} from "../../../services/types.service";
 import {TypeQuestionModel} from "../../models/type_question.model";
+import {ErrorModel} from "../../models/error.model";
+import {PollService} from "../../../services/poll.service";
+import {HttpErrorResponse} from "@angular/common/http";
 
 
 @Component({
@@ -20,21 +23,19 @@ export class DesignerComponent implements OnInit,OnDestroy {
   config = {
     animated: true
   };
-
+  errors:ErrorModel[]=[];
   isNew:boolean;
   subs:any[];
   countSub=0;
-  poll:PollModel;
   quest: QuestionModel;
   strTypeQuestion:string;
-  //types:TypeQuestionModel[];
   answer:AnswerModel;
 
   idCurrQuest:number;
   indexCurQuest:number;
 
 
-  constructor(private modalService: BsModalService,private questionService:QuestionService,private answerService:AnswerService,private typesService:TypesService) { }
+  constructor(private modalService: BsModalService,private questionService:QuestionService,private pollService:PollService,private answerService:AnswerService,private typesService:TypesService) { }
 
   ngOnInit() {
     console.log('ngOnInit()');
@@ -42,12 +43,8 @@ export class DesignerComponent implements OnInit,OnDestroy {
     this.quest=new QuestionModel();
     this.quest.answers=[];
     this.subs=[];
-    this.poll=new PollModel();
-    this.poll.id=Number(localStorage.getItem('idCurrPoll'));
-    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.poll.id).subscribe(questions => {
-      this.poll.questions=questions as QuestionModel[];
-
-      console.log(this.poll);
+    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id).subscribe(questions => {
+      this.pollService.currPoll.questions=questions as QuestionModel[];
     });
   }
 
@@ -75,10 +72,13 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
       if(quest!=null){
         console.log(quest);
-        this.poll.questions.push(this.quest);}
+        this.pollService.currPoll.questions.push(this.quest);}
+      this.modalRef.hide()
+      },response => {
+        this.parseErrorResponse(response as HttpErrorResponse);
       }
     );
-    this.modalRef.hide()
+
   }
 
   editQuest(question: QuestionModel,template) {
@@ -90,7 +90,7 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
 
   deleteQuest(id:number,i: number) {
     this.questionService.deleteQuestion(id).subscribe(event=>{
-      this.poll.questions.splice(i,1);
+      this.pollService.currPoll.questions.splice(i,1);
       this.modalRef.hide();
     });
   }
@@ -132,7 +132,66 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
         this.quest = quest as QuestionModel;
         console.log(this.quest);
       }
+      this.modalRef.hide();
+    },response => {
+        this.parseErrorResponse(response as HttpErrorResponse);
+      }
+    );
+  }
+
+  parseErrorResponse(response:HttpErrorResponse){
+    if(this.errors!=null)
+      this.errors=[];
+    let resError;
+    for(let i=0;i<response.error.length;i++){
+      resError=new ErrorModel();
+      resError.field=response.error[i].field;
+      resError.defaultMessage=response.error[i].defaultMessage;
+      resError.code=response.error[i].code;
+      resError.rejectedValue=response.error[i].rejectedValue;
+      this.errors.push(resError);
+    }
+    console.log(this.errors);
+  }
+
+  submit(id:number){
+    console.log(id);
+    this.pollService.submitPoll(id).subscribe(poll=>{
+      let quests=this.pollService.currPoll.questions;
+      this.pollService.currPoll=poll;
+      this.pollService.currPoll.questions=quests;
     });
-    this.modalRef.hide();
+  }
+
+  checkErrorsForField(field:string,code:number,rejectedValue:string):boolean{
+    if(!this.isNew) {
+      for (let i = 0; i < this.errors.length; i++) {
+        if (this.errors[i].field == field && this.errors[i].code == code)
+          return true;
+      }
+      return false
+    }else{
+      for (let i = 0; i < this.errors.length; i++) {
+        if (this.errors[i].field == field && this.errors[i].rejectedValue == rejectedValue)
+          return true;
+      }
+      return false
+    }
+  }
+
+  outErrorsForField(fieldName:string,code:number,rejectedValue:string):string[] {
+    let errors: string[] = [];
+    if (!this.isNew) {
+      for (let i = 0; i < this.errors.length; i++) {
+        if (this.errors[i].field == fieldName && this.errors[i].rejectedValue == rejectedValue)
+          errors.push(this.errors[i].defaultMessage);
+      }
+    } else {
+      for (let i = 0; i < this.errors.length; i++) {
+        if (this.errors[i].field == fieldName && this.errors[i].rejectedValue == rejectedValue)
+          errors.push(this.errors[i].defaultMessage);
+      }
+    }
+    return errors;
   }
 }

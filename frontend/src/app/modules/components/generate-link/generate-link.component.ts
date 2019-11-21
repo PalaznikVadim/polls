@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {PollService} from "../../../services/poll.service";
 
 @Component({
   selector: 'app-generate-link',
@@ -7,9 +8,10 @@ import { Component, OnInit } from '@angular/core';
 })
 export class GenerateLinkComponent implements OnInit {
 
-  constructor() { }
+  constructor(private pollService:PollService) { }
 
   ngOnInit() {
+
   }
 
 }

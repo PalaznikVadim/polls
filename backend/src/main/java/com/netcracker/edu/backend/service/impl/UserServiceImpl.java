@@ -5,7 +5,14 @@ import com.netcracker.edu.backend.entity.enums.Role;
 import com.netcracker.edu.backend.repository.UserRepository;
 import com.netcracker.edu.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -21,9 +28,18 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmailAndPassword(email,password);
     }
 
-    @Override
-    public List<User> findAll() {
-        return userRepository.findAllByRole(Role.user);
+//    @Override
+//    public Page<User> findAll(Integer page, String sortedField, Pageable pageable) {
+//        if (sortedField==null){
+//            sortedField="name";
+//        }
+//        Pageable pageWithTenElements=PageRequest.of(page,10, Sort.by(sortedField));
+//
+//        return userRepository.findAllByRole(Role.user, pageable);
+//    }
+
+    public Page<User> findAll(Pageable pageable){
+        return userRepository.findAllByRole(Role.user,pageable);
     }
 
     @Override

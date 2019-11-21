@@ -5,6 +5,7 @@ import {QuestionService} from "../../../services/question.service";
 import {AnswerService} from "../../../services/answer.service";
 import {UserAnswerService} from "../../../services/user-answer.service";
 import {StatsService} from "../../../services/stats.service";
+import {PollService} from "../../../services/poll.service";
 
 @Component({
   selector: 'app-stats',
@@ -13,17 +14,18 @@ import {StatsService} from "../../../services/stats.service";
 })
 export class StatsComponent implements OnInit {
 
-  questions: QuestionModel[];
+  questions: QuestionModel[]=[];
   subs: any[];
   countSubs = 0;
 
 
-  constructor(private stats: StatsService) {
+  constructor(private stats: StatsService,private pollService:PollService) {
   }
 
   ngOnInit() {
     this.subs = [];
-    this.subs[this.countSubs++] = this.stats.getPollStats(Number(localStorage.getItem('idCurrPoll'))).subscribe(stats => {
+    console.log(this.pollService.currPoll);
+    this.subs[this.countSubs++] = this.stats.getPollStats(this.pollService.currPoll.id).subscribe(stats => {
       this.questions = stats;
       console.log(this.questions);
     });

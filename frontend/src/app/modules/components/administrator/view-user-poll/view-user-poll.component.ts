@@ -32,7 +32,7 @@ export class ViewUserPollComponent implements OnInit,OnDestroy {
     this.subs=[];
     this.tabs=[false,false];
     this.tabs[Number(localStorage.getItem('index'))]=true;
-    this.subs[this.countSubs++]=this.pollService.getPollById(Number(localStorage.getItem('idCurrPoll'))).subscribe(poll=> {
+    this.subs[this.countSubs++]=this.pollService.getPollById(localStorage.getItem('idCurrPoll')).subscribe(poll=> {
       this.poll=poll;
       this.subs[this.countSubs++] = this.questionService.getAllQuestionByPollId(poll.id).subscribe(questions => {
         this.poll.questions=questions;

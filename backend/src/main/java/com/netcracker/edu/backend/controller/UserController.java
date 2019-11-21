@@ -3,6 +3,10 @@ package com.netcracker.edu.backend.controller;
 import com.netcracker.edu.backend.entity.User;
 import com.netcracker.edu.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,9 +26,12 @@ public class UserController {
         return ResponseEntity.ok(user);
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<User> getAllUsers() {
-        return (List<User>) userService.findAll();
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public Page<User> getAll(@RequestParam Integer page,Integer size,String sort,String order){
+        System.out.println("page="+page+"size="+size+"sort="+sort+"order="+order );
+
+        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
+        return userService.findAll(pageable);
     }
 
     @RequestMapping(value = "id", method = RequestMethod.GET)

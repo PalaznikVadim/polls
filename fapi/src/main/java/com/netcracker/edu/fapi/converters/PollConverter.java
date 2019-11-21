@@ -1,5 +1,6 @@
 package com.netcracker.edu.fapi.converters;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.edu.fapi.models.Poll;
 import com.netcracker.edu.fapi.models.Question;
 import com.netcracker.edu.fapi.models.viewModels.ViewPoll;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 public class PollConverter {
@@ -55,5 +58,14 @@ public class PollConverter {
 
         return viewPoll;
     }
+
+    public Function<List<Poll>, List<ViewPoll>> collectionTransform=polls -> {
+        ObjectMapper m = new ObjectMapper();
+        List<ViewPoll> viewPolls=new ArrayList<>();
+        for(int i=0;i<polls.size();i++){
+            viewPolls.add(convertPollToViewPoll(m.convertValue(polls.get(i),Poll.class)));
+        }
+         return viewPolls;
+    };
 
 }

@@ -18,7 +18,7 @@ export class ProfileComponent implements OnInit {
   constructor(private pollService:PollService,private questionService:QuestionService,private router:Router) { }
 
   ngOnInit() {
-
+    this.pollService.currPoll=new PollModel();
     this.polls=[];
     this.subs=[];
     this.subs[this.countSubs++]=this.pollService.getPollsByUserId(Number(localStorage.getItem('idSelectedUser'))).subscribe(polls=>{
@@ -29,14 +29,18 @@ export class ProfileComponent implements OnInit {
   }
 
   goToPollQuestion(id: number) {
-    localStorage.setItem('idCurrPoll',id.toString());
-    localStorage.setItem('index',(0).toString());
-    this.router.navigate(['viewUserPoll']);
+    this.subs[this.countSubs++]=this.pollService.getPollById(id.toString()).subscribe(poll=>{
+      this.pollService.currPoll=poll;
+      localStorage.setItem('index',(0).toString());
+      this.router.navigate(['viewUserPoll']);
+    });
   }
 
   goToStat(id: number) {
-    localStorage.setItem('idCurrPoll',id.toString());
-    localStorage.setItem('index',(1).toString());
-    this.router.navigate(['viewUserPoll'])
+    this.subs[this.countSubs++]=this.pollService.getPollById(id.toString()).subscribe(poll=>{
+      this.pollService.currPoll=poll;
+      localStorage.setItem('index',(1).toString());
+      this.router.navigate(['viewUserPoll']);
+    });
   }
 }

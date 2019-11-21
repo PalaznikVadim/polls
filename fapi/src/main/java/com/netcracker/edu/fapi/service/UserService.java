@@ -1,12 +1,14 @@
 package com.netcracker.edu.fapi.service;
 
 import com.netcracker.edu.fapi.models.User;
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
     User findByEmailAndPassword(String email,String password);
-    List<User> findAll();
+//    Page<User> findAll(Integer page,String field);
+    Page<User> findAll(Integer page, Integer size, String sort, String order);
     User save(User user);
     User findById(Integer id);
     User[] getAll();

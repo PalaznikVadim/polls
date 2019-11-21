@@ -2,7 +2,6 @@ package com.netcracker.edu.fapi.controller;
 
 
 import com.netcracker.edu.fapi.converters.PollConverter;
-import com.netcracker.edu.fapi.converters.QuestionConverter;
 import com.netcracker.edu.fapi.models.Answer;
 import com.netcracker.edu.fapi.models.Poll;
 import com.netcracker.edu.fapi.models.Question;
@@ -11,8 +10,16 @@ import com.netcracker.edu.fapi.models.viewModels.ViewPoll;
 import com.netcracker.edu.fapi.service.AnswerService;
 import com.netcracker.edu.fapi.service.PollService;
 import com.netcracker.edu.fapi.service.QuestionService;
+import com.netcracker.edu.fapi.validators.PollValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -33,36 +40,49 @@ public class PollDataController {
     private AnswerService answerService;
     @Autowired
     private QuestionService questionService;
+    @Autowired
+    private PollValidator pollValidator;
 
     @RequestMapping("/user")
-    public List<ViewPoll> getAllPolls(@RequestParam String userId) {
+    public Page<ViewPoll> getAllPolls(@RequestParam String userId,int page,int size,String sort,String order) {
 
-        List<Poll> polls= Arrays.asList(pollService.findAllByUserId(Integer.valueOf(userId)));
+        Page<Poll> polls= pollService.findAllByUserId(Integer.valueOf(userId), page, size, sort, order);
         List<ViewPoll> viewPolls=new ArrayList<>();
 
-        for(Poll poll:polls){
-            viewPolls.add(pollConverter.convertPollToViewPoll(poll));
-        }
+        Pageable pageable=new PageRequest(page,size, Sort.by(sort).ascending());
 
-        return (List<ViewPoll>) viewPolls;
+        Page<ViewPoll> viewPollPage= PageableExecutionUtils.getPage(
+                pollConverter.collectionTransform.apply(polls.getContent()),
+                pageable,
+                polls::getTotalElements);
+
+        return viewPollPage;
     }
 
     @RequestMapping("/id")
     public ViewPoll getPollById(@RequestParam String id) {
         Poll poll=pollService.findById(Integer.valueOf(id));
+        System.out.println(poll.toString());
         ViewPoll viewPoll=pollConverter.convertPollToViewPoll(poll);
         return viewPoll;
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ViewPoll savePoll(@RequestBody ViewPoll viewPoll /*todo server validation*/) {
-        if (viewPoll != null) {
+    public ResponseEntity<?> savePoll(@RequestBody ViewPoll viewPoll /*todo server validation*/) {
+        DataBinder dataBinder=new DataBinder(viewPoll);
+        dataBinder.addValidators(pollValidator);
+        dataBinder.validate();
+
+        if(dataBinder.getBindingResult().hasErrors()){
+            List<ObjectError> errorList=dataBinder.getBindingResult().getAllErrors();
+            return ResponseEntity.badRequest().body(errorList);
+        }else {
             viewPoll.setDate(new Date());
             Poll poll=pollConverter.convertViewPollToPoll(viewPoll);
             poll=pollService.save(poll);
-            return pollConverter.convertPollToViewPoll(poll);
+            return ResponseEntity.ok().body(pollConverter.convertPollToViewPoll(poll));
         }
-        return null;
+
     }
 
     @RequestMapping(value = "/template",method = RequestMethod.GET)
@@ -102,6 +122,20 @@ public class PollDataController {
             }
         }
         return pollConverter.convertPollToViewPoll(poll);
+    }
+
+    @RequestMapping(value = "/submit/{id}",method = RequestMethod.POST)
+    public ViewPoll submitPoll(@PathVariable Integer id){
+        Poll poll=pollService.findById(id);
+        poll.setLink(poll.hashCode()+"id"+poll.getId());
+        poll=pollService.save(poll);
+
+        return pollConverter.convertPollToViewPoll(poll);
+    }
+
+    @RequestMapping(value = "",method = RequestMethod.GET)
+    public ViewPoll getByLink(@RequestParam String link){
+        return pollConverter.convertPollToViewPoll(pollService.findByLink(link));
     }
 
 }

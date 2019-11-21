@@ -2,6 +2,7 @@ import {Injectable} from "@angular/core";
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {UserModel} from "../modules/models/user.model";
+import {RestPageModel} from "../modules/models/rest-page.model";
 
 @Injectable()
 export class UserService{
@@ -17,10 +18,10 @@ export class UserService{
   }
 
   saveUser(user:UserModel):Observable<any>{
-    return this.http.post('/api/user/registration', user);
+    return this.http.post<any>('/api/user/registration', user);
   }
 
-  getAllUsers():Observable<UserModel[]>{
-    return this.http.get<UserModel[]>('/api/user/all');
+  getAllUsers(page:number,size:number,sort:string,order:string):Observable<RestPageModel>{
+    return this.http.get<RestPageModel>('/api/user/?page='+page+'&size='+size+'&sort='+sort+'&order='+order);
   }
 }

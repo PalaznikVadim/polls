@@ -1,8 +1,9 @@
-<div *ngIf="poll!=null" class="container">
+<div *ngIf="pollService.currPoll!=null" class="container">
   <div class="row align-content-center justify-content-center" >
     <div class="col-4 align-items-center text-center">
-      <h1 class="">{{poll.name}}</h1>
-      <small>{{poll.theme}}</small>
+      <div *ngIf="pollService.currPoll.status=='blocked'" class="alert alert-danger"><h3>Sorry, this poll has been blocked!</h3></div>
+      <h1 class="">{{pollService.currPoll.name}}</h1>
+      <small>{{pollService.currPoll.theme}}</small>
       <div class="mt-3">
         <p>
           <span>Hello,</span>
@@ -14,8 +15,11 @@
           </span>
         </p>
       </div>
-      <div class="btn btn-outline-info" routerLink="/poll">Start poll now</div>
+      <button [disabled]="pollService.currPoll.status=='blocked'" class="btn btn-outline-info" routerLink="/poll">Start poll now</button>
     </div>
   </div>
+</div>
 
+<div *ngIf="errorMessage!=null" class="text-center mt-5">
+  <h2>{{errorMessage}}</h2>
 </div>

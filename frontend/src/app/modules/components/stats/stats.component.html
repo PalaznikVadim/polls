@@ -1,7 +1,7 @@
 <!--<app-nav></app-nav>-->
 <div class="container">
   <div class="row justify-content-center mb-5">
-    <div class="col-10 text-center" *ngIf="questions==null||questions.length==0;else unset">
+    <div class="col-10 text-center" *ngIf="pollService.currPoll.link==null||questions.length==0;else unset">
       <h3 class="mt-5">Poll's empty. Statistics collection has not started!</h3>
     </div>
   </div>

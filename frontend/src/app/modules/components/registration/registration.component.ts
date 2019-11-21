@@ -2,8 +2,9 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {UserModel} from "../../models/user.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../../services/user.service";
-import {rootRoute} from "@angular/router/src/router_module";
 import {Router} from "@angular/router";
+import {ErrorModel} from "../../models/error.model";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-registration',
@@ -14,6 +15,7 @@ export class RegistrationComponent implements OnInit,OnDestroy {
 
   user = new UserModel();
   registrationForm: FormGroup;
+  errors:ErrorModel[]=[];
   sub:any;
 
 
@@ -26,7 +28,7 @@ export class RegistrationComponent implements OnInit,OnDestroy {
         Validators.required,
         //Validators.pattern("[A-za-z]"),
         Validators.minLength(2),
-        Validators.maxLength(26)
+        Validators.maxLength(20)
       ]),
       surname: new FormControl('', [
         Validators.required,
@@ -38,18 +40,19 @@ export class RegistrationComponent implements OnInit,OnDestroy {
       ]),
       email: new FormControl("", [
         Validators.required,
+        Validators.maxLength(25),
         Validators.pattern("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
       ]),
       passwords: new FormGroup({
           password: new FormControl('', [
             Validators.required,
             Validators.minLength(5),
-            Validators.maxLength(20)
+            Validators.maxLength(25)
           ]),
           confirmPassword: new FormControl('', [
             Validators.required,
             Validators.minLength(5),
-            Validators.maxLength(20)
+            Validators.maxLength(25)
           ])
         }
       ),
@@ -70,18 +73,42 @@ export class RegistrationComponent implements OnInit,OnDestroy {
       this.user.role='user';
 
     console.log(this.user);
-    this.sub=this.userService.saveUser(this.user).subscribe(event => {
-
-
-      console.log(event);
-        this.user = event as UserModel;
+    this.sub=this.userService.saveUser(this.user).subscribe((data:UserModel) => {
+        this.user = data as UserModel;
         if(this.user!==null){
           console.log(this.user);
-          //this.router.navigate(['/']);
+          this.router.navigate(['/']);
+        }
+      },response => {
+      if(this.errors!=null)
+        this.errors=[];
+      let resError;
+        for(let i=0;i<response.error.length;i++){
+          resError=new ErrorModel();
+          resError.field=(response as HttpErrorResponse).error[i].field;
+          resError.defaultMessage=(response as HttpErrorResponse).error[i].defaultMessage;
+          this.errors.push(resError);
         }
       }
     );
     console.log(this.registrationForm);
+  }
+
+  checkErrorsForField(field:string):boolean{
+    for(let i=0;i<this.errors.length;i++) {
+      if (this.errors[i].field == field)
+        return true;
+    }
+    return false
+  }
+
+  outErrorsForField(fieldName:string):string[]{
+    let errors:string[]=[];
+    for(let i=0;i<this.errors.length;i++){
+      if(this.errors[i].field==fieldName)
+        errors.push(this.errors[i].defaultMessage);
+    }
+    return errors;
   }
 
   ngOnDestroy(): void {

@@ -1,8 +1,10 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {PollModel} from "../../models/poll.model";
-import {BsModalRef, BsModalService} from "ngx-bootstrap";
+import {BsModalRef, BsModalService, PageChangedEvent} from "ngx-bootstrap";
 import {PollService} from "../../../services/poll.service";
 import {Router} from "@angular/router";
+import {RestPageModel} from "../../models/rest-page.model";
+import {UserModel} from "../../models/user.model";
 
 @Component({
   selector: 'app-user-home',
@@ -14,12 +16,14 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   private sub:any;
   indexCurrPoll:number;
   idCurrPoll:number;
-  polls:PollModel[];
+  polls:PollModel[]=[];
+  page:RestPageModel;
 
   modalRef: BsModalRef;
   config = {
     animated: true
   };
+  private currentPage: number=1;
 
   constructor(private modalService: BsModalService,private  pollService:PollService,private router: Router) {}
 
@@ -28,10 +32,7 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
-    this.sub = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser"))).subscribe(value => {
-      this.polls = value as PollModel[];
-      console.log(this.polls)
-    });
+    this.getPolls();
   }
 
   ngOnDestroy(): void {
@@ -52,15 +53,17 @@ export class UserHomeComponent implements OnInit,OnDestroy {
     this.modalRef = this.modalService.show(template);
   }
 
-  editPoll(id:number){
+  editPoll(id:number,index:number){
     localStorage.setItem('index',(0).toString());
-    localStorage.setItem("idCurrPoll",id.toString());
+    this.pollService.currPoll=this.polls[index];
     this.router.navigate(['/constructorPoll']);
+
   }
 
-  transferToStats(id:number){
+  transferToStats(id:number,index:number){
     localStorage.setItem('index',(2).toString());
-    localStorage.setItem("idCurrPoll",id.toString());
+    //localStorage.setItem("idCurrPoll",id.toString());
+    this.pollService.currPoll=this.polls[index];
     this.router.navigate(['/constructorPoll']);
   }
 
@@ -73,5 +76,20 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   goToTemplates() {
     this.modalRef.hide();
     this.router.navigate(['creatingByTemplate']);
+  }
+
+  pageChanged(event: PageChangedEvent) {
+    this.currentPage=event.page;
+    console.log(this.currentPage);
+    this.getPolls();
+  }
+
+  private getPolls() {
+    this.sub = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser")),this.currentPage-1,'name').subscribe(page => {
+      this.page = page as RestPageModel;
+      console.log(this.page);
+      this.polls = this.page.content as PollModel[];
+      console.log(this.polls)
+    });
   }
 }

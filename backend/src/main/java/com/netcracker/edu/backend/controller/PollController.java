@@ -3,8 +3,13 @@ package com.netcracker.edu.backend.controller;
 import com.netcracker.edu.backend.entity.Poll;
 import com.netcracker.edu.backend.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +22,11 @@ public class PollController {
     private PollService pollService;
 
     @RequestMapping(value = "/user",method = RequestMethod.GET)
-    public ResponseEntity<List<Poll>> getAllPollByUserId(@RequestParam String userId){
-        List<Poll> polls = pollService.findAllByUserId(Integer.valueOf(userId));
-        return ResponseEntity.ok(polls);
+    public Page<Poll> getAllPollByUserId(@RequestParam Integer userId,int page,int size,String sort,String order){
+        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
+
+        Page<Poll> polls = pollService.findAllByUserId(userId,pageable);
+        return polls;
     }
 
     @RequestMapping(value = "/id", method = RequestMethod.GET)
@@ -41,5 +48,10 @@ public class PollController {
     @RequestMapping(value = "template",method = RequestMethod.GET)
     public List<Poll> getAllTemplateByTheme(@RequestParam String theme){
         return pollService.findAllTemplateByTheme(theme);
+    }
+
+    @RequestMapping(value = "",method = RequestMethod.GET)
+    public Poll getByLink(@RequestParam String link){
+        return pollService.findByLink(link);
     }
 }

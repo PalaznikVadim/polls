@@ -7,6 +7,7 @@ import {TypesService} from "../../../services/types.service";
 import {UserAnswerModel} from "../../models/user-answer.model";
 import {UserAnswerService} from "../../../services/user-answer.service";
 import {Router} from "@angular/router";
+import {PollService} from "../../../services/poll.service";
 
 @Component({
   selector: 'app-poll',
@@ -23,7 +24,7 @@ export class PollComponent implements OnInit,OnDestroy
   countSubs = 0;
   errorMessage: string;
 
-  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private answerService: AnswerService, private typesService: TypesService, private userAnswerService: UserAnswerService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private answerService: AnswerService, private typesService: TypesService, private userAnswerService: UserAnswerService,private pollService:PollService, private router: Router) {
   }
 
   ngOnInit() {
@@ -32,7 +33,7 @@ export class PollComponent implements OnInit,OnDestroy
     // this.subs[this.countSubs++] = this.typesService.getAllTypes().subscribe(types => {
     //   this.typesService.types = types;
 
-      this.questionService.getAllQuestionByPollId(Number(localStorage.getItem('idCurrPoll'))).subscribe(quest => {
+      this.subs[this.countSubs++]=this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id).subscribe(quest => {
         this.quests = quest;
 
         for (let i = 0; i < this.quests.length; i++) {

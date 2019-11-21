@@ -6,8 +6,10 @@ import com.netcracker.edu.fapi.models.viewModels.ViewPoll;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import com.netcracker.edu.fapi.service.PollService;
 import com.netcracker.edu.fapi.service.QuestionService;
+import com.netcracker.edu.fapi.validators.PollValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,9 +30,10 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Poll[] findAllByUserId(Integer userId) {
+    public Page<Poll> findAllByUserId(Integer userId, int page, int size, String sort, String order) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl+"api/poll/user?userId="+userId,Poll[].class);
+        return restTemplate.getForObject(backendServerUrl+"api/poll/user?userId="+userId+"&page="+page
+                +"&size="+size+"&sort="+sort+"&order="+order, RestPageImpl.class);
     }
 
     @Override
@@ -41,6 +44,8 @@ public class PollServiceImpl implements PollService {
 
     @Override
     public Poll save(Poll poll) {
+
+
         RestTemplate restTemplate = new RestTemplate();
         return restTemplate.postForEntity(backendServerUrl + "/api/poll", poll, Poll.class).getBody();
 
@@ -50,6 +55,12 @@ public class PollServiceImpl implements PollService {
     public void deletePoll(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(backendServerUrl + "/api/poll/delete?id=" + id);
+    }
+
+    @Override
+    public Poll findByLink(String link) {
+        RestTemplate restTemplate=new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/poll?link="+link,Poll.class);
     }
 
 

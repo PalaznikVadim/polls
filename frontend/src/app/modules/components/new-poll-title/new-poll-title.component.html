@@ -8,7 +8,12 @@
           <input type="text" name="title" [(ngModel)]="poll.name" class="form-control" aria-describedby="form-text" placeholder="Title" required maxlength="20" #title="ngModel">
         </div>
         <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
-          Enter poll title
+          Enter poll title (length<20 letter)
+        </div>
+        <div *ngIf="checkErrorsForField('name')">
+          <div class="alert alert-danger" *ngFor="let error of outErrorsForField('name')">
+            {{error}}
+          </div>
         </div>
         <div class="form-group">
           <label>Theme</label>
@@ -20,6 +25,11 @@
         <div class="form-group">
           <label>Description</label>
           <textarea class="form-control" [(ngModel)]="poll.description" name="description" maxlength="200"></textarea>
+        </div>
+        <div *ngIf="checkErrorsForField('description')">
+          <div *ngFor="let error of outErrorsForField('description')">
+            {{error}}
+          </div>
         </div>
         <button *ngIf="poll.id==null" type="submit" class="btn btn-primary float-right" [disabled]="!form.form.valid" (click)="addPoll()">Create</button>
         <button *ngIf="poll.id!=null" type="submit" class="btn btn-primary float-right" [disabled]="!form.form.valid" (click)="addPoll()">Update</button>

@@ -3,9 +3,10 @@ import {PollModel} from "../../models/poll.model";
 import {ThemeService} from "../../../services/theme.service";
 import {ThemeModel} from "../../models/theme.model";
 import {PollService} from "../../../services/poll.service";
-import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
+import {ErrorModel} from "../../models/error.model";
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-new-poll-title',
@@ -20,6 +21,7 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   subs:any[];
   countSubs=0;
   newTheme:string;
+  errors:ErrorModel[]=[];
 
   constructor(private modalService: BsModalService, private themeService:ThemeService,private pollService:PollService,private router: Router) {
   }
@@ -39,7 +41,7 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
         this.poll = new PollModel();
         this.poll.theme = this.themes[0].name;
       } else {
-        this.pollService.getPollById(Number(localStorage.getItem('idCurrPoll'))).subscribe(poll => {
+        this.pollService.getPollById(localStorage.getItem('idCurrPoll')).subscribe(poll => {
           this.poll = poll;
           console.log(this.poll);
         });
@@ -64,8 +66,37 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
     this.subs[this.countSubs++]=this.pollService.savePoll(this.poll).subscribe(value => {
       localStorage.setItem('idCurrPoll',value.id.toString());
       localStorage.setItem('index',(0).toString());
+      this.pollService.currPoll=value;
       this.router.navigate(['/constructorPoll']);
-    });
+    },response=>{
+        if(this.errors!=null)
+          this.errors=[];
+        let resError;
+        for(let i=0;i<response.error.length;i++){
+          resError=new ErrorModel();
+          resError.field=(response as HttpErrorResponse).error[i].field;
+          resError.defaultMessage=(response as HttpErrorResponse).error[i].defaultMessage;
+          this.errors.push(resError);
+        }
+      }
+    );
+  }
+
+  checkErrorsForField(field:string):boolean{
+    for(let i=0;i<this.errors.length;i++) {
+      if (this.errors[i].field == field)
+        return true;
+    }
+    return false
+  }
+
+  outErrorsForField(fieldName:string):string[]{
+    let errors:string[]=[];
+    for(let i=0;i<this.errors.length;i++){
+      if(this.errors[i].field==fieldName)
+        errors.push(this.errors[i].defaultMessage);
+    }
+    return errors;
   }
 
   ngOnDestroy(): void {

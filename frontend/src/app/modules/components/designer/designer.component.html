@@ -3,11 +3,12 @@
 <div class="container justify-content-center">
   <div class="row justify-content-center">
     <div class="col-10">
-      <div class="btn btn-success float-right" routerLink="/titleNewPoll">Update poll description</div>
+      <div class="btn btn-success float-left" routerLink="/titleNewPoll">Update poll description</div>
+      <div class="btn btn-success float-right" (click)="submit(pollService.currPoll.id)">Submit poll</div>
     </div>
   </div>
   <div class="row justify-content-center mt-2">
-    <div *ngIf="poll.questions==null||poll.questions.length==0;else unset">
+    <div *ngIf="pollService.currPoll.questions==null||pollService.currPoll.questions.length==0;else unset">
       <h3 class="mt-5">This page is empty. Create a question!</h3>
     </div>
   </div>
@@ -17,7 +18,8 @@
 </div>
 
 <ng-template #unset>
-  <div *ngFor="let quest of poll.questions;let i=index;" class="col-10 block p-3 bg-light mb-2 rounded">
+  <div class="float-right col-10 mt-3"><h2 class="font-weight-bold">{{pollService.currPoll.name}}:</h2></div>
+  <div *ngFor="let quest of pollService.currPoll.questions;let i=index;" class="col-10 block p-3 bg-light mb-2 rounded">
       <div class="title">
         <h3>{{i+1}}<span *ngIf="quest.required=='Yes'">*</span> . {{quest.textTitle}}</h3>
       </div>
@@ -39,7 +41,15 @@
 
 <ng-template #modalAddQuest>
   <div class="modal-header">
-    <input [(ngModel)]="quest.textTitle" type="text" class="form-control mr-sm-2" value="Напишите свой вопрос здесь...">
+    <div class="col-11">
+      <input [(ngModel)]="quest.textTitle" type="text" class="form-control mr-sm-2" value="..." required maxlength="60" #textTitle="ngModel">
+      <div [hidden]="textTitle.valid || textTitle.untouched" class="alert alert-danger">
+        Incorrect length field( ..< 45 charaсters)*front
+      </div>
+      <div *ngIf="checkErrorsForField('textTitle',quest.id,quest.textTitle)">
+        <div class="alert alert-danger" *ngFor="let error of outErrorsForField('textTitle',quest.id,quest.textTitle)">{{error}}</div>
+      </div>
+    </div>
     <button type="button" class="close" (click)="modalRef.hide()">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -57,8 +67,15 @@
     </div>
     <ul >
       <li *ngFor="let answer of quest.answers;let i = index" class="form-inline">
-        <input type="text" class="form-control mr-sm-2 col-10 " [(ngModel)]="quest.answers[i].text">
+        <input type="text" class="form-control mr-sm-2 col-10 " [(ngModel)]="quest.answers[i].text" #text="ngModel"
+        required maxlength="60">
         <button class="btn btn-outline-danger my-2 my-sm-0 mr-sm-0 " (click)="deleteAnswer(i)">-</button>
+        <div *ngIf="checkErrorsForField('text',answer.id,answer.text)">
+          <div class="alert alert-danger" *ngFor="let error of outErrorsForField('text',answer.id,answer.text)">{{error}}</div>
+        </div>
+        <div [hidden]="text.valid || text.untouched" class="alert alert-danger">
+          Incorrect length field( ..< 45 charaсters)*front
+        </div>
       </li>
     </ul>
     <button class="btn btn-outline-success my-2 my-sm-0" (click)="addNewAnswer()">Add answer</button>

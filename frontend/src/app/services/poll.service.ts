@@ -6,6 +6,7 @@ import {PollModel} from "../modules/models/poll.model";
 import {UserModel} from "../modules/models/user.model";
 import {ThemeModel} from "../modules/models/theme.model";
 import {ClonePollModel} from "../modules/models/clonePoll.model";
+import {RestPageModel} from "../modules/models/rest-page.model";
 
 @Injectable()
 // Data service
@@ -24,11 +25,12 @@ export class PollService {
   }
 
   // Ajax request for billing account data
-  getPollsByUserId(userId:number): Observable<PollModel[]> {
-    return this.http.get<PollModel[]>('/api/poll/user'+'?userId='+userId);
+  getPollsByUserId(userId:number,page:number,sort:string): Observable<RestPageModel> {
+    return this.http.get<RestPageModel>('/api/poll/user'+'?userId='+userId+
+    '&page='+page+'&size=6&sort='+sort+'&order=desk');
   }
 
-  getPollById(id:number){
+  getPollById(id:string){
     return this.http.get<PollModel>('/api/poll/id'+'?id='+id);
   }
 
@@ -46,5 +48,14 @@ export class PollService {
 
   clonePoll(clonePoll:ClonePollModel):Observable<PollModel>{
     return this.http.post<PollModel>('/api/poll/clone',clonePoll);
+  }
+
+  submitPoll(id:number):Observable<PollModel>{
+    return this.http.post<PollModel>('api/poll/submit/'+id,id);
+  }
+
+  getPollByLink(pollLink: string) :Observable<PollModel>{
+    return this.http.get<PollModel>('api/poll?link='+pollLink);
+
   }
 }
