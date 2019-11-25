@@ -27,6 +27,7 @@ export class DesignerComponent implements OnInit,OnDestroy {
   isNew:boolean;
   subs:any[];
   countSub=0;
+  currRole:string;
   quest: QuestionModel;
   strTypeQuestion:string;
   answer:AnswerModel;
@@ -39,7 +40,8 @@ export class DesignerComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     console.log('ngOnInit()');
-
+    this.currRole=localStorage.getItem('currRole');
+    localStorage.setItem('idCurrPoll',this.pollService.currPoll.id.toString());
     this.quest=new QuestionModel();
     this.quest.answers=[];
     this.subs=[];

@@ -13,17 +13,26 @@ import {UserModel} from "../../models/user.model";
 })
 export class UserHomeComponent implements OnInit,OnDestroy {
 
-  private sub:any;
+  subs:any;
+  countSubs:number=0;
   indexCurrPoll:number;
   idCurrPoll:number;
   polls:PollModel[]=[];
   page:RestPageModel;
+  currentPage: number=1;
+  prevSort:string='name';
+  sort: string='name';
+  prevSize:number=6;
+  size: number=6;
+  searchResult:string;
 
   modalRef: BsModalRef;
   config = {
     animated: true
   };
-  private currentPage: number=1;
+  search: string='';
+
+
 
   constructor(private modalService: BsModalService,private  pollService:PollService,private router: Router) {}
 
@@ -32,11 +41,13 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   }
 
   ngOnInit() {
+    this.subs=[];
     this.getPolls();
   }
 
   ngOnDestroy(): void {
-    this.sub.unsubscribe();
+      for(let i=0;i<this.subs.length;i++)
+        this.subs[i].unsubscribe();
   }
 
   deletePoll(id: number,i:number) {
@@ -85,11 +96,42 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   }
 
   private getPolls() {
-    this.sub = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser")),this.currentPage-1,'name').subscribe(page => {
+    this.subs[this.countSubs++] = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser")),this.currentPage-1,this.size,this.sort).subscribe(page => {
       this.page = page as RestPageModel;
       console.log(this.page);
       this.polls = this.page.content as PollModel[];
       console.log(this.polls)
     });
+  }
+
+
+  selectSort() {
+    if(this.prevSort!=this.sort) {
+      this.prevSort=this.sort;
+      this.getPolls();
+    }
+  }
+
+  searchPoll() {
+    if(this.search!=''){
+      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort).subscribe(page=>{
+        this.page = page as RestPageModel;
+        this.polls = this.page.content as PollModel[];
+        if(page.totalElements!=0){
+          this.searchResult='Found '+page.totalElements+' poll(s):';
+        }else{
+          this.searchResult='Nothing found!';
+        }
+      });
+    }
+  }
+
+  selectSize() {
+    console.log(this.size);
+    if(this.prevSize!=this.size){
+      this.currentPage=1;
+      this.getPolls();
+      this.prevSize=this.size;
+    }
   }
 }

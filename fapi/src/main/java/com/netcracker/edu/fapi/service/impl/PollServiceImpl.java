@@ -37,6 +37,13 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
+    public Page<Poll> searchBySubstr(String substr,Integer idUser, Integer page,Integer size, String sort, String order) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/poll/search/"+substr+"?idUser="+idUser+
+                "&page="+page+"&size="+size+"&sort="+sort+"&order="+order,RestPageImpl.class);
+    }
+
+    @Override
     public Poll[] findAllTemplateByTheme(String theme) {
         RestTemplate restTemplate=new RestTemplate();
         return restTemplate.getForObject(backendServerUrl+"/api/poll/template?theme="+theme,Poll[].class);
@@ -62,6 +69,4 @@ public class PollServiceImpl implements PollService {
         RestTemplate restTemplate=new RestTemplate();
         return restTemplate.getForObject(backendServerUrl+"/api/poll?link="+link,Poll.class);
     }
-
-
 }

@@ -19,13 +19,16 @@ export class UserListComponent implements OnInit {
   subs: any[];
   countSubs = 0;
   currentPage = 1;
-  sort:string='name';
+  sort: string = 'name';
+  size: number;
+  prevSize: number = 5;
 
   constructor(private userService: UserService, private pollService: PollService, private router: Router) {
   }
 
   ngOnInit() {
     this.subs = [];
+    this.size = 5;
     this.getUsers();
   }
 
@@ -35,37 +38,40 @@ export class UserListComponent implements OnInit {
     this.router.navigate(['profile'])
   }
 
-  click() {
-    console.log();
-  }
-
-
   pageChanged(event: PageChangedEvent) {
-    this.currentPage=event.page;
+    this.currentPage = event.page;
     this.getUsers();
   }
 
   sortByName() {
-    this.sort='name';
+    this.sort = 'name';
     this.getUsers();
   }
 
   sortBySurname() {
-    this.sort='surname';
+    this.sort = 'surname';
     this.getUsers();
   }
 
   sortByDate() {
-    this.sort='dateOfBirth';
+    this.sort = 'dateOfBirth';
     this.getUsers();
   }
 
-  getUsers(){
-    this.subs[this.countSubs++] = this.userService.getAllUsers(this.currentPage-1, 5, this.sort, 'desk').subscribe(page => {
+  getUsers() {
+    this.subs[this.countSubs++] = this.userService.getAllUsers(this.currentPage - 1, this.size, this.sort, 'desk').subscribe(page => {
       this.page = page as RestPageModel;
       console.log(this.page);
       this.users = this.page.content as UserModel[];
       console.log(this.users)
     });
+  }
+
+  selectSize() {
+    if (this.prevSize != this.size) {
+      this.currentPage=1;
+      this.getUsers();
+      this.prevSize = this.size;
+    }
   }
 }

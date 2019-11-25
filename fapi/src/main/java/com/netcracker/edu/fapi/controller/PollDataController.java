@@ -47,7 +47,20 @@ public class PollDataController {
     public Page<ViewPoll> getAllPolls(@RequestParam String userId,int page,int size,String sort,String order) {
 
         Page<Poll> polls= pollService.findAllByUserId(Integer.valueOf(userId), page, size, sort, order);
-        List<ViewPoll> viewPolls=new ArrayList<>();
+
+        Pageable pageable=new PageRequest(page,size, Sort.by(sort).ascending());
+
+        Page<ViewPoll> viewPollPage= PageableExecutionUtils.getPage(
+                pollConverter.collectionTransform.apply(polls.getContent()),
+                pageable,
+                polls::getTotalElements);
+
+        return viewPollPage;
+    }
+
+    @RequestMapping("/search/{substr}")
+    public Page<ViewPoll> searchPollBySubstr(@PathVariable String substr,@RequestParam Integer idUser, Integer page,Integer size,String sort,String order){
+        Page<Poll> polls= pollService.searchBySubstr(substr,idUser,page,size,sort,order);
 
         Pageable pageable=new PageRequest(page,size, Sort.by(sort).ascending());
 

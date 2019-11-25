@@ -25,6 +25,7 @@ public class PollServiceImpl implements PollService {
 
     @Override
     public Page<Poll> findAllByUserId(Integer userId, Pageable pageable) {
+        System.out.println(pageable.toString());
         return pollRepository.findPollsByIdUser(userId,pageable);
     }
 
@@ -46,5 +47,10 @@ public class PollServiceImpl implements PollService {
     @Override
     public Poll findByLink(String link) {
         return pollRepository.findByLink(link);
+    }
+
+    @Override
+    public Page<Poll> searchBySubstr(String substr,Integer idUser,Pageable pageable) {
+        return pollRepository.searchPollsByName(substr,idUser,pageable);
     }
 }

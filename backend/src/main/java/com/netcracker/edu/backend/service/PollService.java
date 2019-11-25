@@ -16,7 +16,5 @@ public interface PollService {
     Poll save(Poll poll);
     void delete(Integer id);
     Poll findByLink(String link);
-
-
-
+    Page<Poll> searchBySubstr(String substr,Integer idUser,Pageable pageable);
 }

@@ -15,5 +15,8 @@ public interface PollRepository extends PagingAndSortingRepository<Poll,Integer>
     @Query("select p from Poll p where p.shared='Yes' and p.idTheme=(select t.id from Theme t where t.name=:theme)")
     Collection<Poll> findAllTemplateByTheme(@Param("theme") String theme);
 
+    @Query("select p from Poll p where p.idUser=:idUser and upper(p.name) like concat('%', upper(:substr), '%') " )
+    Page<Poll> searchPollsByName(@Param("substr") String substr,@Param("idUser") Integer idUser, Pageable pageable);
+
     Poll findByLink(String link);
 }

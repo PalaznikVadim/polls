@@ -41,12 +41,6 @@ import {ErrorService} from "./services/error.service";
 import { ErrorPageComponent } from './modules/components/error-page/error-page.component';
 
 
-// const pollRoutes:Routes=[
-//   {path:"designer",component:DesignerComponent},
-//   {path:'stats',component:StatsComponent},
-//   {path:"link",component:GenerateLinkComponent}
-// ]
-
 const appRoutes: Routes = [
   {path: "", component: SignInComponent},
   {path: "registration", component: RegistrationComponent},
@@ -87,7 +81,6 @@ const appRoutes: Routes = [
     TemplatesComponent,
     ListTemplatesComponent,
     ErrorPageComponent,
-
 
   ],
   imports: [

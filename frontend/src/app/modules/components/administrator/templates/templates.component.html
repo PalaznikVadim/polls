@@ -3,6 +3,20 @@
     <div class="col-2">
       <div class="btn btn-success" (click)="newTemplate()">New template</div>
     </div>
+    <div class="col-9">
+      <div class="row">
+        <select [(ngModel)]="sort" (click)="selectSort()" name="sort" class="browser-default custom-select col-5">
+          <option (click)="selectSort()" value="name" selected>Title</option>
+          <option value="date_time" >Date of addition</option>
+          <option value="idTheme" >Theme</option>
+          <option value="status" >Status</option>
+        </select>
+        <form class="form-inline col-7">
+          <input type="text" class="form-control ml-2 " placeholder="Search" name="search" [(ngModel)]="search">
+          <button class="btn btn-success" (click)="searchPoll()">Search</button>
+        </form>
+      </div>
+    </div>
   </div>
   <div *ngIf="polls.length==0" class="row justify-content-center mt-5">
     <h3>No templates</h3>
@@ -22,12 +36,23 @@
         </div>
         <div class="card-footer color-card  border-info">
           <div class="btn-group btn-block">
-            <button type="button" class="btn btn-sm btn-light mr-1" (click)="editClick(poll.id)">Edit</button>
+            <button type="button" class="btn btn-sm btn-light mr-1" (click)="editClick(poll)">Edit</button>
             <button type="button" class="btn btn-sm btn-danger" (click)="confirm(templateConfirm,poll.id,i)">Delete</button>
           </div>
         </div>
       </div>
     </div>
+  </div>
+  <div *ngIf="polls.length!=0" class="row justify-content-center mt-5 ">
+    <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+    <select [(ngModel)]="size" (click)="selectSize()" name="size" class="browser-default custom-select col-1 ml-2">
+      <option value="6">6</option>
+      <option value="12">12</option>
+      <option value="48">48</option>
+      <option value="96">96</option>
+    </select>
   </div>
 </div>
 

@@ -26,15 +26,23 @@
       <div class="col-3">
         <button type="button" class="btn btn-success float-left" (click)="openModal(template)">New poll</button>
       </div>
-      <div class="col-7 ">
-        <form class="form-inline justify-content-center">
-          <select class="browser-default custom-select">
-            <option selected>sort</option>
-            <option value="1">Date of addition</option>
+      <div class="col-9">
+        <div class="row">
+          <select [(ngModel)]="sort" (click)="selectSort()" name="sort" class="browser-default custom-select col-5">
+            <option (click)="selectSort()" value="name" selected>Title</option>
+            <option value="date_time" >Date of addition</option>
+            <option value="idTheme" >Theme</option>
+            <option value="status" >Status</option>
           </select>
-          <button class="btn btn-success ml-1">Sort</button>
-        </form>
+          <form class="form-inline col-7">
+            <input type="text" class="form-control ml-2 " placeholder="Search" name="search" [(ngModel)]="search">
+            <button class="btn btn-success" (click)="searchPoll()">Search</button>
+          </form>
+        </div>
       </div>
+    </div>
+    <div *ngIf="searchResult!=null">
+      <h4>{{searchResult}}</h4>
     </div>
     <div class="row justify-content-center">
       <div *ngIf="polls.length==0;else unset">
@@ -42,9 +50,15 @@
       </div>
     </div>
     <div *ngIf="polls.length!=0" class="row justify-content-center mt-5 ">
-        <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
+      <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
                     previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
-        </pagination>
+      </pagination>
+      <select [(ngModel)]="size" (click)="selectSize()" name="size" class="browser-default custom-select col-1 ml-2">
+        <option value="6">6</option>
+        <option value="12">12</option>
+        <option value="48">48</option>
+        <option value="96">96</option>
+      </select>
     </div>
   </div>
 </div>

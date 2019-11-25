@@ -29,11 +29,18 @@ public class PollController {
         return polls;
     }
 
+    @RequestMapping(value = "/search/{substr}",method = RequestMethod.GET)
+    public Page<Poll> searchPollsBySubstr(@PathVariable String substr,@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
+        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
+
+        Page<Poll> polls = pollService.searchBySubstr(substr,idUser,pageable);
+        return polls;
+    }
+
     @RequestMapping(value = "/id", method = RequestMethod.GET)
     public Optional<Poll> getPollById(@RequestParam String id) {
         return pollService.findPollById(Integer.valueOf(id));
     }
-
 
     @RequestMapping(method = RequestMethod.POST)
     public Poll saveUser(@RequestBody Poll poll) {
@@ -49,6 +56,8 @@ public class PollController {
     public List<Poll> getAllTemplateByTheme(@RequestParam String theme){
         return pollService.findAllTemplateByTheme(theme);
     }
+
+
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public Poll getByLink(@RequestParam String link){
