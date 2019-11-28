@@ -55,7 +55,7 @@ export class ProfileComponent implements OnInit {
   }
 
   getPolls(){
-    this.subs[this.countSubs++]=this.pollService.getPollsByUserId(Number(localStorage.getItem('idSelectedUser')),this.currentPage-1,this.size,this.sort).subscribe(page=>{
+    this.subs[this.countSubs++]=this.pollService.getPollsByUserId(Number(localStorage.getItem('idSelectedUser')),this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
       this.polls=page.content as PollModel[];
       this.page=page;
       console.log(this.polls);
@@ -73,7 +73,7 @@ export class ProfileComponent implements OnInit {
   searchPoll() {
     if(this.search!=''){
       this.currentPage=1;
-      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idSelectedUser')),this.currentPage-1,this.size,this.sort).subscribe(page=>{
+      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idSelectedUser')),this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
         this.page = page as RestPageModel;
         this.polls = this.page.content as PollModel[];
         if(page.totalElements!=0){

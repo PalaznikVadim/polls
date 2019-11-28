@@ -40,5 +40,8 @@ public class ThemeController {
         return  themeService.findAllTemplateThemes();
     }
 
-
+    @RequestMapping(value = "/userId",method = RequestMethod.GET)
+    public String[] getUserPollThemes(@RequestParam Integer userId){
+        return themeService.findAllByIdUser(userId);
+    }
 }

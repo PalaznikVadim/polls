@@ -81,4 +81,15 @@ public class QuestionConverter {
         return viewQuestion;
     }
 
+    public ViewQuestion convertViewQuestionToViewQuestionWithAnswers(ViewQuestion viewQuestion){
+        List<Answer> answers = answerService.getAllAnswerByQuestionId(viewQuestion.getId());
+        List<ViewAnswer> viewAnswers = new ArrayList<>();
+        for (Answer answer : answers) {
+            viewAnswers.add(answerConverter.convertAnswerToViewAnswerWithStats(answer));
+        }
+        viewQuestion.setAnswers(viewAnswers);
+
+        return viewQuestion;
+    }
+
 }

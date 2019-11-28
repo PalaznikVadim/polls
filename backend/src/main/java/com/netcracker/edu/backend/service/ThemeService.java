@@ -11,4 +11,5 @@ public interface ThemeService {
     Theme findThemeByName(String name);
     String[] findAllTemplateThemes();
     Theme save(String theme);
+    String[] findAllByIdUser(Integer idUser);
 }

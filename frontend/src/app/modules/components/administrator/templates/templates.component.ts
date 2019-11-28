@@ -19,12 +19,12 @@ export class TemplatesComponent implements OnInit {
   idCurrPoll:number;
   page:RestPageModel;
   size:number=6;
-  prevSize:number=6;
   currentPage: number=1;
-  prevSort:string='name';
   sort:string='name';
+  order:string;
   search: string;
   private searchResult: string;
+  private select: string;
 
 
   constructor(private pollService:PollService,private modalService: BsModalService,private router:Router) { }
@@ -74,29 +74,23 @@ export class TemplatesComponent implements OnInit {
   }
 
   private getPolls() {
-    this.subs[this.countSubs++]=this.pollService.getPollsByUserId(Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort).subscribe(page=>{
+    this.subs[this.countSubs++]=this.pollService.getPollsByUserId(Number(localStorage.getItem('idCurrUser')),this.select,this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
       this.polls=page.content as PollModel[];
       this.page=page;
     });
   }
 
   selectSize() {
-    if(this.prevSize!=this.size){
-      this.prevSize=this.size;
       this.getPolls();
-    }
   }
 
   selectSort() {
-    if(this.sort!=this.prevSort){
-      this.prevSort=this.sort;
       this.getPolls();
-    }
   }
 
   searchPoll() {
     if(this.search!=''){
-      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort).subscribe(page=>{
+      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
         this.page = page as RestPageModel;
         this.polls = this.page.content as PollModel[];
         if(page.totalElements!=0){

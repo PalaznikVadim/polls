@@ -23,17 +23,13 @@ public class PollController {
 
     @RequestMapping(value = "/user",method = RequestMethod.GET)
     public Page<Poll> getAllPollByUserId(@RequestParam Integer userId,int page,int size,String sort,String order){
-        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
-
-        Page<Poll> polls = pollService.findAllByUserId(userId,pageable);
+        Page<Poll> polls = pollService.findAllByUserId(userId,page,size,sort,order);
         return polls;
     }
 
     @RequestMapping(value = "/search/{substr}",method = RequestMethod.GET)
     public Page<Poll> searchPollsBySubstr(@PathVariable String substr,@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
-        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
-
-        Page<Poll> polls = pollService.searchBySubstr(substr,idUser,pageable);
+        Page<Poll> polls = pollService.searchBySubstr(substr,idUser,page,size,sort,order);
         return polls;
     }
 
@@ -57,10 +53,23 @@ public class PollController {
         return pollService.findAllTemplateByTheme(theme);
     }
 
-
-
     @RequestMapping(value = "",method = RequestMethod.GET)
     public Poll getByLink(@RequestParam String link){
         return pollService.findByLink(link);
+    }
+
+    @RequestMapping(value = "drafts",method = RequestMethod.GET)
+    public Page<Poll> getUserDrafts(@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
+        return pollService.findDraftsByUserId(idUser,page,size,sort,order);
+    }
+
+    @RequestMapping(value = "activePolls",method = RequestMethod.GET)
+    public Page<Poll> getUserActivePolls(@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
+        return pollService.findActivePollsByUserId(idUser,page,size,sort,order);
+    }
+
+    @RequestMapping(value = "theme",method = RequestMethod.GET)
+    public Page<Poll> getPollsByTheme(@RequestParam Integer idUser, String theme, Integer page,Integer size,String sort, String order){
+        return pollService.findAllByTheme(theme,idUser,page,size,sort,order);
     }
 }

@@ -28,8 +28,6 @@ public class UserController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public Page<User> getAll(@RequestParam Integer page,Integer size,String sort,String order){
-        System.out.println("page="+page+"size="+size+"sort="+sort+"order="+order );
-
         Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
         return userService.findAll(pageable);
     }

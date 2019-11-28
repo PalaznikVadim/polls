@@ -3,7 +3,9 @@ package com.netcracker.edu.fapi.service.impl;
 import com.netcracker.edu.fapi.models.Theme;
 import com.netcracker.edu.fapi.service.ThemeService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
@@ -42,8 +44,17 @@ public class ThemeServiceImpl implements ThemeService {
 
 
     @Override
-    public Theme save(String theme) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForEntity(backendServerUrl + "/api/theme", theme, Theme.class).getBody();
+    public ResponseEntity<?> save(String theme) {
+        if (theme != null) {
+            RestTemplate restTemplate = new RestTemplate();
+            return ResponseEntity.ok(restTemplate.postForEntity(backendServerUrl + "/api/theme", theme, Theme.class).getBody());
+        }
+        return null;
+    }
+
+    @Override
+    public String[] getUserPollThemes(Integer idUser) {
+        RestTemplate restTemplate=new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/theme/userId?userId="+idUser,String[].class);
     }
 }

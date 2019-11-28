@@ -15,10 +15,6 @@ export class ThemeService{
     return this.http.get<ThemeModel[]>('/api/theme');
   }
 
-  getThemeByName(name:string):Observable<ThemeModel>{
-    return this.http.get<ThemeModel>('/api/theme/name'+'?name='+name);
-  }
-
   save(titleTheme:string):Observable<ThemeModel>{
     return this.http.post<ThemeModel>('/api/theme/save',titleTheme);
   }
@@ -27,4 +23,7 @@ export class ThemeService{
     return this.http.get<string[]>('/api/theme/template');
   }
 
+  getUserPollThemes(idUser:number):Observable<string[]>{
+    return this.http.get<string[]>('/api/theme/userId?userId='+idUser);
+  }
 }

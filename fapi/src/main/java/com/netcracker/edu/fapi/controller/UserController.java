@@ -24,39 +24,22 @@ public class UserController {
     private UserValidator userValidator;
 
     @RequestMapping(value = "",method = RequestMethod.GET)
-    public ResponseEntity<Page<User>> getAllUsers(@RequestParam int page,
+    public ResponseEntity<?> getAllUsers(@RequestParam int page,
                                                   @RequestParam int size,
                                                   @RequestParam String sort,
                                                   @RequestParam String order){
 
-        Page<User> users=userService.findAll(page,size,sort,order);
-        if(users.getContent()!=null){
-            return ResponseEntity.ok(users);
-        }else{
-            return ResponseEntity.notFound().build();
-        }
+       return userService.findAll(page,size,sort,order);
     }
 
     @GetMapping("/signin")
-    public User getUserByEmail(@RequestParam String email,@RequestParam String password) {
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email,@RequestParam String password) {
         return userService.findByEmailAndPassword(email,password);
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = "application/json")
     public ResponseEntity<?> saveUser(@RequestBody User user){
-        DataBinder dataBinder=new DataBinder(user);
-        dataBinder.addValidators(userValidator);
-        dataBinder.validate();
-
-        if(dataBinder.getBindingResult().hasErrors()){
-            List<ObjectError> errorList= dataBinder.getBindingResult().getAllErrors();
-
-            return ResponseEntity.badRequest().body(errorList);
-        }
-        else{
-            return ResponseEntity.ok(userService.save(user));
-
-        }
+        return userService.save(user);
     }
 
     @GetMapping("/id")

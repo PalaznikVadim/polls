@@ -73,14 +73,12 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   createQuestion() {
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
       if(quest!=null){
-        console.log(quest);
-        this.pollService.currPoll.questions.push(this.quest);}
+        this.pollService.currPoll.questions.push(quest);}
       this.modalRef.hide()
       },response => {
         this.parseErrorResponse(response as HttpErrorResponse);
       }
     );
-
   }
 
   editQuest(question: QuestionModel,template) {
@@ -130,6 +128,8 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   updateQuestion() {
     this.quest.type="Select one answer"?'radio':'checkbox';
     this.subs[this.countSub++]=this.questionService.saveQuestion(this.quest).subscribe(quest => {
+      console.log("this="+this.quest.id);
+      console.log(("response="+quest.id));
       if (quest != null) {
         this.quest = quest as QuestionModel;
         console.log(this.quest);

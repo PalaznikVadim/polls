@@ -27,15 +27,17 @@ public class ThemeController {
     public Theme getThemeByName(@RequestParam String name){ return themeService.findThemeByName(name);}
 
     @RequestMapping(value = "/save",method = RequestMethod.POST)
-    public ResponseEntity<Theme> save(@RequestBody String titleTheme /*todo server validation*/) {
-        if (titleTheme != null) {
-            return ResponseEntity.ok(themeService.save(titleTheme));
-        }
-        return null;
+    public ResponseEntity<?> save(@RequestBody String titleTheme /*todo server validation*/) {
+        return themeService.save(titleTheme);
     }
 
     @RequestMapping(value = "/template",method = RequestMethod.GET)
     public String[] getTemplateThemes(){
         return themeService.findAllTemplateThemes();
+    }
+
+    @RequestMapping(value = "/userId",method = RequestMethod.GET)
+    public String[] getUserPollThemes(@RequestParam Integer userId){
+        return themeService.getUserPollThemes(userId);
     }
 }

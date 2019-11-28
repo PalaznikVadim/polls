@@ -25,14 +25,14 @@ export class PollService {
   }
 
   // Ajax request for billing account data
-  getPollsByUserId(userId:number,page:number,size:number,sort:string): Observable<RestPageModel> {
-    return this.http.get<RestPageModel>('/api/poll/user'+'?userId='+userId+
-    '&page='+page+'&size='+size+'&sort='+sort+'&order=desk');
+  getPollsByUserId(userId:number,select:string,page:number,size:number,sort:string,order:string): Observable<RestPageModel> {
+    return this.http.get<RestPageModel>('/api/poll/user'+'?userId='+userId+'&select='+select+
+    '&page='+page+'&size='+size+'&sort='+sort+'&order='+order);
   }
 
-  searchPollsBySubstr(substr:string,idUser:number,page:number,size:number,sort:string):Observable<RestPageModel>{
+  searchPollsBySubstr(substr:string,idUser:number,page:number,size:number,sort:string,order:string):Observable<RestPageModel>{
     return this.http.get<RestPageModel>('/api/poll/search/'+substr+'?idUser='+idUser+'&page='+page+
-    '&size='+size+'&sort='+sort+'&order=asc');
+    '&size='+size+'&sort='+sort+'&order='+order);
   }
 
   getPollById(id:string){

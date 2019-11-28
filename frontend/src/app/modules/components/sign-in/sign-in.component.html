@@ -15,11 +15,21 @@
           <div *ngIf="isControlInvalid('email')" class="alert alert-danger">
             Uncorrect format email ( Example: cat1@gmail.com)
           </div>
+          <div *ngIf="errors.get('email')!=null">
+            <div *ngFor="let error of errors.get('email')" class="alert alert-danger">
+              {{error}}
+            </div>
+          </div>
 
           <label for="inputPassword">Password</label>
           <input  class="form-control" id="inputPassword" formControlName="password" name="password" placeholder="Password" type="password">
           <div *ngIf="isControlInvalid('password')" class="alert alert-danger">
-            Uncorrect lenght password ( 5 and more characters)
+            Uncorrect lenght password ( 4 < length < 26)
+          </div>
+          <div *ngIf="errors.get('password')!=null">
+            <div *ngFor="let error of errors.get('password')" class="alert alert-danger">
+              {{error}}
+            </div>
           </div>
         </div>
         <div class="checkbox mb-3 text-center">

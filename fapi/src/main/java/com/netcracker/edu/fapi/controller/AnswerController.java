@@ -16,8 +16,6 @@ public class AnswerController {
 
     @Autowired
     private AnswerService answerService;
-    @Autowired
-    private QuestionService questionService;
 
     @RequestMapping(value = "/question",method = RequestMethod.GET)
     public ResponseEntity<List<Answer>> getAllAnswersByQuestionId(@RequestParam String id){
@@ -27,17 +25,12 @@ public class AnswerController {
 
     @RequestMapping(value = "",method = RequestMethod.POST)
     public Answer saveAnswer(@RequestBody Answer answer){
-        System.out.println(answer.toString());
         answer=answerService.saveAnswer(answer);
-
         return answer;
     }
 
     @RequestMapping(value = "delete",method = RequestMethod.DELETE)
     public void deleteAnswer(@RequestParam Integer id){
-        Answer answer =answerService.getById(id);
         answerService.deleteById(id);
-        questionService.updateStatsQuestion(answer.getIdQuestion());
     }
-
 }

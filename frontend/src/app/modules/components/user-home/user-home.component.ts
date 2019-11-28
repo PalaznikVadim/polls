@@ -4,7 +4,8 @@ import {BsModalRef, BsModalService, PageChangedEvent} from "ngx-bootstrap";
 import {PollService} from "../../../services/poll.service";
 import {Router} from "@angular/router";
 import {RestPageModel} from "../../models/rest-page.model";
-import {UserModel} from "../../models/user.model";
+import {ThemeModel} from "../../models/theme.model";
+import {ThemeService} from "../../../services/theme.service";
 
 @Component({
   selector: 'app-user-home',
@@ -20,29 +21,37 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   polls:PollModel[]=[];
   page:RestPageModel;
   currentPage: number=1;
-  prevSort:string='name';
   sort: string='name';
-  prevSize:number=6;
   size: number=6;
+  order: string='ASC';
   searchResult:string;
+  search: string='';
+  themes:string[];
 
   modalRef: BsModalRef;
   config = {
     animated: true
   };
-  search: string='';
+  select: string;
 
 
 
-  constructor(private modalService: BsModalService,private  pollService:PollService,private router: Router) {}
+
+
+  constructor(private modalService: BsModalService,private  pollService:PollService,private router: Router,private themeService:ThemeService) {}
 
   openModal(template: TemplateRef<any>) {
     this.modalRef = this.modalService.show(template);
   }
 
   ngOnInit() {
+    this.select='all';
     this.subs=[];
     this.getPolls();
+    this.subs[this.countSubs++]=this.themeService.getUserPollThemes(Number(localStorage.getItem('idCurrUser'))).subscribe(themes=>{
+      this.themes=themes;
+      console.log(this.themes)
+    });
   }
 
   ngOnDestroy(): void {
@@ -53,6 +62,7 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   deletePoll(id: number,i:number) {
     this.pollService.deletePoll(id.toString()).subscribe(value=>{
       this.polls.splice(i,1);
+      this.updatePage(1);
       this.modalRef.hide();
       console.log("Poll with id="+id+"deleted");
     });
@@ -92,29 +102,20 @@ export class UserHomeComponent implements OnInit,OnDestroy {
   pageChanged(event: PageChangedEvent) {
     this.currentPage=event.page;
     console.log(this.currentPage);
-    this.getPolls();
+    this.updatePage(this.currentPage);
   }
 
   private getPolls() {
-    this.subs[this.countSubs++] = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser")),this.currentPage-1,this.size,this.sort).subscribe(page => {
+    this.subs[this.countSubs++] = this.pollService.getPollsByUserId(Number(localStorage.getItem("idCurrUser")),this.select,this.currentPage-1,this.size,this.sort,this.order).subscribe(page => {
       this.page = page as RestPageModel;
       console.log(this.page);
       this.polls = this.page.content as PollModel[];
-      console.log(this.polls)
     });
-  }
-
-
-  selectSort() {
-    if(this.prevSort!=this.sort) {
-      this.prevSort=this.sort;
-      this.getPolls();
-    }
   }
 
   searchPoll() {
     if(this.search!=''){
-      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort).subscribe(page=>{
+      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
         this.page = page as RestPageModel;
         this.polls = this.page.content as PollModel[];
         if(page.totalElements!=0){
@@ -126,12 +127,16 @@ export class UserHomeComponent implements OnInit,OnDestroy {
     }
   }
 
-  selectSize() {
-    console.log(this.size);
-    if(this.prevSize!=this.size){
-      this.currentPage=1;
+  updatePage(page:number) {
+    this.currentPage=page;
+    if (this.search==''){
+      this.searchResult='';
+      console.log('getPoll');
       this.getPolls();
-      this.prevSize=this.size;
+    }else{
+      console.log('searchPoll');
+      this.searchPoll();
     }
+    console.log(this.size);
   }
 }

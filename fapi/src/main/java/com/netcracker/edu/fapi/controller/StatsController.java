@@ -29,12 +29,7 @@ public class StatsController {
 
     @RequestMapping(value = "",method = RequestMethod.GET)
     public List<ViewQuestion> getPollStats(@RequestParam Integer idPoll){
-        List<Question> questions=questionService.getAllQuestionByIdPoll(idPoll);
-        List<ViewQuestion> viewQuestions=new ArrayList<>();
-        for(Question question:questions){
-            viewQuestions.add(questionConverter.convertQuestionToViewQuestionWithAnswerWithStats(question));
-        }
-        return viewQuestions;
+        return questionService.getPollStats(idPoll);
     }
 
     @RequestMapping(value = "/stat",method = RequestMethod.GET)

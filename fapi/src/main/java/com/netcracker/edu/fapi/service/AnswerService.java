@@ -10,5 +10,4 @@ public interface AnswerService {
     Answer saveAnswer(Answer answer);
     void deleteById(Integer id);
     Answer getById(Integer id);
-//    Iterable<Answer> saveAllAnswers(List<Answer> answers);
 }

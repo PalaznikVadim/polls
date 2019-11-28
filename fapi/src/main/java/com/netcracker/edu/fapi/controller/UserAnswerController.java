@@ -31,19 +31,7 @@ public class UserAnswerController {
 
     @RequestMapping(value = "/all",method = RequestMethod.POST)
     ResponseEntity<UserAnswer[]> save(@RequestBody List<UserAnswer> userAnswers){
-
-        Set<Integer> questionIds=new HashSet<>();
-        for(UserAnswer userAnswer:userAnswers) {
-            questionIds.add(userAnswer.getIdQuestion());
-            userAnswer.setDateTime(new Date());
-        }
-        ResponseEntity<UserAnswer[]> userAnswerList=userAnswerService.saveAll(userAnswers);
-
-        for(int id:questionIds) {//вынести в метод и запускать асинхронно
-            questionService.updateStatsQuestion(id);
-        }
-
-        return userAnswerList;
+        return userAnswerService.saveAll(userAnswers);
     }
 
     @RequestMapping(value = "/count",method = RequestMethod.GET)

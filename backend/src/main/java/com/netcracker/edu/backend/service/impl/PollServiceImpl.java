@@ -5,7 +5,9 @@ import com.netcracker.edu.backend.repository.PollRepository;
 import com.netcracker.edu.backend.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 
@@ -24,8 +26,8 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Page<Poll> findAllByUserId(Integer userId, Pageable pageable) {
-        System.out.println(pageable.toString());
+    public Page<Poll> findAllByUserId(Integer userId, Integer page,Integer size,String sort,String order) {
+        Pageable pageable=createPageable(page,size, sort, order);
         return pollRepository.findPollsByIdUser(userId,pageable);
     }
 
@@ -50,7 +52,37 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Page<Poll> searchBySubstr(String substr,Integer idUser,Pageable pageable) {
-        return pollRepository.searchPollsByName(substr,idUser,pageable);
+    public Page<Poll> searchBySubstr(String substr,Integer idUser,Integer page,Integer size,String sort,String order) {
+        Pageable pageable=createPageable(page,size, sort, order);
+        return pollRepository.searchPollsBySubstr(substr,idUser,pageable);
     }
+
+    @Override
+    public Page<Poll> findAllByTheme(String theme, Integer idUser,Integer page,Integer size,String sort,String order) {
+        Pageable pageable=createPageable(page,size, sort, order);
+        return pollRepository.findAllByThemeAndIdUser(theme,idUser,pageable);
+    }
+
+    @Override
+    public Page<Poll> findDraftsByUserId(Integer idUser, Integer page, Integer size, String sort, String order) {
+        Pageable pageable=createPageable(page,size, sort, order);
+        return pollRepository.findDraftsByUserId(idUser,pageable);
+    }
+
+    @Override
+    public Page<Poll> findActivePollsByUserId(Integer idUser, Integer page, Integer size, String sort, String order) {
+        Pageable pageable=createPageable(page,size, sort, order);
+        return pollRepository.findActivePollsByUserId(idUser,pageable);
+    }
+
+    private Pageable createPageable(Integer page, Integer size, String sort, String order){
+        Pageable pageable;
+        if(order.toLowerCase().contains("asc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        }else{
+            pageable=PageRequest.of(page, size, Sort.by(sort).descending());
+        }
+        return pageable;
+    }
+
 }

@@ -4,6 +4,7 @@ import com.netcracker.edu.fapi.converters.AnswerConverter;
 import com.netcracker.edu.fapi.models.Answer;
 import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.service.AnswerService;
+import com.netcracker.edu.fapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class AnswerServiceImpl implements AnswerService {
     private String backendServerUrl;
 
     @Autowired
-    private AnswerConverter answerConverter;
+    private QuestionService questionService;
 
     @Override
     public List<Answer> getAllAnswerByQuestionId(Integer idQuestion) {
@@ -40,8 +41,10 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public void deleteById(Integer id) {
+        Answer answer =getById(id);
         RestTemplate restTemplate = new RestTemplate();
         restTemplate.delete(backendServerUrl + "/api/answer/delete?id=" + id);
+        questionService.updateStatsQuestion(answer.getIdQuestion());
     }
 
     @Override
@@ -49,11 +52,4 @@ public class AnswerServiceImpl implements AnswerService {
         RestTemplate restTemplate=new RestTemplate();
         return restTemplate.getForObject(backendServerUrl+"/api/answer/id?id="+id,Answer.class);
     }
-
-//    @Override
-//    public Iterable<Answer> saveAllAnswers(List<Answer> answers) {
-//        RestTemplate restTemplate = new RestTemplate();
-//        List<Answer> answerList=restTemplate.getForObject(backendServerUrl + "/api/answer", answers, Iterable<Answer>.class)
-//        return null;
-//    }
 }

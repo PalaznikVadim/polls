@@ -40,4 +40,9 @@ public class ThemeServiceImpl implements ThemeService {
         themeEntity.setName(theme);
         return themeRepository.save(themeEntity);
     }
+
+    @Override
+    public String[] findAllByIdUser(Integer idUser) {
+        return themeRepository.findAllByIdUser(idUser);
+    }
 }

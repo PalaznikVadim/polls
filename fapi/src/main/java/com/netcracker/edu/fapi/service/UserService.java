@@ -6,10 +6,10 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    User findByEmailAndPassword(String email,String password);
+    ResponseEntity<?> findByEmailAndPassword(String email,String password);
 //    Page<User> findAll(Integer page,String field);
-    Page<User> findAll(Integer page, Integer size, String sort, String order);
-    User save(User user);
+    ResponseEntity<?> findAll(Integer page, Integer size, String sort, String order);
+    ResponseEntity<?> save(User user);
     User findById(Integer id);
     User[] getAll();
 }

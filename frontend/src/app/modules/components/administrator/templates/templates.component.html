@@ -5,7 +5,7 @@
     </div>
     <div class="col-9">
       <div class="row">
-        <select [(ngModel)]="sort" (click)="selectSort()" name="sort" class="browser-default custom-select col-5">
+        <select [(ngModel)]="sort" (change)="selectSort()" name="sort" class="browser-default custom-select col-5">
           <option (click)="selectSort()" value="name" selected>Title</option>
           <option value="date_time" >Date of addition</option>
           <option value="idTheme" >Theme</option>
@@ -47,7 +47,7 @@
     <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
     </pagination>
-    <select [(ngModel)]="size" (click)="selectSize()" name="size" class="browser-default custom-select col-1 ml-2">
+    <select [(ngModel)]="size" (change)="selectSize()" name="size" class="browser-default custom-select col-1 ml-2">
       <option value="6">6</option>
       <option value="12">12</option>
       <option value="48">48</option>
