@@ -22,7 +22,9 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class QuestionServiceImpl implements QuestionService {
@@ -50,9 +52,10 @@ public class QuestionServiceImpl implements QuestionService {
         RestTemplate restTemplate = new RestTemplate();
         Question[] questions = restTemplate.getForObject(backendServerUrl + "/api/question/poll?idPoll="+idPoll, Question[].class);
         List<ViewQuestion> viewQuestions=new ArrayList<>();
-        for(Question question:questions){
-            viewQuestions.add(questionConverter.convertQuestionToViewQuestionWithAnswer(question));
-        }
+//        for(Question question:questions){
+//            viewQuestions.add(questionConverter.convertQuestionToViewQuestionWithAnswer(question));
+//        }
+        viewQuestions= Arrays.stream(questions).map(question -> questionConverter.convertQuestionToViewQuestionWithAnswer(question)).collect(Collectors.toList());
         return viewQuestions;
     }
 

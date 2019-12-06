@@ -7,6 +7,7 @@ import {Router} from "@angular/router";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {ErrorModel} from "../../models/error.model";
 import {HttpErrorResponse} from "@angular/common/http";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-new-poll-title',
@@ -23,7 +24,7 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   newTheme:string;
   errors:ErrorModel[]=[];
 
-  constructor(private modalService: BsModalService, private themeService:ThemeService,private pollService:PollService,private router: Router) {
+  constructor(private modalService: BsModalService, private themeService:ThemeService,private pollService:PollService,private userService:UserService,private router: Router) {
   }
 
   modalRef: BsModalRef;
@@ -33,18 +34,15 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
 
   ngOnInit() {
     this.subs=[];
-    this.role=localStorage.getItem('currRole');
+    this.role=this.userService.currUser.role;
     this.subs[this.countSubs++]=this.themeService.getAllTheme().subscribe(value=> {
       this.themes = value as ThemeModel[];
 
-      if (localStorage.getItem('idCurrPoll') == 'null') {
+      if (this.pollService.currPoll == null) {
         this.poll = new PollModel();
         this.poll.theme = this.themes[0].name;
       } else {
-        this.pollService.getPollById(localStorage.getItem('idCurrPoll')).subscribe(poll => {
-          this.poll = poll;
-          console.log(this.poll);
-        });
+        this.poll=this.pollService.currPoll;
       }
     });
   }
@@ -55,8 +53,8 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
 
   addPoll() {
     if(this.poll.id==null) {
-      this.poll.idUser = Number(localStorage.getItem("idCurrUser"));
-      if (localStorage.getItem('currRole') == 'admin')
+      this.poll.idUser = this.userService.currUser.id;
+      if (this.userService.currUser.role == 'admin')
         this.poll.shared = 'Yes';
       else
         this.poll.shared = 'No';
@@ -64,7 +62,6 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
     }
     console.log(this.poll);
     this.subs[this.countSubs++]=this.pollService.savePoll(this.poll).subscribe(value => {
-      localStorage.setItem('idCurrPoll',value.id.toString());
       localStorage.setItem('index',(0).toString());
       this.pollService.currPoll=value;
       this.router.navigate(['/constructorPoll']);

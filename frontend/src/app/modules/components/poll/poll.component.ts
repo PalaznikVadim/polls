@@ -3,7 +3,6 @@ import {QuestionModel} from "../../models/question.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {QuestionService} from "../../../services/question.service";
 import {AnswerService} from "../../../services/answer.service";
-import {TypesService} from "../../../services/types.service";
 import {UserAnswerModel} from "../../models/user-answer.model";
 import {UserAnswerService} from "../../../services/user-answer.service";
 import {Router} from "@angular/router";
@@ -24,7 +23,7 @@ export class PollComponent implements OnInit,OnDestroy
   countSubs = 0;
   errorMessage: string;
 
-  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private answerService: AnswerService, private typesService: TypesService, private userAnswerService: UserAnswerService,private pollService:PollService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private answerService: AnswerService,  private userAnswerService: UserAnswerService,private pollService:PollService, private router: Router) {
   }
 
   ngOnInit() {
@@ -120,7 +119,7 @@ export class PollComponent implements OnInit,OnDestroy
   ngOnDestroy(): void {
     if (this.subs != null) {
       for (let i = 0; i < this.subs.length; i++) {
-        //this.subs[i].unsubscribe();
+        this.subs[i].unsubscribe();
       }
 
     }

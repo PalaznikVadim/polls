@@ -23,9 +23,9 @@ public class QuestionController {
     }
 
     @RequestMapping(value = "/id",method = RequestMethod.GET)
-    public Optional<Question> getQuestionById(@RequestParam String id){
+    public Optional<Question> getQuestionById(@RequestParam Integer id){
 //        Optional<Question> question=questionService.getById(Integer.valueOf(id));
-        return questionService.getById(Integer.valueOf(id));
+        return questionService.getById(id);
     }
 
     @RequestMapping(value = "",method = RequestMethod.POST)

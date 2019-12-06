@@ -5,11 +5,11 @@ import {QuestionModel} from "../../models/question.model";
 import {AnswerModel} from "../../models/answer.model";
 import {QuestionService} from "../../../services/question.service";
 import {AnswerService} from "../../../services/answer.service";
-import {TypesService} from "../../../services/types.service";
 import {TypeQuestionModel} from "../../models/type_question.model";
 import {ErrorModel} from "../../models/error.model";
 import {PollService} from "../../../services/poll.service";
 import {HttpErrorResponse} from "@angular/common/http";
+import {UserService} from "../../../services/user.service";
 
 
 @Component({
@@ -36,12 +36,12 @@ export class DesignerComponent implements OnInit,OnDestroy {
   indexCurQuest:number;
 
 
-  constructor(private modalService: BsModalService,private questionService:QuestionService,private pollService:PollService,private answerService:AnswerService,private typesService:TypesService) { }
+  constructor(private modalService: BsModalService,private questionService:QuestionService,
+              private pollService:PollService,private answerService:AnswerService, private userService:UserService) { }
 
   ngOnInit() {
     console.log('ngOnInit()');
-    this.currRole=localStorage.getItem('currRole');
-    localStorage.setItem('idCurrPoll',this.pollService.currPoll.id.toString());
+    this.currRole=this.userService.currUser.role;
     this.quest=new QuestionModel();
     this.quest.answers=[];
     this.subs=[];
@@ -52,13 +52,13 @@ export class DesignerComponent implements OnInit,OnDestroy {
 
 
   addQuest(template: TemplateRef<any>){
-console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(this.strTypeQuestion));
+//console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(this.strTypeQuestion));
     this.isNew=true;
     this.quest=new QuestionModel();
     this.quest.textTitle='Enter question title';
     this.quest.required='No';
     this.quest.type='radio';
-    this.quest.idPoll=Number(localStorage.getItem('idCurrPoll'));
+    this.quest.idPoll=this.pollService.currPoll.id;
     this.quest.answers=[] as AnswerModel[];
     for(let i=0;i<3;i++) {
       this.answer = new AnswerModel();
@@ -71,6 +71,7 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   createQuestion() {
+    console.log(this.quest.type);
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
       if(quest!=null){
         this.pollService.currPoll.questions.push(quest);}
@@ -126,10 +127,8 @@ console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(t
   }
 
   updateQuestion() {
-    this.quest.type="Select one answer"?'radio':'checkbox';
     this.subs[this.countSub++]=this.questionService.saveQuestion(this.quest).subscribe(quest => {
-      console.log("this="+this.quest.id);
-      console.log(("response="+quest.id));
+      console.log(this.quest.type);
       if (quest != null) {
         this.quest = quest as QuestionModel;
         console.log(this.quest);

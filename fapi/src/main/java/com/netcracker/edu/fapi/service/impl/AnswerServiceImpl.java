@@ -1,8 +1,6 @@
 package com.netcracker.edu.fapi.service.impl;
 
-import com.netcracker.edu.fapi.converters.AnswerConverter;
 import com.netcracker.edu.fapi.models.Answer;
-import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.service.AnswerService;
 import com.netcracker.edu.fapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,11 +30,8 @@ public class AnswerServiceImpl implements AnswerService {
 
     @Override
     public Answer saveAnswer(Answer answer) {
-
         RestTemplate restTemplate = new RestTemplate();
-        Answer ans=restTemplate.postForEntity(backendServerUrl + "/api/answer", answer, Answer.class).getBody();
-
-        return answer;
+        return restTemplate.postForEntity(backendServerUrl + "/api/answer", answer, Answer.class).getBody();
     }
 
     @Override

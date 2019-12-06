@@ -1,7 +1,6 @@
 package com.netcracker.edu.fapi.service;
 
 import com.netcracker.edu.fapi.models.User;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 
 public interface UserService {
@@ -12,4 +11,5 @@ public interface UserService {
     ResponseEntity<?> save(User user);
     User findById(Integer id);
     User[] getAll();
+    User getByEmail(String email);
 }

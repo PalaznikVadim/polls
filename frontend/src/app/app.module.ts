@@ -29,7 +29,6 @@ import {UserService} from "./services/user.service";
 import {ThemeService} from "./services/theme.service";
 import {QuestionService} from "./services/question.service";
 import {AnswerService} from "./services/answer.service";
-import {TypesService} from "./services/types.service";
 import {UserAnswerService} from "./services/user-answer.service";
 import {UserHomeComponent} from './modules/components/user-home/user-home.component';
 import {ViewUserPollComponent} from './modules/components/administrator/view-user-poll/view-user-poll.component';
@@ -39,6 +38,7 @@ import {TemplatesComponent} from './modules/components/administrator/templates/t
 import {ListTemplatesComponent} from './modules/components/list-templates/list-templates.component';
 import {ErrorService} from "./services/error.service";
 import { ErrorPageComponent } from './modules/components/error-page/error-page.component';
+import { PageWithPollsComponent } from './modules/components/page-with-polls/page-with-polls.component';
 
 
 const appRoutes: Routes = [
@@ -54,6 +54,9 @@ const appRoutes: Routes = [
   {path: 'profile', component: ProfileComponent},
   {path: 'templates', component: TemplatesComponent},
   {path: "creatingByTemplate", component: ListTemplatesComponent},
+  {path:'myPolls',component: PageWithPollsComponent},
+  {path:'myTemplates',component: PageWithPollsComponent},
+  {path:'userPolls',component: PageWithPollsComponent},
   {path: "**",component:ErrorPageComponent}
 
 
@@ -81,6 +84,7 @@ const appRoutes: Routes = [
     TemplatesComponent,
     ListTemplatesComponent,
     ErrorPageComponent,
+    PageWithPollsComponent,
 
   ],
   imports: [
@@ -104,7 +108,6 @@ const appRoutes: Routes = [
     ThemeService,
     QuestionService,
     AnswerService,
-    TypesService,
     UserAnswerService,
     StatsService,
     ErrorService

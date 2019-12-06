@@ -4,12 +4,7 @@ import com.netcracker.edu.backend.entity.Poll;
 import com.netcracker.edu.backend.service.PollService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.util.List;
 import java.util.Optional;
@@ -22,14 +17,8 @@ public class PollController {
     private PollService pollService;
 
     @RequestMapping(value = "/user",method = RequestMethod.GET)
-    public Page<Poll> getAllPollByUserId(@RequestParam Integer userId,int page,int size,String sort,String order){
-        Page<Poll> polls = pollService.findAllByUserId(userId,page,size,sort,order);
-        return polls;
-    }
-
-    @RequestMapping(value = "/search/{substr}",method = RequestMethod.GET)
-    public Page<Poll> searchPollsBySubstr(@PathVariable String substr,@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
-        Page<Poll> polls = pollService.searchBySubstr(substr,idUser,page,size,sort,order);
+    public Page<Poll> getAllPollByUserId(@RequestParam Integer userId,String substr,int page,int size,String sort,String order){
+        Page<Poll> polls = pollService.findAllByUserId(userId,substr,page,size,sort,order);
         return polls;
     }
 
@@ -59,17 +48,18 @@ public class PollController {
     }
 
     @RequestMapping(value = "drafts",method = RequestMethod.GET)
-    public Page<Poll> getUserDrafts(@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
-        return pollService.findDraftsByUserId(idUser,page,size,sort,order);
+    public Page<Poll> getUserDrafts(@RequestParam Integer idUser,String substr,Integer page,Integer size,String sort,String order){
+        System.out.println(substr);
+        return pollService.findDraftsByUserId(idUser,substr,page,size,sort,order);
     }
 
     @RequestMapping(value = "activePolls",method = RequestMethod.GET)
-    public Page<Poll> getUserActivePolls(@RequestParam Integer idUser,Integer page,Integer size,String sort,String order){
-        return pollService.findActivePollsByUserId(idUser,page,size,sort,order);
+    public Page<Poll> getUserActivePolls(@RequestParam Integer idUser,String substr,Integer page,Integer size,String sort,String order){
+        return pollService.findActivePollsByUserId(idUser,substr,page,size,sort,order);
     }
 
     @RequestMapping(value = "theme",method = RequestMethod.GET)
-    public Page<Poll> getPollsByTheme(@RequestParam Integer idUser, String theme, Integer page,Integer size,String sort, String order){
-        return pollService.findAllByTheme(theme,idUser,page,size,sort,order);
+    public Page<Poll> getPollsByTheme(@RequestParam Integer idUser, String theme, String substr, Integer page,Integer size,String sort, String order){
+        return pollService.findAllByTheme(theme,substr,idUser,page,size,sort,order);
     }
 }

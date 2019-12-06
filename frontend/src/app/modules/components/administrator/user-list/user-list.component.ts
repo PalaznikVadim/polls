@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import {UserModel} from "../../../models/user.model";
 import {UserService} from "../../../../services/user.service";
 import {PollService} from "../../../../services/poll.service";
-import {PollModel} from "../../../models/poll.model";
 import {Router} from "@angular/router";
 import {RestPageModel} from "../../../models/rest-page.model";
 import {PageChangedEvent} from "ngx-bootstrap";
@@ -17,11 +16,9 @@ export class UserListComponent implements OnInit {
   page: RestPageModel;
   users: UserModel[];
   subs: any[];
-  countSubs = 0;
   currentPage = 1;
   sort: string = 'name';
   size: number;
-  prevSize: number = 5;
 
   constructor(private userService: UserService, private pollService: PollService, private router: Router) {
   }
@@ -59,19 +56,9 @@ export class UserListComponent implements OnInit {
   }
 
   getUsers() {
-    this.subs[this.countSubs++] = this.userService.getAllUsers(this.currentPage - 1, this.size, this.sort, 'desk').subscribe(page => {
+    this.subs[this.subs.length] = this.userService.getAllUsers(this.currentPage - 1, this.size, this.sort, 'desk').subscribe(page => {
       this.page = page as RestPageModel;
-      console.log(this.page);
-      this.users = this.page.content as UserModel[];
-      console.log(this.users)
+      this.users = this.page.content;
     });
-  }
-
-  selectSize() {
-    if (this.prevSize != this.size) {
-      this.currentPage=1;
-      this.getUsers();
-      this.prevSize = this.size;
-    }
   }
 }

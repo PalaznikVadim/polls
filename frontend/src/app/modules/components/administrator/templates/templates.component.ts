@@ -4,6 +4,9 @@ import {PollModel} from "../../../models/poll.model";
 import {BsModalRef, BsModalService, PageChangedEvent} from "ngx-bootstrap";
 import {Router} from "@angular/router";
 import {RestPageModel} from "../../../models/rest-page.model";
+import {map, tap} from "rxjs/operators";
+import {ThemeService} from "../../../../services/theme.service";
+import {UserService} from "../../../../services/user.service";
 
 @Component({
   selector: 'app-templates',
@@ -18,37 +21,47 @@ export class TemplatesComponent implements OnInit {
   indexCurrPoll:number;
   idCurrPoll:number;
   page:RestPageModel;
-  size:number=6;
-  currentPage: number=1;
-  sort:string='name';
+  size:number;
+  currentPage: number;
+  sort:string;
   order:string;
   search: string;
   private searchResult: string;
   private select: string;
 
 
-  constructor(private pollService:PollService,private modalService: BsModalService,private router:Router) { }
+  constructor(private pollService:PollService,private modalService: BsModalService,private router:Router,
+              private themeService:ThemeService,private userService:UserService) { }
 
   ngOnInit() {
-    this.subs=[];
+    this.search='';
+    this.select='all';
+    this.order='ASC';
+    this.sort='name';
+    this.currentPage=1;
+    this.size=6;
     this.polls=[];
-    this.getPolls();
+    this.subs=[];
+    this.getPolls(this.currentPage);
+    this.subs[this.subs.length] = this.themeService.getUserPollThemes(this.userService.currUser.id).subscribe(themes => {
+      this.themes = themes;
+      console.log(this.themes)
+    });
   }
 
   modalRef: BsModalRef;
   config = {
     animated: true
   };
-
+  themes: string[];
 
   newTemplate() {
-    localStorage.setItem('idCurrPoll',null);
+    this.pollService.currPoll=null;
     this.router.navigate(['titleNewPoll']);
   }
 
   editClick(poll:PollModel) {
     localStorage.setItem('index',(0).toString());
-    localStorage.setItem("idCurrPoll",poll.id.toString());
     this.pollService.currPoll=poll;
     this.router.navigate(['/constructorPoll']);
   }
@@ -70,35 +83,25 @@ export class TemplatesComponent implements OnInit {
   pageChanged(event: PageChangedEvent) {
     this.currentPage=event.page;
     console.log(this.currentPage);
-    this.getPolls();
+    this.getPolls(this.currentPage);
   }
 
-  private getPolls() {
-    this.subs[this.countSubs++]=this.pollService.getPollsByUserId(Number(localStorage.getItem('idCurrUser')),this.select,this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
-      this.polls=page.content as PollModel[];
-      this.page=page;
-    });
-  }
-
-  selectSize() {
-      this.getPolls();
-  }
-
-  selectSort() {
-      this.getPolls();
-  }
-
-  searchPoll() {
-    if(this.search!=''){
-      this.subs[this.countSubs++]=this.pollService.searchPollsBySubstr(this.search,Number(localStorage.getItem('idCurrUser')),this.currentPage-1,this.size,this.sort,this.order).subscribe(page=>{
-        this.page = page as RestPageModel;
-        this.polls = this.page.content as PollModel[];
-        if(page.totalElements!=0){
-          this.searchResult='Found '+page.totalElements+' poll(s):';
-        }else{
-          this.searchResult='Nothing found!';
-        }
+  getPolls(page: number) {
+    this.currentPage = page;
+    this.subs[this.countSubs++] = this.pollService.getPollsPageByUserId(this.userService.currUser.id,
+      this.select, this.search, this.currentPage - 1, this.size, this.sort, this.order)
+      .pipe(
+        tap((pageResponse: RestPageModel) => {
+          this.page = pageResponse;
+          if (this.search)
+            this.searchResult = 'Found ' + this.page.totalElements + ' poll(s)';
+          else
+            this.searchResult=null;
+        }),
+        map((pageResponse: RestPageModel) => pageResponse.content)
+      )
+      .subscribe((polls: PollModel[]) => {
+        this.polls = polls;
       });
-    }
   }
 }

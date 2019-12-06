@@ -11,13 +11,13 @@ import java.util.Optional;
 
 public interface PollService {
     Optional<Poll> findPollById(Integer id);
-    Page<Poll> findAllByUserId(Integer userId, Integer page,Integer size,String sort,String order);
+    Page<Poll> findAllByUserId(Integer userId,String substr, Integer page,Integer size,String sort,String order);
     List<Poll> findAllTemplateByTheme(String theme);
     Poll save(Poll poll);
     void delete(Integer id);
     Poll findByLink(String link);
-    Page<Poll> searchBySubstr(String substr,Integer idUser,Integer page,Integer size, String sort,String order);
-    Page<Poll> findAllByTheme(String theme, Integer idUser,Integer page,Integer size,String sort,String order);
-    Page<Poll> findDraftsByUserId(Integer idUser,Integer page,Integer size,String sort,String order);
-    Page<Poll> findActivePollsByUserId(Integer idUser,Integer page,Integer size,String sort,String order);
+    //Page<Poll> searchBySubstr(String substr,Integer idUser,Integer page,Integer size, String sort,String order);
+    Page<Poll> findAllByTheme(String theme,String substr, Integer idUser,Integer page,Integer size,String sort,String order);
+    Page<Poll> findDraftsByUserId(Integer idUser,String substr,Integer page,Integer size,String sort,String order);
+    Page<Poll> findActivePollsByUserId(Integer idUser,String substr,Integer page,Integer size,String sort,String order);
 }

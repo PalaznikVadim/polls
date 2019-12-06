@@ -1,17 +1,12 @@
 package com.netcracker.edu.fapi.controller;
 
 import com.netcracker.edu.fapi.models.User;
+import com.netcracker.edu.fapi.service.TokenService;
 import com.netcracker.edu.fapi.service.UserService;
-import com.netcracker.edu.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.DataBinder;
-import org.springframework.validation.Errors;
-import org.springframework.validation.ObjectError;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 
 @RestController
@@ -21,8 +16,10 @@ public class UserController {
     @Autowired
     private UserService userService;
     @Autowired
-    private UserValidator userValidator;
+    private TokenService tokenService;
 
+
+    @Secured("ROLE_ADMIN")
     @RequestMapping(value = "",method = RequestMethod.GET)
     public ResponseEntity<?> getAllUsers(@RequestParam int page,
                                                   @RequestParam int size,
@@ -34,7 +31,8 @@ public class UserController {
 
     @GetMapping("/signin")
     public ResponseEntity<?> getUserByEmail(@RequestParam String email,@RequestParam String password) {
-        return userService.findByEmailAndPassword(email,password);
+
+        return tokenService.authenticate(email,password);
     }
 
     @RequestMapping(value="/registration", method = RequestMethod.POST, produces = "application/json")
@@ -47,6 +45,12 @@ public class UserController {
         return userService.findById(Integer.valueOf(id));
     }
 
+    @Secured(value = {"ADMIN"})
     @GetMapping("/all")
     public User[] getAll(){return userService.getAll();}
+
+//    @GetMapping("/username")
+//    public User getByEmail(@RequestParam String email){
+//        return userService.getByEmail(email);
+//    }
 }

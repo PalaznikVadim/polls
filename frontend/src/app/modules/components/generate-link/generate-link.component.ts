@@ -13,5 +13,11 @@ export class GenerateLinkComponent implements OnInit {
   ngOnInit() {
 
   }
+  public copyToClipboard(): void {
+    const inputElement = document.getElementById('inputLink');
+    (<any>inputElement).select();
+    document.execCommand('copy');
+    inputElement.blur();
+  }
 
 }

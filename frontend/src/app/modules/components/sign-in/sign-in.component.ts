@@ -1,9 +1,8 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {UserModel} from "../../models/user.model";
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {PollService} from "../../../services/poll.service";
 import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
+import {HttpHeaders} from "@angular/common/http";
 
 @Component({
   selector: 'app-sign-in',
@@ -17,10 +16,11 @@ export class SignInComponent implements OnInit,OnDestroy {
   signInForm: FormGroup;
   errors:Map<string,Array<string>>;
 
-  constructor(private  userService: UserService,private router: Router,private pollService:PollService) {
+  constructor(private  userService: UserService,private router: Router) {
   }
 
   ngOnInit() {
+    this.errors=new Map<string, Array<string>>();
     this.signInForm = new FormGroup({
       email: new FormControl("", [
         Validators.required,
@@ -50,18 +50,19 @@ export class SignInComponent implements OnInit,OnDestroy {
 
   signInClick() {
 
-    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,this.signInForm.controls['password'].value).subscribe(user => {
-
-      if(user!==null){
-        localStorage.setItem("idCurrUser",user.id.toString());
-        localStorage.setItem('currRole',user.role);
+    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,this.signInForm.controls['password'].value).subscribe(response => {
+      if(response.user!==null){
+        localStorage.setItem("token",response.token);
+        this.userService.currUser=response.user;
+        this.userService.reqHeader=new HttpHeaders({
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer_' + response.token
+        });
         this.router.navigate(['/homePage']);
 
       }else{
         this.errorMassage='Incorrect data. Not found user with these email and password. Recheck entered data';
       }
-      console.log(Number(localStorage.getItem("idCurrUser")));
-
     },response => {
       this.errors=response.error;
       console.log(this.errors);

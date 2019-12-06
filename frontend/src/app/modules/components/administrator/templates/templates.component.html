@@ -1,29 +1,47 @@
 <div class="container">
   <div class="row">
-    <div class="col-2">
+    <div class="col-2 mb-2">
       <div class="btn btn-success" (click)="newTemplate()">New template</div>
     </div>
-    <div class="col-9">
-      <div class="row">
-        <select [(ngModel)]="sort" (change)="selectSort()" name="sort" class="browser-default custom-select col-5">
-          <option (click)="selectSort()" value="name" selected>Title</option>
-          <option value="date_time" >Date of addition</option>
-          <option value="idTheme" >Theme</option>
-          <option value="status" >Status</option>
+  </div>
+  <div class="row align-items-start mb-3 mt-3">
+    <div class="col-md-3">
+      <div class="row align-items-end">
+        <label class="col-md-4 text-right"><h5>Select:</h5> </label>
+        <select (change)="getPolls(1)" [(ngModel)]="select" class="browser-default custom-select col-md-8">
+          <option value="all" selected>all</option>
+          <option value="theme_{{theme}}" *ngFor="let theme of themes">{{theme}}</option>
         </select>
-        <form class="form-inline col-7">
-          <input type="text" class="form-control ml-2 " placeholder="Search" name="search" [(ngModel)]="search">
-          <button class="btn btn-success" (click)="searchPoll()">Search</button>
-        </form>
       </div>
     </div>
+    <div class="col-md-5">
+      <div class="row">
+        <label class="col-md-3 text-right"><h5>Sort by:</h5></label>
+        <select [(ngModel)]="sort" (change)="getPolls(1)" name="sort" class="browser-default custom-select col-md-6">
+          <option value="name" selected>Title</option>
+          <option value="date">Date of addition</option>
+          <option value="idTheme">Theme</option>
+          <option value="status">Status</option>
+        </select>
+        <select [(ngModel)]="order" (change)="getPolls(1)" name="order" class="browser-default custom-select col-md-2">
+          <option value="ASC" selected>ASC</option>
+          <option value="DESK">DESC</option>
+        </select>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <form class="form-inline row" >
+        <input type="text" class="form-control col-md-6" placeholder="Search" name="search" [(ngModel)]="search" required>
+        <button class="btn btn-success col-md-3" [disabled]="!search" (click)="getPolls(1)">Search</button>
+      </form>
+    </div>
   </div>
-  <div *ngIf="polls.length==0" class="row justify-content-center mt-5">
+  <div *ngIf="polls?.length==0" class="row justify-content-center mt-5">
     <h3>No templates</h3>
   </div>
-  <div *ngIf="polls.length!=0" class="row justify-content-center mt-5">
-    <div class="col-4 pr-2"  *ngFor="let poll of polls;let i=index;">
-      <div class="card border-info  mb-3" style="max-width: 18rem;">
+  <div *ngIf="polls?.length!=0" class="row justify-content-center mt-5">
+    <div class="col-4 pr-2 mb-3"  *ngFor="let poll of polls;let i=index;">
+      <div class="card border-info myStyle mb-3" style="max-width: 18rem;">
         <div class="card-header color-card border-info"><h5>{{poll.name}}</h5></div>
         <div class="card-body">
           <h6 class="card-text">Theme: {{poll.theme}}</h6>
@@ -43,11 +61,11 @@
       </div>
     </div>
   </div>
-  <div *ngIf="polls.length!=0" class="row justify-content-center mt-5 ">
+  <div *ngIf="polls.length!=0" class="row justify-content-center mt-3 ">
     <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
     </pagination>
-    <select [(ngModel)]="size" (change)="selectSize()" name="size" class="browser-default custom-select col-1 ml-2">
+    <select [(ngModel)]="size" (change)="getPolls(1)" name="size" class="browser-default custom-select col-1 ml-2">
       <option value="6">6</option>
       <option value="12">12</option>
       <option value="48">48</option>

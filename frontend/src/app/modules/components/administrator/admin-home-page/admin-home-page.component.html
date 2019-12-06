@@ -3,6 +3,8 @@
     <form class="form-inline mt-2 mt-md-0">
       <button [class.active]="tabs[0]" type="button" class="btn btn-outline-light ml-2" (click)="changeContent(0)">Users</button>
       <button [class.active]="tabs[1]" type="button" class="btn btn-outline-light ml-2" (click)="changeContent(1)">Templates</button>
+      <button type="button" class="btn btn-outline-light ml-2" routerLink="/myTemplates">myTemplates</button>
+      <button type="button" class="btn btn-outline-light ml-2" routerLink="/userPolls">userPolls</button>
     </form>
     <ul class="navbar-nav mr-0 ml-auto">
       <li class="nav-item active">

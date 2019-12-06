@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-nav',
@@ -11,10 +12,10 @@ export class NavComponent implements OnInit {
   tabs:boolean[];
   role:string;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router,private userService:UserService) { }
 
   ngOnInit() {
-    this.role=localStorage.getItem('currRole');
+    this.role=this.userService.currUser.role;
     if(localStorage.getItem('index')!=null){
       this.tabs=[false,false,false];
       this.tabs[Number(localStorage.getItem('index'))]=true;

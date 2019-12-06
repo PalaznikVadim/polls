@@ -1,9 +1,7 @@
 package com.netcracker.edu.fapi.models;
 
-import org.apache.tomcat.jni.Poll;
-
 import java.sql.Date;
-import java.util.Collection;
+
 
 public class User {
     private int id;

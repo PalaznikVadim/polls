@@ -15,11 +15,11 @@ export class HomePageComponent implements OnInit {
 
   role:string;
 
-  constructor() {
+  constructor(private userService:UserService) {
   }
 
   ngOnInit(): void {
-    this.role=localStorage.getItem('currRole');
+    this.role=this.userService.currUser.role;
   }
 
 }

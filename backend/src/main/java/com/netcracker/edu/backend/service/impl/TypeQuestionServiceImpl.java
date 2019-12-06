@@ -29,6 +29,6 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
     @Override
     public Integer getIdByType(Type type) {
 
-        return typeQuestionRepository.findIdByType(Type.radio);
+        return typeQuestionRepository.findIdByType(type);
     }
 }

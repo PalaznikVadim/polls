@@ -18,6 +18,9 @@
 </nav>
 
 <div *ngIf="tabs[0]&&poll!=null" class="container">
+  <div class="row">
+    <h3>{{poll.name}}</h3>
+  </div>
   <div class="row justify-content-center">
       <div *ngFor="let quest of poll.questions;let i=index;" class="col-10 block p-3 bg-light mb-2 rounded">
         <div class="title">

@@ -1,9 +1,5 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
-import {UserModel} from "../../../models/user.model";
 import {QuestionService} from "../../../../services/question.service";
-import {AnswerService} from "../../../../services/answer.service";
-import {QuestionModel} from "../../../models/question.model";
-import {TypesService} from "../../../../services/types.service";
 import {PollModel} from "../../../models/poll.model";
 import {PollService} from "../../../../services/poll.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
@@ -32,7 +28,7 @@ export class ViewUserPollComponent implements OnInit,OnDestroy {
     this.subs=[];
     this.tabs=[false,false];
     this.tabs[Number(localStorage.getItem('index'))]=true;
-    this.subs[this.countSubs++]=this.pollService.getPollById(localStorage.getItem('idCurrPoll')).subscribe(poll=> {
+    this.subs[this.countSubs++]=this.pollService.getPollById(this.pollService.currPoll.id.toString()).subscribe(poll=> {
       this.poll=poll;
       this.subs[this.countSubs++] = this.questionService.getAllQuestionByPollId(poll.id).subscribe(questions => {
         this.poll.questions=questions;

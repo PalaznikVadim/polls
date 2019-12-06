@@ -30,7 +30,7 @@
     <pagination *ngIf="page!=null" [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
                 previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
     </pagination>
-    <select [(ngModel)]="size" (click)="selectSize()" name="size" class="browser-default custom-select col-1 ml-2">
+    <select [(ngModel)]="size" (change)="getUsers()" name="size" class="browser-default custom-select col-1 ml-2">
       <option value="5">5</option>
       <option value="10">10</option>
       <option value="25">25</option>

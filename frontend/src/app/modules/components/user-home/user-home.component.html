@@ -1,4 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <button type="button" class="btn btn-outline-light ml-2" routerLink="/myPolls">pollPage</button>
   <div class="collapse navbar-collapse" id="navbarCollapse">
 <!--    <ul class="navbar-nav mr-auto">-->
 <!--      <li class="nav-item active">-->
@@ -23,41 +24,41 @@
 <div class="album py-2 bg-transparent">
   <div class="container">
     <div class="row mb-4">
-      <div class="col-3">
+      <div class="col-md-3">
         <button type="button" class="btn btn-success float-left" (click)="openModal(template)">New poll</button>
       </div>
     </div>
-    <div class="row align-items-start mb-3">
-      <div class="col-4">
+    <div class="row align-items-start mb-5">
+      <div class="col-md-3">
         <div class="row align-items-end">
-          <label class="col-3"><h5>Select:</h5> </label>
-          <select (change)="updatePage(1)" [(ngModel)]="select" class="browser-default custom-select col-8">
+          <label class="col-md-4 text-right"><h5>Select:</h5> </label>
+          <select (change)="getPolls(1)" [(ngModel)]="select" class="browser-default custom-select col-md-8">
             <option value="all" selected>all</option>
             <option value="drafts">Drafts</option>
-            <option value="activePolls">Active polls</option>
+            <option value="activePolls">Polls with link</option>
             <option value="theme_{{theme}}" *ngFor="let theme of themes">{{theme}}</option>
           </select>
         </div>
       </div>
-      <div class="col-4">
+      <div class="col-md-5">
         <div class="row">
-          <label class="col-3"><h5>Sort by:</h5></label>
-          <select [(ngModel)]="sort" (change)="updatePage(1)" name="sort" class="browser-default custom-select col-6">
+          <label class="col-md-3 text-right"><h5>Sort by:</h5></label>
+          <select [(ngModel)]="sort" (change)="getPolls(1)" name="sort" class="browser-default custom-select col-md-6">
             <option value="name" selected>Title</option>
             <option value="date">Date of addition</option>
             <option value="idTheme">Theme</option>
             <option value="status">Status</option>
           </select>
-          <select [(ngModel)]="order" (change)="updatePage(1)" name="order" class="browser-default custom-select col-3">
+          <select [(ngModel)]="order" (change)="getPolls(1)" name="order" class="browser-default custom-select col-md-2">
             <option value="ASC" selected>ASC</option>
             <option value="DESK">DESC</option>
           </select>
         </div>
       </div>
-      <div class="col-4">
-          <form class="form-inline row">
-            <input type="text" class="form-control ml-2 col-7" placeholder="Search" name="search" [(ngModel)]="search">
-            <button class="btn btn-success col-3" (click)="updatePage(1)">Search</button>
+      <div class="col-md-4">
+          <form class="form-inline row" >
+            <input type="text" class="form-control col-md-6" placeholder="Search" name="search" [(ngModel)]="search" required>
+            <button class="btn btn-success col-md-3" [disabled]="!search" (click)="getPolls(1)">Search</button>
           </form>
       </div>
     </div>
@@ -65,15 +66,15 @@
       <h4>{{searchResult}}</h4>
     </div>
     <div class="row justify-content-center">
-      <div *ngIf="polls.length==0;else unset">
+      <div *ngIf="!polls?.length;else unset">
         <h3 class="mt-5">This page is empty. Create a poll!</h3>
       </div>
     </div>
-    <div *ngIf="polls.length!=0" class="row justify-content-center mt-5 ">
+    <div *ngIf="polls?.length!=0" class="row justify-content-center mt-5 ">
       <pagination [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"  (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
                     previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
       </pagination>
-      <select [(ngModel)]="size" (change)="updatePage(1)" name="size" class="browser-default custom-select col-1 ml-2">
+      <select [(ngModel)]="size" (change)="getPolls(1)" name="size" class="browser-default custom-select col-1 ml-2">
         <option value="6">6</option>
         <option value="12">12</option>
         <option value="48">48</option>

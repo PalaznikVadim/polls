@@ -10,7 +10,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -41,5 +40,14 @@ public class UserController {
     public User saveUser(@RequestBody User user) {
         System.out.println(user.toString());
         return userService.save(user);
+    }
+
+    //email as username
+    @RequestMapping(value = "/username",method = RequestMethod.GET)
+    public User getByEmail(@RequestParam String email){
+        System.out.println("email- " + email);
+        User user =  userService.getByEmail(email);
+        System.out.println("user- " + user);
+        return user;
     }
 }

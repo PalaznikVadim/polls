@@ -26,17 +26,14 @@ export class RegistrationComponent implements OnInit,OnDestroy {
     this.registrationForm = new FormGroup({
       name: new FormControl("", [
         Validators.required,
-        //Validators.pattern("[A-za-z]"),
-        Validators.minLength(2),
-        Validators.maxLength(20)
+        Validators.pattern("[A-Za-z]{2,20}"),
       ]),
       surname: new FormControl('', [
         Validators.required,
-        Validators.minLength(2),
-        Validators.maxLength(20)
+        Validators.pattern("[A-Za-z-]{2,20}")
       ]),
       DOB: new FormControl("", [
-        Validators.required
+        Validators.required,
       ]),
       email: new FormControl("", [
         Validators.required,

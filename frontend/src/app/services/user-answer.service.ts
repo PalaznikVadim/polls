@@ -12,8 +12,4 @@ export class UserAnswerService {
   saveAllUserAnswer(userAnswers:UserAnswerModel[]):Observable<UserAnswerModel[]>{
     return this.http.post<UserAnswerModel[]>('/api/userAnswer/all',userAnswers);
   }
-
-  countSelected(idAnswer:number):Observable<number>{
-    return this.http.get<number>('api/userAnswer/count?idAnswer='+idAnswer)
-  }
 }

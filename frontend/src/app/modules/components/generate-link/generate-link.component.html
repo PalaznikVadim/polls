@@ -3,12 +3,11 @@
 <div class="container mt-5">
   <div class="row justify-content-center">
     <div class="col-md-8 justify-content-center ">
-      <form *ngIf="pollService.currPoll.link!=null;" class="form-signin">
-        <h1 class="h3 mb-3 font-weight-normal">Скопируйте и пошлите своим респодентам ссылку:</h1>
-        <label for="inputLink" class="sr-only"></label>
-        <input type="text" id="inputLink" class="form-control"
+      <form *ngIf="pollService.currPoll.link!=null;" class="form-inline row">
+        <h1 class="h3 mb-3 font-weight-normal">Copy and send your respondents the link:</h1>
+        <input type="text" id="inputLink" class="form-control col-sm-9"
                value="localhost:4301/firstPagePoll/{{pollService.currPoll.link}}" required autofocus>
-        <button class="btn btn-lg btn-primary btn-block" type="submit">Копировать</button>
+        <button class="btn btn-lg btn-primary col-sm-3" (click)="copyToClipboard()"  type="submit">Copy</button>
       </form>
       <div *ngIf="pollService.currPoll.link==null" class="text-center"><h2>This poll has been saved as draft.</h2></div>
     </div>

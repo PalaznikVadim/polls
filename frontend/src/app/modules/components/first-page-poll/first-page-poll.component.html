@@ -1,10 +1,10 @@
 <div *ngIf="pollService.currPoll!=null" class="container">
   <div class="row align-content-center justify-content-center" >
-    <div class="col-4 align-items-center text-center">
+    <div class="col-6 align-items-center text-center">
       <div *ngIf="pollService.currPoll.status=='blocked'" class="alert alert-danger"><h3>Sorry, this poll has been blocked!</h3></div>
       <h1 class="">{{pollService.currPoll.name}}</h1>
-      <small>{{pollService.currPoll.theme}}</small>
-      <div class="mt-3">
+      <h5>{{pollService.currPoll.theme}}</h5>
+      <div class="mt-3 ">
         <p>
           <span>Hello,</span>
         </p>

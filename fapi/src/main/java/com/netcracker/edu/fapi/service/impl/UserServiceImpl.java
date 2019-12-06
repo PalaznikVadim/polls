@@ -6,16 +6,14 @@ import com.netcracker.edu.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.DataBinder;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -23,20 +21,58 @@ public class UserServiceImpl implements UserService {
     @Value("${backend.server.url}")
     private String backendServerUrl;
 
+
+    private final BCryptPasswordEncoder passwordEncoder;
+    private final UserValidator userValidator;
+
     @Autowired
-    private UserValidator userValidator;
+    public UserServiceImpl( UserValidator userValidator, BCryptPasswordEncoder passwordEncoder) {
+        this.userValidator = userValidator;
+        this.passwordEncoder = passwordEncoder;
+    }
+
 
     @Override
-    public ResponseEntity<?> findByEmailAndPassword(String email,String password) {
-        Map<String,List<String>> errors=validateEmailAndPassword(email,password);
-        if(errors.size()!=0){
-            return ResponseEntity.badRequest().body(errors);
-        }else {
-            RestTemplate restTemplate = new RestTemplate();
-            User user = restTemplate.getForObject(backendServerUrl + "api/user/email?email=" + email + "&password=" + password, User.class);
-            return ResponseEntity.ok().body(user);
-        }
+    public ResponseEntity<?> findByEmailAndPassword(String email, String password) {
+
+//        Map<String, List<String>> errors = validateEmailAndPassword(email, password);
+//        if (errors.size() != 0) {
+//            return ResponseEntity.badRequest().body(errors);
+//        } else {
+//            try {
+//                String username = email;
+//                authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+//                User user = getByEmail(username);
+//
+//
+//                if (user == null) {
+//                    throw new UsernameNotFoundException("User with email: " + username + " not found");
+//                }
+//                String token = jwtTokenProvider.createToken(username, user.getRole());
+//
+//                Map<Object, Object> response = new HashMap<>();
+//                response.put("username", username);
+//                response.put("token", token);
+//
+//                return ResponseEntity.ok(response);
+//            } catch (AuthenticationException e) {
+//                throw new BadCredentialsException("Invalid username or password");
+//            }
+
+
+//        Map<String,List<String>> errors=validateEmailAndPassword(email,password);
+//        if(errors.size()!=0){
+//            return ResponseEntity.badRequest().body(errors);
+//        }else {
+//            RestTemplate restTemplate = new RestTemplate();
+//            User user = restTemplate.getForObject(backendServerUrl + "api/user/email?email=" + email + "&password=" + password, User.class);
+//            return ResponseEntity.ok().body(user);
+//        }
+       //}
+        return null;
     }
+
+
 
     @Override
     public ResponseEntity<?> findAll(Integer page, Integer size, String sort, String order) {
@@ -62,6 +98,7 @@ public class UserServiceImpl implements UserService {
             return ResponseEntity.badRequest().body(errorList);
         }
         else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             RestTemplate restTemplate = new RestTemplate();
             user = restTemplate.postForEntity(backendServerUrl + "/api/user", user, User.class).getBody();
             return ResponseEntity.ok().body(user);
@@ -81,33 +118,11 @@ public class UserServiceImpl implements UserService {
         return restTemplate.getForObject(backendServerUrl+"/api/user/all",User[].class);
     }
 
-    private Map<String,List<String>> validateEmailAndPassword(String email, String password){
-        Map<String,List<String>> errors=new HashMap<String, List<String>>();
-        List<String> emailErrors=new ArrayList<>();
-        List<String> passwordErrors=new ArrayList<>();
-        String regExEmail="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
-                "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        if(!email.matches(regExEmail)){
-            emailErrors.add("Incorrect format email (example: cat@gmail.com)");
-        }
-        if(email.length()>25){
-            emailErrors.add("Incorrect email length (length<26)");
-        }
-
-        if(password.length()>25){
-            passwordErrors.add("Incorrect password length (length<26)");
-        }
-
-        if(password.contains(" ")){
-            passwordErrors.add("Password has whitespaces");
-        }
-
-        if(emailErrors.size()!=0)
-            errors.put("email",emailErrors);
-        if(passwordErrors.size()!=0)
-            errors.put("password",passwordErrors);
-
-        return errors;
+    @Override
+    public User getByEmail(String email) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl+"/api/user/username?email="+email,User.class);
     }
+
 }
 

@@ -5,6 +5,7 @@ import {Router} from "@angular/router";
 import {ThemeModel} from "../../models/theme.model";
 import {PollModel} from "../../models/poll.model";
 import {ClonePollModel} from "../../models/clonePoll.model";
+import {UserService} from "../../../services/user.service";
 
 @Component({
   selector: 'app-list-templates',
@@ -20,7 +21,7 @@ export class ListTemplatesComponent implements OnInit {
   clonePoll:ClonePollModel;
 
 
-  constructor(private themeService:ThemeService, private pollService:PollService,private router:Router){ }
+  constructor(private themeService:ThemeService,private userService:UserService,private pollService:PollService,private router:Router){ }
 
   ngOnInit() {
     this.clonePoll=new ClonePollModel();
@@ -50,9 +51,9 @@ export class ListTemplatesComponent implements OnInit {
 
   goToDesigner(id: number) {
     this.clonePoll.id=id;
-    this.clonePoll.idUser=Number(localStorage.getItem('idCurrUser'));
+    this.clonePoll.idUser=this.userService.currUser.id;
     this.subs[this.countSubs++]=this.pollService.clonePoll(this.clonePoll).subscribe(poll=>{
-      localStorage.setItem('idCurrPoll',poll.id.toString());
+      this.pollService.currPoll=poll;
       this.router.navigate(['titleNewPoll']);
     });
   }
