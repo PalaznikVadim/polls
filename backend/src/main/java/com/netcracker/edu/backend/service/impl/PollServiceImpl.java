@@ -26,9 +26,11 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Page<Poll> findAllByUserId(Integer userId, String substr, Integer page,Integer size,String sort,String order) {
+    public Page<Poll> findAllByUserId(Integer userId,String theme, String substr, Integer page,Integer size,String sort,String order) {
         Pageable pageable=createPageable(page,size, sort, order);
-        return pollRepository.findPollsByIdUser(userId,substr,pageable);
+        if(theme.equals("all"))
+            theme=null;
+        return pollRepository.findPollsByIdUser(userId,theme,substr,pageable);
     }
 
     @Override
@@ -51,30 +53,21 @@ public class PollServiceImpl implements PollService {
         return pollRepository.findByLink(link);
     }
 
-//    @Override
-//    public Page<Poll> searchBySubstr(String substr,Integer idUser,Integer page,Integer size,String sort,String order) {
-//        Pageable pageable=createPageable(page,size, sort, order);
-//        return pollRepository.searchPollsBySubstr(substr,idUser,pageable);
-//    }
 
     @Override
-    public Page<Poll> findAllByTheme(String theme, String substr, Integer idUser,Integer page,Integer size,String sort,String order) {
+    public Page<Poll> findDraftsByUserId(Integer idUser,String theme, String substr, Integer page, Integer size, String sort, String order) {
         Pageable pageable=createPageable(page,size, sort, order);
-        System.out.println(substr);
-        return pollRepository.findAllByThemeAndIdUser(theme,idUser,substr,pageable);
+        if(theme.equals("all"))
+            theme=null;
+        return pollRepository.findDraftsByUserId(theme,substr,idUser,pageable);
     }
 
     @Override
-    public Page<Poll> findDraftsByUserId(Integer idUser, String substr, Integer page, Integer size, String sort, String order) {
+    public Page<Poll> findActivePollsByUserId(Integer idUser,String theme, String substr, Integer page, Integer size, String sort, String order) {
+        if(theme.equals("all"))
+            theme=null;
         Pageable pageable=createPageable(page,size, sort, order);
-        return pollRepository.findDraftsByUserId(substr,idUser,pageable);
-    }
-
-    @Override
-    public Page<Poll> findActivePollsByUserId(Integer idUser, String substr, Integer page, Integer size, String sort, String order) {
-        System.out.println(substr);
-        Pageable pageable=createPageable(page,size, sort, order);
-        return pollRepository.findActivePollsByUserId(substr,idUser,pageable);
+        return pollRepository.findActivePollsByUserId(theme,substr,idUser,pageable);
     }
 
     private Pageable createPageable(Integer page, Integer size, String sort, String order){

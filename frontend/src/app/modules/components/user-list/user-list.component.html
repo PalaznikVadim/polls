@@ -1,0 +1,81 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="collapse navbar-collapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <button *ngIf="userService.currUser?.role=='admin'" type="button"
+                class="btn btn-outline-light" routerLink="/home"><i class="fas fa-home"></i> My templates
+        </button>
+      </li>
+    </ul>
+    <ul class="navbar-nav mr-0 ml-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" (click)="exit()">Exit</button>
+      </li>
+    </ul>
+  </div>
+</nav>
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-sm-2">
+      <select [(ngModel)]="order" (change)="getUsers(1)" class="custom-select" size="1">
+        <option value="ASC">ASC</option>
+        <option value="DESC">DESC</option>
+      </select>
+    </div>
+    <div class="col-sm-4">
+      <form class="form-inline row">
+        <input type="text" class="form-control col-md-6" placeholder="Search" name="search" [(ngModel)]="search"
+               required>
+        <button class="btn btn-success col-md-3" [disabled]="!search" (click)="getUsers(1)">Search</button>
+      </form>
+    </div>
+  </div>
+  <div class="row justify-content-center">
+    <div class="col-10">
+      <div *ngIf="page!=null" class="mt-3 p-2 rounded bg-light">
+        <h4>Users table</h4>
+        <table class="table table-striped">
+          <thead>
+          <th scope="col-1">
+            <div class="btn"><b>#</b></div>
+          </th>
+          <th scope="col-3">
+            <div class="btn" (click)="sortByName()"><b>Name</b></div>
+          </th>
+          <th scope="col-3">
+            <div class="btn" (click)="sortBySurname()"><b>Surname</b></div>
+          </th>
+          <th scope="col-3">
+            <div class="btn" (click)="sortByDate()"><b>Date of birth</b></div>
+          </th>
+          <th scope="col-2">Profile</th>
+          </thead>
+          <tbody>
+          <tr *ngFor="let user of users;let j=index;">
+            <th class="row justify-content-center">{{j + 1 + page.number * page.size}}</th>
+            <th>{{user.name}}</th>
+            <th>{{user.surname}}</th>
+            <th>{{user.dateOfBirth}}</th>
+            <th>
+              <div class="btn btn-outline-info" (click)="goTo(user.id)">Go to</div>
+            </th>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row justify-content-center mt-4">
+    <pagination *ngIf="page!=null" [boundaryLinks]="true" [itemsPerPage]="page.size" [totalItems]="page.totalElements"
+                (pageChanged)="pageChanged($event)" [(ngModel)]="currentPage"
+                previousText="&lsaquo;" nextText="&rsaquo;" firstText="&laquo;" lastText="&raquo;">
+    </pagination>
+    <select [(ngModel)]="size" (change)="getUsers(1)" name="size" class="browser-default custom-select col-1 ml-2">
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="25">25</option>
+      <option value="50">50</option>
+
+    </select>
+  </div>
+</div>

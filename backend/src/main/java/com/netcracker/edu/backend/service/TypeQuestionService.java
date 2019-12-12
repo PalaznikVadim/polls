@@ -8,6 +8,10 @@ import java.util.Optional;
 
 public interface TypeQuestionService {
     List<TypeQuestion> getAllTypeQuestion();
+
     Optional<TypeQuestion> getTypeById(Integer id);
+
     Integer getIdByType(Type type);
+
+    String[] getAllType();
 }

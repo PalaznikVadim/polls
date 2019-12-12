@@ -20,37 +20,41 @@ public class UserController {
 
 
     @Secured("ROLE_ADMIN")
-    @RequestMapping(value = "",method = RequestMethod.GET)
-    public ResponseEntity<?> getAllUsers(@RequestParam int page,
-                                                  @RequestParam int size,
-                                                  @RequestParam String sort,
-                                                  @RequestParam String order){
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ResponseEntity<?> getAllUsers(@RequestParam String search,
+                                         int page,
+                                         int size,
+                                         String sort,
+                                         String order) {
 
-       return userService.findAll(page,size,sort,order);
+        return userService.findAll(search, page, size, sort, order);
     }
 
     @GetMapping("/signin")
-    public ResponseEntity<?> getUserByEmail(@RequestParam String email,@RequestParam String password) {
+    public ResponseEntity<?> getUserByEmail(@RequestParam String email, @RequestParam String password) {
 
-        return tokenService.authenticate(email,password);
+        return tokenService.authenticate(email, password);
     }
 
-    @RequestMapping(value="/registration", method = RequestMethod.POST, produces = "application/json")
-    public ResponseEntity<?> saveUser(@RequestBody User user){
-        return userService.save(user);
+    @RequestMapping(value = "/registration", method = RequestMethod.POST, produces = "application/json")
+    public ResponseEntity<?> saveUser(@RequestBody User user) {
+        return tokenService.registration(user);
     }
 
     @GetMapping("/id")
-    public User getUserById(@RequestParam String id){
+    public User getUserById(@RequestParam String id) {
         return userService.findById(Integer.valueOf(id));
     }
 
     @Secured(value = {"ADMIN"})
     @GetMapping("/all")
-    public User[] getAll(){return userService.getAll();}
+    public User[] getAll() {
+        return userService.getAll();
+    }
 
-//    @GetMapping("/username")
-//    public User getByEmail(@RequestParam String email){
-//        return userService.getByEmail(email);
-//    }
+    @GetMapping("/loadByToken")
+    public User loadByToken(@RequestParam String token) {
+        return tokenService.loadByToken(token);
+    }
+
 }

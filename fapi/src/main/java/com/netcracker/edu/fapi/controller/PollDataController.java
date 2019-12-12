@@ -19,10 +19,10 @@ public class PollDataController {
     @Autowired
     private PollService pollService;
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping("/user")
-    public Page<ViewPoll> getPolls(@RequestParam Integer userId,String select,String substr, int page,int size,String sort,String order) {
-        return pollService.getPolls(userId,select,substr,page,size,sort,order);
+    public Page<ViewPoll> getPolls(@RequestParam Integer userId, String select, String theme, String substr, int page, int size, String sort, String order) {
+        return pollService.getPolls(userId, select, theme, substr, page, size, sort, order);
         //return pollService.findAllByUserId(userId,page,size,sort,order);
     }
 
@@ -33,43 +33,43 @@ public class PollDataController {
 
 
     @RequestMapping("/id")
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     public ViewPoll getPollById(@RequestParam String id) {
         return pollService.findById(Integer.valueOf(id));
     }
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<?> savePoll(@RequestBody ViewPoll viewPoll /*todo server validation*/) {
         return pollService.save(viewPoll);
     }
 
     @Secured({"ROLE_USER"})
-    @RequestMapping(value = "/template",method = RequestMethod.GET)
-    public List<ViewPoll> getAllTemplateByTheme(@RequestParam String theme){
+    @RequestMapping(value = "/template", method = RequestMethod.GET)
+    public List<ViewPoll> getAllTemplateByTheme(@RequestParam String theme) {
         return pollService.findAllTemplateByTheme(theme);
     }
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
     public void deletePoll(@RequestParam String id) {
         pollService.deletePoll(Integer.valueOf(id));
     }
 
     @Secured({"ROLE_USER"})
-    @RequestMapping(value = "/clone",method = RequestMethod.POST)
-    public ViewPoll clone(@RequestBody ClonePoll clonePoll){
+    @RequestMapping(value = "/clone", method = RequestMethod.POST)
+    public ViewPoll clone(@RequestBody ClonePoll clonePoll) {
         return pollService.clonePoll(clonePoll);
     }
 
     @Secured({"ROLE_USER"})
-    @RequestMapping(value = "/submit/{id}",method = RequestMethod.POST)
-    public ViewPoll submitPoll(@PathVariable Integer id){
+    @RequestMapping(value = "/submit/{id}", method = RequestMethod.POST)
+    public ViewPoll submitPoll(@PathVariable Integer id) {
         return pollService.submitPoll(id);
     }
 
-    @RequestMapping(value = "",method = RequestMethod.GET)
-    public ViewPoll getByLink(@RequestParam String link){
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public ViewPoll getByLink(@RequestParam String link) {
         return pollService.findByLink(link);
     }
 

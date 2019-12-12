@@ -1,30 +1,23 @@
 import {Injectable} from "@angular/core";
 import {Observable} from "rxjs";
 import {QuestionModel} from "../modules/models/question.model";
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient} from "@angular/common/http";
 
 
 @Injectable()
 export class QuestionService {
 
-  private readonly reqHeader:HttpHeaders;
-
-  constructor(private http:HttpClient){
-    this.reqHeader=new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer_' + localStorage.getItem('token')
-    });
-  }
+  constructor(private http:HttpClient){}
 
   getAllQuestionByPollId(idPoll:number):Observable<QuestionModel[]>{
-    return this.http.get<QuestionModel[]>('/api/question/poll?idPoll='+idPoll,{headers:this.reqHeader});
+    return this.http.get<QuestionModel[]>('/api/question/poll?idPoll='+idPoll);
   }
 
   saveQuestion(question:QuestionModel):Observable<QuestionModel>{
-    return this.http.post<QuestionModel>('/api/question',question,{headers:this.reqHeader});
+    return this.http.post<QuestionModel>('/api/question',question);
   }
 
   deleteQuestion(id: number):Observable<void> {
-    return this.http.delete<void>('api/question/delete?id='+id,{headers:this.reqHeader});
+    return this.http.delete<void>('api/question/delete?id='+id);
   }
 }

@@ -1,23 +1,24 @@
 import {ErrorModel} from "../modules/models/error.model";
 
 export class ErrorService {
-  public errors:ErrorModel[];
 
-  constructor(){}
 
-  checkErrorsForField(field:string):boolean{
-    for(let i=0;i<this.errors.length;i++) {
-      if (this.errors[i].field == field)
+  constructor() {
+  }
+
+  checkErrorsForField(field:string,errors:ErrorModel[]):boolean{
+    for(let i=0;i<errors.length;i++) {
+      if (errors[i].field == field)
         return true;
     }
     return false
   }
 
-  outErrorsForField(fieldName:string):string[]{
+  outErrorsForField(fieldName:string,errorsMass:ErrorModel[]):string[]{
     let errors:string[]=[];
-    for(let i=0;i<this.errors.length;i++){
-      if(this.errors[i].field==fieldName)
-        errors.push(this.errors[i].defaultMessage);
+    for(let i=0;i<errorsMass.length;i++){
+      if(errorsMass[i].field==fieldName)
+        errors.push(errorsMass[i].defaultMessage);
     }
     return errors;
   }

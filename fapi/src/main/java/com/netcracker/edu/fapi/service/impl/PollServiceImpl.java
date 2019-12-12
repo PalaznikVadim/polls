@@ -55,13 +55,13 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Page<ViewPoll> findAllByUserId(Integer userId,String substr, int page, int size, String sort, String order) {
+    public Page<ViewPoll> findAllByUserId(Integer userId, String theme, String substr, int page, int size, String sort, String order) {
         RestTemplate restTemplate = new RestTemplate();
-        Page<Poll> polls= restTemplate.getForObject(backendServerUrl + "api/poll/user?userId=" + userId +
-                "&substr="+substr+"&page=" + page
+        Page<Poll> polls = restTemplate.getForObject(backendServerUrl + "api/poll/user?userId=" + userId
+                + "&theme=" + theme + "&substr=" + substr + "&page=" + page
                 + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
 
-        Pageable pageable = createPageable(page,size,sort,order);
+        Pageable pageable = createPageable(page, size, sort, order);
         Page<ViewPoll> viewPollPage = PageableExecutionUtils.getPage(
                 pollConverter.collectionTransform.apply(polls.getContent()),
                 pageable,
@@ -88,7 +88,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public List<ViewPoll> findAllTemplateByTheme(String theme) {
         RestTemplate restTemplate = new RestTemplate();
-        Poll[] polls= restTemplate.getForObject(backendServerUrl + "/api/poll/template?theme=" + theme, Poll[].class);
+        Poll[] polls = restTemplate.getForObject(backendServerUrl + "/api/poll/template?theme=" + theme, Poll[].class);
 //        List<ViewPoll> viewPolls = new ArrayList<>();
 //        for (Poll poll : polls) {
 //            viewPolls.add(pollConverter.convertPollToViewPoll(poll));
@@ -123,7 +123,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public ViewPoll findByLink(String link) {
         RestTemplate restTemplate = new RestTemplate();
-        Poll poll=restTemplate.getForObject(backendServerUrl + "/api/poll?link=" + link, Poll.class);
+        Poll poll = restTemplate.getForObject(backendServerUrl + "/api/poll?link=" + link, Poll.class);
         return pollConverter.convertPollToViewPoll(poll);
     }
 
@@ -142,8 +142,8 @@ public class PollServiceImpl implements PollService {
             List<Answer> answers = answerService.getAllAnswerByQuestionId(viewQuestion.getId());
             viewQuestion.setIdPoll(poll.getId());
             viewQuestion.setId(0);
-            Question question=questionConverter.convertViewQuestToQuestion(viewQuestion);
-            question=restTemplate.postForEntity(backendServerUrl+"/api/question",question,Question.class).getBody();
+            Question question = questionConverter.convertViewQuestToQuestion(viewQuestion);
+            question = restTemplate.postForEntity(backendServerUrl + "/api/question", question, Question.class).getBody();
             for (Answer answer : answers) {
                 answer.setIdQuestion(question.getId());
                 answer.setId(0);
@@ -162,24 +162,60 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public ViewPoll submitPoll(Integer id){
+    public ViewPoll submitPoll(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
         Poll poll = restTemplate.getForObject(backendServerUrl + "api/poll/id?id=" + id, Poll.class);
-        poll.setLink(poll.hashCode()+"id"+poll.getId());
-        poll=poll = restTemplate.postForEntity(backendServerUrl + "/api/poll", poll, Poll.class).getBody();
+        poll.setLink(poll.hashCode() + "id" + poll.getId());
+        poll = poll = restTemplate.postForEntity(backendServerUrl + "/api/poll", poll, Poll.class).getBody();
 
         return pollConverter.convertPollToViewPoll(poll);
     }
 
     @Override
-    public Page<ViewPoll> findDraftsByUserId(Integer idUser,String substr, Integer page, Integer size, String sort, String order) {
+    public Page<ViewPoll> findDraftsByUserId(Integer idUser, String theme, String substr, Integer page, Integer size,
+                                             String sort, String order) {
         System.out.println(substr);
         RestTemplate restTemplate = new RestTemplate();
-        Page<Poll> polls= restTemplate.getForObject(backendServerUrl + "api/poll/drafts?idUser=" + idUser +
-                "&substr="+substr+"&page=" + page
+        Page<Poll> polls = restTemplate.getForObject(backendServerUrl + "api/poll/drafts?idUser=" + idUser +
+                "&theme=" + theme + "&substr=" + substr + "&page=" + page
                 + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
 
-        Pageable pageable = createPageable(page,size,sort,order);
+        Pageable pageable = createPageable(page, size, sort, order);
+        Page<ViewPoll> viewPollPage = PageableExecutionUtils.getPage(
+                pollConverter.collectionTransform.apply(polls.getContent()),
+                pageable,
+                polls::getTotalElements);
+
+        return viewPollPage;
+    }
+
+//    @Override
+//    public Page<ViewPoll> findPollsByTheme(String theme, String substr, Integer idUser, Integer page, Integer size,
+//                                           String sort, String order) {
+//        System.out.println(substr);
+//        RestTemplate restTemplate = new RestTemplate();
+//        Page<Poll> polls = restTemplate.getForObject(backendServerUrl + "api/poll/theme?idUser=" + idUser + "&theme=" +
+//                theme + "&substr=" + substr + "&page=" + page
+//                + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
+//
+//        Pageable pageable = createPageable(page, size, sort, order);
+//        Page<ViewPoll> viewPollPage = PageableExecutionUtils.getPage(
+//                pollConverter.collectionTransform.apply(polls.getContent()),
+//                pageable,
+//                polls::getTotalElements);
+//
+//        return viewPollPage;
+//    }
+
+    @Override
+    public Page<ViewPoll> findActivePollsByUserId(Integer idUser, String theme, String substr, Integer page, Integer size, String sort, String order) {
+        System.out.println(substr);
+        RestTemplate restTemplate = new RestTemplate();
+        Page<Poll> polls = restTemplate.getForObject(backendServerUrl + "api/poll/activePolls?idUser=" + idUser +
+                "&theme=" + theme + "&substr=" + substr + "&page=" + page
+                + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
+
+        Pageable pageable = createPageable(page, size, sort, order);
         Page<ViewPoll> viewPollPage = PageableExecutionUtils.getPage(
                 pollConverter.collectionTransform.apply(polls.getContent()),
                 pageable,
@@ -189,61 +225,24 @@ public class PollServiceImpl implements PollService {
     }
 
     @Override
-    public Page<ViewPoll> findPollsByTheme(String theme,String substr, Integer idUser, Integer page, Integer size,
-                                           String sort, String order) {
-        System.out.println(substr);
-        RestTemplate restTemplate = new RestTemplate();
-        Page<Poll> polls= restTemplate.getForObject(backendServerUrl + "api/poll/theme?idUser=" + idUser+"&theme="+
-                theme + "&substr="+substr + "&page=" + page
-                + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
-
-        Pageable pageable = createPageable(page,size,sort,order);
-        Page<ViewPoll> viewPollPage = PageableExecutionUtils.getPage(
-                pollConverter.collectionTransform.apply(polls.getContent()),
-                pageable,
-                polls::getTotalElements);
-
-        return viewPollPage;
-    }
-
-    @Override
-    public Page<ViewPoll> findActivePollsByUserId(Integer idUser,String substr, Integer page, Integer size, String sort, String order) {
-        System.out.println(substr);
-        RestTemplate restTemplate = new RestTemplate();
-        Page<Poll> polls= restTemplate.getForObject(backendServerUrl + "api/poll/activePolls?idUser=" + idUser +
-                "&substr="+substr+"&page=" + page
-                + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
-
-        Pageable pageable = createPageable(page,size,sort,order);
-        Page<ViewPoll> viewPollPage = PageableExecutionUtils.getPage(
-                pollConverter.collectionTransform.apply(polls.getContent()),
-                pageable,
-                polls::getTotalElements);
-
-        return viewPollPage;
-    }
-
-    @Override
-    public Page<ViewPoll> getPolls(Integer userId, String select,String substr, int page, int size, String sort, String order) {
-        if(select.toLowerCase().equals("all")){
-            return findAllByUserId(userId,substr,page,size,sort,order);
-        }else if(select.toLowerCase().equals("drafts")){
-            return findDraftsByUserId(userId,substr,page,size,sort,order);
-        }else if(select.toLowerCase().equals("activePolls".toLowerCase())){
-            return findActivePollsByUserId(userId,substr,page,size,sort,order);
-        }else if(select.contains("theme_")){
-            String theme=select.substring(select.indexOf("_")+1);
-            return findPollsByTheme(theme,substr,userId,page,size,sort,order);
+    public Page<ViewPoll> getPolls(Integer userId, String select, String theme, String substr, int page, int size, String sort, String order) {
+        if (select.toLowerCase().equals("all")) {
+            return findAllByUserId(userId, theme, substr, page, size, sort, order);
+        } else if (select.toLowerCase().equals("drafts")) {
+            return findDraftsByUserId(userId, theme, substr, page, size, sort, order);
+        } else if (select.toLowerCase().equals("activePolls".toLowerCase())) {
+            return findActivePollsByUserId(userId, theme, substr, page, size, sort, order);
         }
 
         return null;
     }
-    private Pageable createPageable(Integer page, Integer size, String sort, String order){
+
+    private Pageable createPageable(Integer page, Integer size, String sort, String order) {
         Pageable pageable;
-        if(order.toLowerCase().contains("asc")) {
+        if (order.toLowerCase().contains("asc")) {
             pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
-        }else{
-            pageable=PageRequest.of(page, size, Sort.by(sort).descending());
+        } else {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
         return pageable;
     }

@@ -4,6 +4,7 @@ import com.netcracker.edu.fapi.models.User;
 import com.netcracker.edu.fapi.security.jwt.JwtTokenProvider;
 import com.netcracker.edu.fapi.service.TokenService;
 import com.netcracker.edu.fapi.service.UserService;
+import com.netcracker.edu.fapi.validators.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -13,6 +14,8 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.DataBinder;
+import org.springframework.validation.ObjectError;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,6 +34,11 @@ public class TokenServiceImpl implements TokenService {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserValidator userValidator;
+
+
+
 
 
     @Override
@@ -46,6 +54,7 @@ public class TokenServiceImpl implements TokenService {
 
                 if (user == null) {
                     throw new UsernameNotFoundException("User with email: " + username + " not found");
+
                 }
                 String token = jwtTokenProvider.createToken(username, user.getRole());
 
@@ -61,28 +70,27 @@ public class TokenServiceImpl implements TokenService {
         }
     }
 
+    @Override
+    public ResponseEntity<?> registration(User user) {
+        DataBinder dataBinder = new DataBinder(user);
+        dataBinder.addValidators(userValidator);
+        dataBinder.validate();
 
-//        public ResponseEntity<?> getUserByEmail (@RequestParam String email, @RequestParam String password){
-//        try{
-//            String username=email;
-//            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username,password));
-//            User user=userService.getByEmail(username);
-//
-//            if(user==null){
-//                throw new UsernameNotFoundException("User with email: "+username+" not found");
-//            }
-//            String token= jwtTokenProvider.createToken(username,user.getRole());
-//
-//            Map<Object,Object> response=new HashMap<>();
-//            response.put("username",username);
-//            response.put("token",token);
-//
-//            return ResponseEntity.ok(response);
-//        }catch (AuthenticationException e){
-//            throw  new BadCredentialsException("Invalid username or password");
-//        }
-////        return userService.findByEmailAndPassword(email,password);
+        if (dataBinder.getBindingResult().hasErrors()) {
+            List<ObjectError> errorList = dataBinder.getBindingResult().getAllErrors();
+            return ResponseEntity.badRequest().body(errorList);
+        } else {
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            user = userService.save(user);
+            return ResponseEntity.ok().body(user);
+        }
+    }
 
+    @Override
+    public User loadByToken(String token){
+
+        return userService.getByEmail(jwtTokenProvider.getUsername(token));
+    }
 
     private Map<String,List<String>> validateEmailAndPassword(String email, String password){
         Map<String,List<String>> errors=new HashMap<String, List<String>>();

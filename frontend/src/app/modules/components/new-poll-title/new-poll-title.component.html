@@ -5,13 +5,14 @@
       <form *ngIf="poll!=null" #form="ngForm">
         <div class="form-group">
           <label>Title</label>
-          <input type="text" name="title" [(ngModel)]="poll.name" class="form-control" aria-describedby="form-text" placeholder="Title" required maxlength="20" #title="ngModel">
+          <input type="text" name="title" [(ngModel)]="poll.name" class="form-control" aria-describedby="form-text"
+                 placeholder="Title" required maxlength="20" #title="ngModel">
         </div>
         <div [hidden]="title.valid || title.untouched" class="alert alert-danger">
           Enter poll title (length<20 letter)
         </div>
-        <div *ngIf="checkErrorsForField('name')">
-          <div class="alert alert-danger" *ngFor="let error of outErrorsForField('name')">
+        <div *ngIf="errorService.checkErrorsForField('name',errors)">
+          <div class="alert alert-danger" *ngFor="let error of errorService.outErrorsForField('name',errors)">
             {{error}}
           </div>
         </div>
@@ -20,19 +21,30 @@
           <select [(ngModel)]="poll.theme" class="custom-select" size="1" name="type">
             <option *ngFor="let theme of themes">{{theme.name}}</option>
           </select>
-          <div class="btn btn-light float-right" *ngIf="role=='admin'" (click)="openModal(modalAddTheme)">Add new theme</div>
+          <div class="alert alert-danger" *ngIf="errorService.checkErrorsForField('theme',errors)">
+            <div *ngFor="let error of errorService.outErrorsForField('theme',errors)">
+              {{error}}
+            </div>
+          </div>
+          <button class="btn btn-light float-right" *ngIf="role=='admin'" (click)="openModal(modalAddTheme)">Add new
+            theme
+          </button>
         </div>
         <div class="form-group">
           <label>Description</label>
           <textarea class="form-control" [(ngModel)]="poll.description" name="description" maxlength="200"></textarea>
         </div>
-        <div *ngIf="checkErrorsForField('description')">
-          <div *ngFor="let error of outErrorsForField('description')">
+        <div *ngIf="errorService.checkErrorsForField('description',errors)">
+          <div *ngFor="let error of errorService.outErrorsForField('description',errors)">
             {{error}}
           </div>
         </div>
-        <button *ngIf="poll.id==null" type="submit" class="btn btn-primary float-right" [disabled]="!form.form.valid" (click)="addPoll()">Create</button>
-        <button *ngIf="poll.id!=null" type="submit" class="btn btn-primary float-right" [disabled]="!form.form.valid" (click)="addPoll()">Update</button>
+        <button *ngIf="poll.id==null" type="submit" class="btn btn-primary float-right" [disabled]="!form.form.valid"
+                (click)="addPoll()">Create
+        </button>
+        <button *ngIf="poll.id!=null" type="submit" class="btn btn-primary float-right" [disabled]="!form.form.valid"
+                (click)="addPoll()">Update
+        </button>
       </form>
     </div>
   </div>
@@ -44,10 +56,11 @@
   </div>
   <div class="modal-body justify-content-center">
     <label>Title theme</label>
-    <input type="text" id="inputTheme" [(ngModel)]="newTheme" class="form-control" aria-describedby="form-text" placeholder="Theme" required maxlength="20">
+    <input type="text" id="inputTheme" [(ngModel)]="newTheme" class="form-control" aria-describedby="form-text"
+           placeholder="Theme" required maxlength="20">
   </div>
   <div class="modal-footer">
-    <button  type="button" class="btn btn-primary" (click)="addNewTheme(newTheme)">Create</button>
+    <button [disabled]="!newTheme" type="button" class="btn btn-primary" (click)="addNewTheme(newTheme)">Create</button>
 
   </div>
 </ng-template>

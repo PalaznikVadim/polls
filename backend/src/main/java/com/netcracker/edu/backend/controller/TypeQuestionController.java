@@ -4,10 +4,7 @@ import com.netcracker.edu.backend.entity.TypeQuestion;
 import com.netcracker.edu.backend.entity.enums.Type;
 import com.netcracker.edu.backend.service.TypeQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,21 +17,26 @@ public class TypeQuestionController {
     private TypeQuestionService typeQuestionService;
 
 
-    @RequestMapping(value = "",method = RequestMethod.GET)
-    public List<TypeQuestion> getAllTypes(){
-        List<TypeQuestion> typeQuestions=typeQuestionService.getAllTypeQuestion();
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<TypeQuestion> getAllTypes() {
+        List<TypeQuestion> typeQuestions = typeQuestionService.getAllTypeQuestion();
         System.out.println(typeQuestions.toString());
         return typeQuestions;
     }
 
-    @RequestMapping(value = "/id",method = RequestMethod.GET)
-    public Optional<TypeQuestion> getTypeById(@RequestParam Integer id){
+    @RequestMapping(value = "/id", method = RequestMethod.GET)
+    public Optional<TypeQuestion> getTypeById(@RequestParam Integer id) {
         return typeQuestionService.getTypeById(id);
     }
 
-    @RequestMapping(value = "/type",method = RequestMethod.GET)
-    public Integer getIdByType(@RequestParam Type type){
+    @RequestMapping(value = "/type", method = RequestMethod.GET)
+    public Integer getIdByType(@RequestParam Type type) {
         return typeQuestionService.getIdByType(type);
+    }
+
+    @GetMapping("/all")
+    public String[] getAll() {
+        return typeQuestionService.getAllType();
     }
 
 

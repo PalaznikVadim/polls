@@ -1,23 +1,21 @@
 import {Component, OnDestroy, OnInit, TemplateRef} from '@angular/core';
 import {BsModalRef, BsModalService} from "ngx-bootstrap";
-import {PollModel} from "../../models/poll.model";
+import {ErrorModel} from "../../models/error.model";
 import {QuestionModel} from "../../models/question.model";
 import {AnswerModel} from "../../models/answer.model";
 import {QuestionService} from "../../../services/question.service";
-import {AnswerService} from "../../../services/answer.service";
-import {TypeQuestionModel} from "../../models/type_question.model";
-import {ErrorModel} from "../../models/error.model";
 import {PollService} from "../../../services/poll.service";
-import {HttpErrorResponse} from "@angular/common/http";
+import {AnswerService} from "../../../services/answer.service";
 import {UserService} from "../../../services/user.service";
-
+import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorService} from "../../../services/error.service";
 
 @Component({
-  selector: 'app-designer',
-  templateUrl: './designer.component.html',
-  styleUrls: ['./designer.component.css']
+  selector: 'app-poll-with-questions',
+  templateUrl: './poll-with-questions.component.html',
+  styleUrls: ['./poll-with-questions.component.css']
 })
-export class DesignerComponent implements OnInit,OnDestroy {
+export class PollWithQuestionsComponent implements OnInit,OnDestroy {
 
   modalRef: BsModalRef;
   config = {
@@ -29,14 +27,14 @@ export class DesignerComponent implements OnInit,OnDestroy {
   countSub=0;
   currRole:string;
   quest: QuestionModel;
-  strTypeQuestion:string;
   answer:AnswerModel;
 
   idCurrQuest:number;
   indexCurQuest:number;
+  role: string;
 
 
-  constructor(private modalService: BsModalService,private questionService:QuestionService,
+  constructor(private modalService: BsModalService,private questionService:QuestionService,private errorService:ErrorService,
               private pollService:PollService,private answerService:AnswerService, private userService:UserService) { }
 
   ngOnInit() {
@@ -45,14 +43,14 @@ export class DesignerComponent implements OnInit,OnDestroy {
     this.quest=new QuestionModel();
     this.quest.answers=[];
     this.subs=[];
-    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id).subscribe(questions => {
+    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id)
+      .subscribe(questions => {
       this.pollService.currPoll.questions=questions as QuestionModel[];
     });
   }
 
 
   addQuest(template: TemplateRef<any>){
-//console.log(this.strTypeQuestion+'='+this.typesService.findIdTypeByDescription(this.strTypeQuestion));
     this.isNew=true;
     this.quest=new QuestionModel();
     this.quest.textTitle='Enter question title';
@@ -73,9 +71,9 @@ export class DesignerComponent implements OnInit,OnDestroy {
   createQuestion() {
     console.log(this.quest.type);
     this.questionService.saveQuestion(this.quest).subscribe(quest=>{
-      if(quest!=null){
-        this.pollService.currPoll.questions.push(quest);}
-      this.modalRef.hide()
+        if(quest!=null){
+          this.pollService.currPoll.questions.push(quest);}
+        this.modalRef.hide()
       },response => {
         this.parseErrorResponse(response as HttpErrorResponse);
       }
@@ -105,16 +103,16 @@ export class DesignerComponent implements OnInit,OnDestroy {
   deleteAnswer(index:number) {
     if(this.quest.answers[index].id!=null){
       console.log(this.quest.answers[index].id);
-    this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
-      this.quest.answers.splice(index,1);
-    });
+      this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
+        this.quest.answers.splice(index,1);
+      });
     }else{
       this.quest.answers.splice(index,1);
     }
 
   }
 
-  openModal(template: TemplateRef<any>,id:number,i:number) {
+  openModal(template: TemplateRef<any>,id?:number,i?:number) {
     this.idCurrQuest=id;
     this.indexCurQuest=i;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
@@ -128,13 +126,13 @@ export class DesignerComponent implements OnInit,OnDestroy {
 
   updateQuestion() {
     this.subs[this.countSub++]=this.questionService.saveQuestion(this.quest).subscribe(quest => {
-      console.log(this.quest.type);
-      if (quest != null) {
-        this.quest = quest as QuestionModel;
-        console.log(this.quest);
-      }
-      this.modalRef.hide();
-    },response => {
+        console.log(this.quest.type);
+        if (quest != null) {
+          this.quest = quest as QuestionModel;
+          console.log(this.quest);
+        }
+        this.modalRef.hide();
+      },response => {
         this.parseErrorResponse(response as HttpErrorResponse);
       }
     );
@@ -164,7 +162,7 @@ export class DesignerComponent implements OnInit,OnDestroy {
     });
   }
 
-  checkErrorsForField(field:string,code:number,rejectedValue:string):boolean{
+  checkErrorsForAnswerField(field:string,code:number,rejectedValue:string):boolean{
     if(!this.isNew) {
       for (let i = 0; i < this.errors.length; i++) {
         if (this.errors[i].field == field && this.errors[i].code == code)
@@ -180,7 +178,7 @@ export class DesignerComponent implements OnInit,OnDestroy {
     }
   }
 
-  outErrorsForField(fieldName:string,code:number,rejectedValue:string):string[] {
+  outErrorsForAnswerField(fieldName:string,code:number,rejectedValue:string):string[] {
     let errors: string[] = [];
     if (!this.isNew) {
       for (let i = 0; i < this.errors.length; i++) {
@@ -194,5 +192,12 @@ export class DesignerComponent implements OnInit,OnDestroy {
       }
     }
     return errors;
+  }
+
+  confirm() {
+    this.subs[this.subs.length]=this.pollService.savePoll(this.pollService.currPoll).subscribe(poll=>{
+      this.pollService.currPoll.status=poll.status;
+      this.modalRef.hide();
+    });
   }
 }

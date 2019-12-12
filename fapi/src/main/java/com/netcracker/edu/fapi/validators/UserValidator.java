@@ -2,9 +2,10 @@ package com.netcracker.edu.fapi.validators;
 
 
 import com.netcracker.edu.fapi.models.User;
+import com.netcracker.edu.fapi.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.Errors;
-import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;
 
 import java.text.DateFormat;
@@ -16,6 +17,9 @@ import java.util.Date;
 @Service
 public class UserValidator implements Validator {
 
+    @Autowired
+    private UserService userService;
+
     @Override
     public boolean supports(Class<?> clazz) {
         return User.class.equals(clazz);
@@ -24,7 +28,7 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object obj, Errors errors) {
         User user=(User) obj;
-
+System.out.println("date"+user.getDateOfBirth());
 
         String regExEmail="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
                 "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -32,9 +36,18 @@ public class UserValidator implements Validator {
         if(!user.getEmail().matches(regExEmail)){
             errors.rejectValue("email",null,"Incorrect format field email!Recheck this field(Example: cat@mail.com)");
         }
+
         if(user.getEmail().length()>25){
             errors.rejectValue("email",null,"Incorrect field email length!(length < 25 letter)");
         }
+
+        if(!errors.hasFieldErrors("email")){
+            User userWithEmail=userService.getByEmail(user.getEmail());
+            if(userWithEmail!=null){
+                errors.rejectValue("email",null,"This email is busy. Recheck data. ");
+            }
+        }
+
 
         if(user.getName().length()>20||user.getName().length()<2)
             errors.rejectValue("name",null,"Incorrect field length( < 20 letter)!");

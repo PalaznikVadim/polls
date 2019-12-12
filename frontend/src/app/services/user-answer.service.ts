@@ -7,9 +7,10 @@ import {Observable} from "rxjs";
 
 @Injectable()
 export class UserAnswerService {
-  constructor(private http:HttpClient){}
+  constructor(private http: HttpClient) {
+  }
 
-  saveAllUserAnswer(userAnswers:UserAnswerModel[]):Observable<UserAnswerModel[]>{
-    return this.http.post<UserAnswerModel[]>('/api/userAnswer/all',userAnswers);
+  saveAllUserAnswer(userAnswers: UserAnswerModel[]): Observable<UserAnswerModel[]> {
+    return this.http.post<UserAnswerModel[]>('/api/userAnswer/all', userAnswers);
   }
 }

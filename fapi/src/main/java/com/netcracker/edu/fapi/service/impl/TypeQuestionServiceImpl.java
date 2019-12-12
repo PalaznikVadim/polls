@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.Arrays;
+import java.util.List;
+
 
 @Service
 public class TypeQuestionServiceImpl implements TypeQuestionService {
@@ -29,6 +32,12 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
     public Integer getIdByType(String type) {
         RestTemplate restTemplate=new RestTemplate();
         return restTemplate.getForObject(backendServerUrl+"/api/type/type?type="+type,Integer.class);
+    }
+
+    @Override
+    public List<String> getAll() {
+        RestTemplate restTemplate =new RestTemplate();
+        return Arrays.asList(restTemplate.getForObject(backendServerUrl + "/api/type/all", String[].class));
     }
 
 

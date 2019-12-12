@@ -4,9 +4,6 @@ import com.netcracker.edu.backend.entity.User;
 import com.netcracker.edu.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,9 +23,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "", method = RequestMethod.GET)
-    public Page<User> getAll(@RequestParam Integer page,Integer size,String sort,String order){
-        Pageable pageable= PageRequest.of(page,size, Sort.by(sort).ascending());
-        return userService.findAll(pageable);
+    public Page<User> getAll(@RequestParam String search, Integer page,Integer size,String sort,String order){
+        return userService.findAll(search,page,size,sort,order);
     }
 
     @RequestMapping(value = "id", method = RequestMethod.GET)

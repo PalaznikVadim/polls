@@ -13,7 +13,7 @@ import {map, tap} from "rxjs/operators";
   templateUrl: './page-with-polls.component.html',
   styleUrls: ['./page-with-polls.component.css']
 })
-export class PageWithPollsComponent implements OnInit,OnDestroy {
+export class PageWithPollsComponent implements OnInit, OnDestroy {
 
   private subs: any;
   private indexCurrPoll: number;//?
@@ -27,8 +27,8 @@ export class PageWithPollsComponent implements OnInit,OnDestroy {
   searchResult: string;
   search: string;
   themes: string[];
-  isPoll:boolean;
-  idUser:number;
+  isPoll: boolean;
+  idUser: number;
 
 
   modalRef: BsModalRef;
@@ -36,27 +36,35 @@ export class PageWithPollsComponent implements OnInit,OnDestroy {
     animated: true
   };
   select: string;
+  theme: string;
 
 
-  constructor(private modalService: BsModalService, private  pollService: PollService, private router: Router, private themeService: ThemeService,private userService:UserService) {
+  constructor(private modalService: BsModalService, private  pollService: PollService, private router: Router, private themeService: ThemeService, private userService: UserService) {
+    if (this.userService.currUser == null)
+      this.router.navigate(['/']);
   }
 
   ngOnInit() {
+
     this.select = 'all';
-    this.search='';
-    this.currentPage=1;
-    this.size=6;
-    this.order='ASC';
-    this.sort='name';
-    if(this.router.url.includes('myTemplates')){
-      this.isPoll=false;
-      this.idUser=this.userService.currUser.id;
-    }else{
-      this.isPoll=true;
-      if(this.router.url.includes('userPolls')){
-        this.idUser=1;
-      }else{
-        this.idUser=this.userService.currUser.id;
+    this.search = '';
+    this.currentPage = 1;
+    this.size = 6;
+    this.order = 'ASC';
+    this.sort = 'name';
+    this.theme = 'all';
+    console.log(this.userService.currUser);
+    if (this.router.url.includes('myTemplates')) {
+      this.isPoll = false;
+      this.idUser = this.userService.currUser.id;
+      this.userService.idSelectedUser = null;
+    } else {
+      this.isPoll = true;
+      if (this.router.url.includes('userPolls')) {
+        this.idUser = this.userService.idSelectedUser;
+      } else {
+        this.idUser = this.userService.currUser.id;
+        this.userService.idSelectedUser = null;
       }
     }
     console.log(this.router.url.includes('myTemplates'));
@@ -70,8 +78,9 @@ export class PageWithPollsComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    for (let i = 0; i < this.subs.length; i++)
-      this.subs[i].unsubscribe();
+    if (this.subs)
+      for (let i = 0; i < this.subs.length; i++)
+        this.subs[i].unsubscribe();
   }
 
   openModal(template: TemplateRef<any>) {
@@ -94,23 +103,22 @@ export class PageWithPollsComponent implements OnInit,OnDestroy {
   }
 
   editPoll(id: number, index: number) {
-    localStorage.setItem('index', (0).toString());
     this.pollService.currPoll = this.polls[index];
-    this.router.navigate(['/constructorPoll']);
-
+    if (this.userService.currUser.role == 'user')
+      this.router.navigate(['/creation_poll']);
+    else
+      this.router.navigate(['/templateCreation']);
   }
 
   transferToStats(id: number, index: number) {
-    localStorage.setItem('index', (2).toString());
     this.pollService.currPoll = this.polls[index];
-    this.router.navigate(['/constructorPoll']);
+    this.router.navigate(['/stats']);
   }
 
   createNewPoll() {
-    this.pollService.currPoll=null;
-    //localStorage.setItem('idCurrPoll', null);
+    this.pollService.currPoll = null;
     this.modalRef.hide();
-    this.router.navigate(['titleNewPoll']);
+    this.router.navigate(['newPoll']);
   }
 
   goToTemplates() {
@@ -126,15 +134,15 @@ export class PageWithPollsComponent implements OnInit,OnDestroy {
 
   getPolls(page: number) {
     this.currentPage = page;
-    this.subs[this.subs.length] = this.pollService.getPollsPageByUserId(this.idUser,
-      this.select, this.search, this.currentPage - 1, this.size, this.sort, this.order)
+    this.subs[this.subs.length] = this.pollService.getPollsPageByUserId(this.idUser, this.select,
+      this.theme, this.search, this.currentPage - 1, this.size, this.sort, this.order)
       .pipe(
         tap((pageResponse: RestPageModel) => {
           this.page = pageResponse;
           if (this.search)
             this.searchResult = 'Found ' + this.page.totalElements + ' poll(s)';
           else
-            this.searchResult=null;
+            this.searchResult = null;
         }),
         map((pageResponse: RestPageModel) => pageResponse.content)
       )
@@ -144,27 +152,33 @@ export class PageWithPollsComponent implements OnInit,OnDestroy {
   }
 
   newTemplate() {
-    this.pollService.currPoll=null;
-    this.router.navigate(['titleNewPoll']);
+    this.pollService.currPoll = null;
+    this.router.navigate(['newPoll']);
   }
 
 
 //admin
   goToPollQuestion(id: number) {
-    this.subs[this.subs.length]=this.pollService.getPollById(id.toString()).subscribe(poll=>{
-      this.pollService.currPoll=poll;
-      // localStorage.setItem('idCurrPoll',(poll.id).toString());
-      localStorage.setItem('index',(0).toString());
+    this.subs[this.subs.length] = this.pollService.getPollById(id.toString()).subscribe(poll => {
+      this.pollService.currPoll = poll;
       this.router.navigate(['viewUserPoll']);
     });
   }
 
   goToStat(id: number) {
-    this.subs[this.subs.length]=this.pollService.getPollById(id.toString()).subscribe(poll=>{
-      this.pollService.currPoll=poll;
-      // localStorage.setItem('idCurrPoll',(poll.id).toString());
-      localStorage.setItem('index',(1).toString());
-      this.router.navigate(['viewUserPoll']);
+    this.subs[this.subs.length] = this.pollService.getPollById(id.toString()).subscribe(poll => {
+      this.pollService.currPoll = poll;
+      this.router.navigate(['stats']);
     });
+  }
+
+  exit() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/']);
+  }
+
+  back() {
+    this.userService.idSelectedUser = null;
+    this.router.navigate(['/userTable']);
   }
 }

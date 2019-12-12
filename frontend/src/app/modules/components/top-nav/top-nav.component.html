@@ -1,0 +1,27 @@
+<nav class="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" (click)="back()"><i class="fas fa-arrow-left"></i> Back
+        </button>
+      </li>
+    </ul>
+    <form *ngIf="userService.currUser.role!='admin'||userService.idSelectedUser"
+          class="form-inline mt-2 mt-md-0">
+      <button [class.active]="isCreatePage" class="btn btn-outline-light ml-1" (click)="goToQuestions()">
+        <i class="fas fa-cogs"></i> Poll</button>
+      <button [class.active]="isLinkPage" *ngIf="userService.currUser.role=='user'"
+              class="btn btn-outline-light ml-1" routerLink="/pollLink"><i class="fas fa-link"></i> Сollecting answers
+      </button>
+      <button [class.active]="isStatsPage" class="btn btn-outline-light ml-1" routerLink="/stats">
+        <i class="fas fa-signal"></i> Stats
+      </button>
+    </form>
+    <ul class="navbar-nav mr-0 ml-auto">
+      <li class="nav-item active">
+        <button type="button" class="btn btn-outline-light" (click)="exit()"><i class="fas fa-sign-out-alt"></i> Exit
+        </button>
+      </li>
+    </ul>
+  </div>
+</nav>

@@ -31,4 +31,9 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
 
         return typeQuestionRepository.findIdByType(type);
     }
+
+    @Override
+    public String[] getAllType() {
+        return typeQuestionRepository.getAllType();
+    }
 }

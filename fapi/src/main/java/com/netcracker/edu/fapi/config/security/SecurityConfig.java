@@ -19,29 +19,30 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT="api/";
-    private static final String SINGIN_ENDPOINT="";
+    private static final String ADMIN_ENDPOINT = "api/";
+    private static final String SINGIN_ENDPOINT = "";
 
     @Autowired
-    public SecurityConfig(JwtTokenProvider jwtTokenProvider){
-        this.jwtTokenProvider=jwtTokenProvider;
+    public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
+        this.jwtTokenProvider = jwtTokenProvider;
     }
 
     @Bean
     @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception{
+    public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception{
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .httpBasic().disable()
                 .csrf().disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeRequests()
-                .antMatchers("/api/user/signin","/api/user/registration","/api/poll","/api/userAnswer/all").permitAll()
+                .antMatchers("/api/user/signin", "/api/user/registration", "/api/poll", "/api/userAnswer/all",
+                        "/api/question/poll", "/api/user/loadByToken").permitAll()
                 //.antMatchers().hasRole("admin")
                 .anyRequest().authenticated()
                 .and()

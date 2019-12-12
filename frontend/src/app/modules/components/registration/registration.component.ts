@@ -5,6 +5,7 @@ import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
 import {ErrorModel} from "../../models/error.model";
 import {HttpErrorResponse} from "@angular/common/http";
+import {ErrorService} from "../../../services/error.service";
 
 @Component({
   selector: 'app-registration',
@@ -19,7 +20,7 @@ export class RegistrationComponent implements OnInit,OnDestroy {
   sub:any;
 
 
-  constructor(private  userService: UserService,private router: Router) {
+  constructor(private  userService: UserService,private router: Router,private errorService:ErrorService) {
   }
 
   ngOnInit() {
@@ -88,25 +89,25 @@ export class RegistrationComponent implements OnInit,OnDestroy {
         }
       }
     );
-    console.log(this.registrationForm);
+    console.log(this.errors);
   }
 
-  checkErrorsForField(field:string):boolean{
-    for(let i=0;i<this.errors.length;i++) {
-      if (this.errors[i].field == field)
-        return true;
-    }
-    return false
-  }
-
-  outErrorsForField(fieldName:string):string[]{
-    let errors:string[]=[];
-    for(let i=0;i<this.errors.length;i++){
-      if(this.errors[i].field==fieldName)
-        errors.push(this.errors[i].defaultMessage);
-    }
-    return errors;
-  }
+  // checkErrorsForField(field:string):boolean{
+  //   for(let i=0;i<this.errors.length;i++) {
+  //     if (this.errors[i].field == field)
+  //       return true;
+  //   }
+  //   return false
+  // }
+  //
+  // outErrorsForField(fieldName:string):string[]{
+  //   let errors:string[]=[];
+  //   for(let i=0;i<this.errors.length;i++){
+  //     if(this.errors[i].field==fieldName)
+  //       errors.push(this.errors[i].defaultMessage);
+  //   }
+  //   return errors;
+  // }
 
   ngOnDestroy(): void {
     if(this.sub!=null)

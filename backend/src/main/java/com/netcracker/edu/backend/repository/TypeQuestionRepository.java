@@ -11,4 +11,8 @@ public interface TypeQuestionRepository extends CrudRepository<TypeQuestion,Inte
 
    @Query(value = "select t.id from TypeQuestion t where t.type =:type ")
     Integer findIdByType(@Param("type") Type type);
+
+   @Query("select t.type from TypeQuestion t")
+   String[] getAllType();
 }
+

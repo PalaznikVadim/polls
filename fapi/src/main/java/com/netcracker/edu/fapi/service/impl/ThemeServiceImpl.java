@@ -5,11 +5,11 @@ import com.netcracker.edu.fapi.service.ThemeService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Service
 public class ThemeServiceImpl implements ThemeService {
@@ -18,7 +18,7 @@ public class ThemeServiceImpl implements ThemeService {
     private String backendServerUrl;
 
     @Override
-    public Iterable<Theme> findAll() {
+    public List<Theme> findAll() {
         RestTemplate restTemplate = new RestTemplate();
         Theme[] themesResponse = restTemplate.getForObject(backendServerUrl + "/api/theme", Theme[].class);
         return themesResponse == null ? Collections.emptyList() : Arrays.asList(themesResponse);

@@ -8,6 +8,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap";
 import {ErrorModel} from "../../models/error.model";
 import {HttpErrorResponse} from "@angular/common/http";
 import {UserService} from "../../../services/user.service";
+import {ErrorService} from "../../../services/error.service";
 
 @Component({
   selector: 'app-new-poll-title',
@@ -24,7 +25,8 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   newTheme:string;
   errors:ErrorModel[]=[];
 
-  constructor(private modalService: BsModalService, private themeService:ThemeService,private pollService:PollService,private userService:UserService,private router: Router) {
+  constructor(private modalService: BsModalService, private themeService:ThemeService,private pollService:PollService,
+              private userService:UserService,private router: Router,private errorService:ErrorService) {
   }
 
   modalRef: BsModalRef;
@@ -64,7 +66,7 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
     this.subs[this.countSubs++]=this.pollService.savePoll(this.poll).subscribe(value => {
       localStorage.setItem('index',(0).toString());
       this.pollService.currPoll=value;
-      this.router.navigate(['/constructorPoll']);
+      this.router.navigate(['/creation_poll']);
     },response=>{
         if(this.errors!=null)
           this.errors=[];
@@ -77,23 +79,6 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
         }
       }
     );
-  }
-
-  checkErrorsForField(field:string):boolean{
-    for(let i=0;i<this.errors.length;i++) {
-      if (this.errors[i].field == field)
-        return true;
-    }
-    return false
-  }
-
-  outErrorsForField(fieldName:string):string[]{
-    let errors:string[]=[];
-    for(let i=0;i<this.errors.length;i++){
-      if(this.errors[i].field==fieldName)
-        errors.push(this.errors[i].defaultMessage);
-    }
-    return errors;
   }
 
   ngOnDestroy(): void {

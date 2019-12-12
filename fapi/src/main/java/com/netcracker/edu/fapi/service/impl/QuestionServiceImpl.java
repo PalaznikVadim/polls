@@ -50,48 +50,50 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public List<ViewQuestion> getAllQuestionByIdPoll(Integer idPoll) {
         RestTemplate restTemplate = new RestTemplate();
-        Question[] questions = restTemplate.getForObject(backendServerUrl + "/api/question/poll?idPoll="+idPoll, Question[].class);
-        List<ViewQuestion> viewQuestions=new ArrayList<>();
+        Question[] questions = restTemplate.getForObject(backendServerUrl + "/api/question/poll?idPoll=" + idPoll, Question[].class);
+        List<ViewQuestion> viewQuestions = new ArrayList<>();
 //        for(Question question:questions){
 //            viewQuestions.add(questionConverter.convertQuestionToViewQuestionWithAnswer(question));
 //        }
-        viewQuestions= Arrays.stream(questions).map(question -> questionConverter.convertQuestionToViewQuestionWithAnswer(question)).collect(Collectors.toList());
+        viewQuestions = Arrays.stream(questions).
+                map(question -> questionConverter.convertQuestionToViewQuestionWithAnswer(question))
+                .collect(Collectors.toList());
         return viewQuestions;
     }
 
     @Override
     public ViewQuestion getById(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
-        Question question=restTemplate.getForObject(backendServerUrl+"/api/question/id?id="+id,Question.class);
+        Question question = restTemplate.getForObject(backendServerUrl + "/api/question/id?id=" + id, Question.class);
         return questionConverter.convertQuestionToViewQuestionWithAnswer(question);
     }
 
     @Override
     public ResponseEntity<?> save(ViewQuestion viewQuestion) {
-        List<ObjectError> errorList=new ArrayList<>();
+        List<ObjectError> errorList = new ArrayList<>();
         List<ViewAnswer> viewAnswers = viewQuestion.getAnswers();
 
-        DataBinder dataBinder=new DataBinder(viewQuestion);
+        DataBinder dataBinder = new DataBinder(viewQuestion);
         dataBinder.addValidators(questionValidator);
         dataBinder.validate();
 
-        if(dataBinder.getBindingResult().hasErrors())
+        if (dataBinder.getBindingResult().hasErrors())
             errorList.addAll(dataBinder.getBindingResult().getAllErrors());
 
-        for(ViewAnswer viewAnswer:viewAnswers){
-            dataBinder=new DataBinder(viewAnswer);
+        for (ViewAnswer viewAnswer : viewAnswers) {
+            dataBinder = new DataBinder(viewAnswer);
             dataBinder.addValidators(answerValidator);
             dataBinder.validate();
-            if(dataBinder.getBindingResult().hasErrors())
+            if (dataBinder.getBindingResult().hasErrors())
                 errorList.addAll(dataBinder.getBindingResult().getAllErrors());
         }
 
-        if(errorList.size()!=0){
+        if (errorList.size() != 0) {
             return ResponseEntity.badRequest().body(errorList);
-        }else {
-            Question question=questionConverter.convertViewQuestToQuestion(viewQuestion);
+        } else {
+            Question question = questionConverter.convertViewQuestToQuestion(viewQuestion);
             RestTemplate restTemplate = new RestTemplate();
-            question=restTemplate.postForEntity(backendServerUrl+"/api/question",question,Question.class).getBody();
+            question = restTemplate.postForEntity(backendServerUrl + "/api/question", question, Question.class).getBody();
             for (ViewAnswer viewAnswer : viewAnswers) {
                 answerService.saveAnswer(answerConverter.convertViewAnswerToAnswer(viewAnswer, question.getId()));
             }
@@ -102,20 +104,21 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void delete(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl+"/api/question/delete?id="+id);
+        restTemplate.delete(backendServerUrl + "/api/question/delete?id=" + id);
     }
 
     @Override
-    public void updateStatsQuestion(Integer id) {
-        List<Answer> answers=answerService.getAllAnswerByQuestionId(id);
+    public void updateStatsQuestion(Integer questionId) {
+        List<Answer> answers = answerService.getAllAnswerByQuestionId(questionId);
         for (Answer answer : answers) {
             Stats stats = statsService.getByIdAnswer(answer.getId());
-            if (stats == null)
+            if (stats == null) {
                 stats = new Stats();
-            stats.setIdAnswer(answer.getId());
+                stats.setIdAnswer(answer.getId());
+            }
             stats.setCount(userAnswerService.countSelected(answer.getId()));
 
-            double percent = Math.round((double)stats.getCount()/ userAnswerService.countAllSelected(id) * 100*100)/100D;
+            double percent = Math.round((double) stats.getCount() / userAnswerService.countAllSelected(questionId) * 100);
             stats.setPercent(percent);
             statsService.save(stats);
         }
@@ -123,9 +126,9 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public List<ViewQuestion> getPollStats(Integer idPoll) {
-        List<ViewQuestion> questions=getAllQuestionByIdPoll(idPoll);
-        List<ViewQuestion> viewQuestions=new ArrayList<>();
-        for(ViewQuestion question:questions){
+        List<ViewQuestion> questions = getAllQuestionByIdPoll(idPoll);
+        List<ViewQuestion> viewQuestions = new ArrayList<>();
+        for (ViewQuestion question : questions) {
             viewQuestions.add(questionConverter.convertViewQuestionToViewQuestionWithAnswers(question));
         }
         return viewQuestions;

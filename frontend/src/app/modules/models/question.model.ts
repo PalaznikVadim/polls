@@ -1,5 +1,4 @@
 import {AnswerModel} from "./answer.model";
-import {UserAnswerModel} from "./user-answer.model";
 
 export class QuestionModel{
   public id:number;

@@ -14,8 +14,8 @@
           <div *ngIf="isControlInvalid('name')" class="alert alert-danger">
             Incorrect field (2-20 charachter,A-z)
           </div>
-          <div *ngIf="checkErrorsForField('name')">
-            <div *ngFor="let error of outErrorsForField('name')" class="alert alert-danger">
+          <div *ngIf="errorService.checkErrorsForField('name',errors)">
+            <div *ngFor="let error of errorService.outErrorsForField('name',errors)" class="alert alert-danger">
               {{error}}
             </div>
           </div>
@@ -26,8 +26,8 @@
           <div *ngIf="isControlInvalid('surname')" class="alert alert-danger">
             Incorrect lenght field (2-20 charachter, A-z, possible use "-")
           </div>
-          <div *ngIf="checkErrorsForField('surname')">
-            <div *ngFor="let error of outErrorsForField('surname')" class="alert alert-danger">
+          <div *ngIf="errorService.checkErrorsForField('surname',errors)">
+            <div *ngFor="let error of errorService.outErrorsForField('surname',errors)" class="alert alert-danger">
               {{error}}
             </div>
           </div>
@@ -35,18 +35,24 @@
         <div class="form-group">
           <label for="inputDOB">Date of Birth</label>
           <input id="inputDOB" formControlName="DOB" name="DOB" type="date"  class="form-control " >
-        </div>
-        <div *ngIf="checkErrorsForField('dateOfBirth')">
-          <div *ngFor="let error of outErrorsForField('dateOfBirth')" class="alert alert-danger">
-            {{error}}
+          <div *ngIf="errorService.checkErrorsForField('dateOfBirth',errors)">
+            <div *ngFor="let error of errorService.outErrorsForField('dateOfBirth',errors)" class="alert alert-danger">
+              {{error}}
+            </div>
           </div>
         </div>
+
         <div class="form-group">
           <label for="inputEmail">Email</label>
           <input type="email" id="inputEmail" formControlName="email" class="form-control"
                  name="email" placeholder="Email"/>
           <div *ngIf="isControlInvalid('email')" class="alert alert-danger">
             Incorrect format email (Example: cat1@gmail.com)
+          </div>
+          <div *ngIf="errorService.checkErrorsForField('email',errors)">
+            <div *ngFor="let error of errorService.outErrorsForField('email',errors)" class="alert alert-danger">
+              {{error}}
+            </div>
           </div>
           <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
         </div>
@@ -66,18 +72,15 @@
           <div class="alert alert-danger" *ngIf="password1.value !== password2.value" >
             Passwords don't match
           </div>
-          <div *ngIf="checkErrorsForField('password')">
-            <div *ngFor="let error of outErrorsForField('password')" class="alert alert-danger">
+          <div *ngIf="errorService.checkErrorsForField('password',errors)">
+            <div *ngFor="let error of errorService.outErrorsForField('password',errors)" class="alert alert-danger">
               {{error}}
             </div>
           </div>
         </div>
-
-
         <button type="submit" class="btn btn-primary mt-5 btn-block" [disabled]="((!registrationForm.valid) || (password1.value !== password2.value))">Register</button>
       </form>
     </div>
   </div>
 </div>
 
-{{errors}}

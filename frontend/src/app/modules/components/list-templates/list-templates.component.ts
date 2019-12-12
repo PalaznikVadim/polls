@@ -54,7 +54,7 @@ export class ListTemplatesComponent implements OnInit {
     this.clonePoll.idUser=this.userService.currUser.id;
     this.subs[this.countSubs++]=this.pollService.clonePoll(this.clonePoll).subscribe(poll=>{
       this.pollService.currPoll=poll;
-      this.router.navigate(['titleNewPoll']);
+      this.router.navigate(['newPoll']);
     });
   }
 }

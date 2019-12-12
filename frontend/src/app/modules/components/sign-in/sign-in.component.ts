@@ -2,30 +2,38 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../../../services/user.service";
 import {Router} from "@angular/router";
-import {HttpHeaders} from "@angular/common/http";
+import {ErrorModel} from "../../models/error.model";
+import {ErrorService} from "../../../services/error.service";
 
 @Component({
   selector: 'app-sign-in',
   templateUrl: './sign-in.component.html',
   styleUrls: ['./sign-in.component.css']
 })
-export class SignInComponent implements OnInit,OnDestroy {
+export class SignInComponent implements OnInit, OnDestroy {
 
-  errorMassage:string;
+  errorMassage: string;
   sub: any;
   signInForm: FormGroup;
-  errors:Map<string,Array<string>>;
+  // errors: Map<string, Array<string>>;
+  errors: ErrorModel[];
 
-  constructor(private  userService: UserService,private router: Router) {
+  constructor(private  userService: UserService, private router: Router,private errorService:ErrorService) {
   }
 
   ngOnInit() {
-    this.errors=new Map<string, Array<string>>();
+    if (localStorage.getItem('err')) {
+      this.errorMassage = localStorage.getItem('err');
+      localStorage.removeItem('err');
+    }
+
+    this.errors = [];
+    //this.errors = new Map<string, Array<string>>();
     this.signInForm = new FormGroup({
       email: new FormControl("", [
-        Validators.required,
-        Validators.pattern("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"),
-        Validators.maxLength(25)
+          Validators.required,
+          Validators.pattern("[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}"),
+          Validators.maxLength(25)
         ]
       ),
       password: new FormControl("", [
@@ -33,12 +41,18 @@ export class SignInComponent implements OnInit,OnDestroy {
         Validators.minLength(5),
         Validators.maxLength(25)
       ]),
-      isRemember: new FormControl()
+      rememberMe: new FormControl()
     });
+    if(localStorage.getItem('rememberMe')){
+      const data=JSON.parse(localStorage.getItem('rememberMe'));
+      this.signInForm.controls['email'].setValue(data.email);
+      this.signInForm.controls['password'].setValue(data.password);
+      console.log(data);
+    }
   }
 
   ngOnDestroy(): void {
-    if(this.sub!=null)
+    if (this.sub != null)
       this.sub.unsubscribe();
   }
 
@@ -48,24 +62,43 @@ export class SignInComponent implements OnInit,OnDestroy {
     return result;
   }
 
+  rememberMe():void{
+    const user={email:this.signInForm.controls['email'].value,
+                password:this.signInForm.controls['password'].value};
+    if(this.signInForm.controls['rememberMe'].value){
+      localStorage.setItem('rememberMe',JSON.stringify(user));
+    }
+  }
+
   signInClick() {
+    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,
+      this.signInForm.controls['password'].value).subscribe(response => {
+      if (response.user !== null) {
+        this.rememberMe();
+        localStorage.setItem("token", response.token);
+        this.userService.currUser = response.user;
+        this.router.navigate(['/home']);
 
-    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,this.signInForm.controls['password'].value).subscribe(response => {
-      if(response.user!==null){
-        localStorage.setItem("token",response.token);
-        this.userService.currUser=response.user;
-        this.userService.reqHeader=new HttpHeaders({
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer_' + response.token
-        });
-        this.router.navigate(['/homePage']);
-
-      }else{
-        this.errorMassage='Incorrect data. Not found user with these email and password. Recheck entered data';
+      } else {
+        this.errorMassage = 'Incorrect data. Not found user with these email and password. Recheck entered data';
       }
-    },response => {
-      this.errors=response.error;
-      console.log(this.errors);
+    }, errorResponse => {
+        this.errors=[];
+
+      if (errorResponse.status == '403') {
+        console.log('403');
+        this.errorMassage = 'Incorrect data. Not found user with these email and password. Recheck entered data';
+      } else if (errorResponse.status == '400' && errorResponse.error) {
+        const errors = errorResponse.error;
+        for (let key in errors) {
+          for (let i = 0; i < errors[key].length; i++) {
+            const errorResponse = new ErrorModel();
+            errorResponse.field = key;
+            errorResponse.defaultMessage = errors[key][i];
+            this.errors.push(errorResponse);
+          }
+        }
+      }
     });
   }
 }
