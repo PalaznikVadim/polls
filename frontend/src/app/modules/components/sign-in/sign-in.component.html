@@ -16,7 +16,8 @@
             Incorrect format email ( Example: cat1@gmail.com)
           </div>
           <div *ngIf="errorService.checkErrorsForField('email',errors)">
-            <div *ngFor="let error of errorService.outErrorsForField('email',errors)" class="alert alert-danger">
+            <div *ngFor="let error of errorService.outErrorsForField('email',errors)"
+                 class="alert alert-danger">
               {{error}}
             </div>
           </div>
@@ -28,18 +29,20 @@
             Incorrect lenght password ( 4 < length < 26)
           </div>
           <div *ngIf="errorService.checkErrorsForField('password',errors)">
-            <div *ngFor="let error of errorService.outErrorsForField('password',errors)" class="alert alert-danger">
+            <div *ngFor="let error of errorService.outErrorsForField('password',errors)"
+                 class="alert alert-danger">
               {{error}}
             </div>
           </div>
         </div>
-        <div class="checkbox mb-3 text-center">
-          <label>
-            <input type="checkbox" btnCheckbox name="rememberMe"  formControlName="rememberMe"> Remember me
-          </label>
-        </div>
+<!--        <div class="checkbox mb-3 text-center invisible">-->
+<!--          <label>-->
+<!--            <input type="checkbox" btnCheckbox name="rememberMe"  formControlName="rememberMe"> Remember me-->
+<!--          </label>-->
+<!--        </div>-->
         <div  *ngIf="errorMassage!=null" class="alert alert-danger">{{errorMassage}}</div>
-        <button type="submit" (click)="signInClick()" [disabled]="!signInForm.valid"  class="btn btn-primary btn-block" >Sign in</button>
+        <button type="submit" (click)="signInClick()" [disabled]="!signInForm.valid"
+                class="btn btn-primary btn-block mt-5" >Sign in</button>
       </form>
     </div>
   </div>

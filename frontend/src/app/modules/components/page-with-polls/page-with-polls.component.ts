@@ -39,7 +39,8 @@ export class PageWithPollsComponent implements OnInit, OnDestroy {
   theme: string;
 
 
-  constructor(private modalService: BsModalService, private  pollService: PollService, private router: Router, private themeService: ThemeService, private userService: UserService) {
+  constructor(private modalService: BsModalService, private  pollService: PollService, private router: Router,
+              private themeService: ThemeService, private userService: UserService) {
     if (this.userService.currUser == null)
       this.router.navigate(['/']);
   }

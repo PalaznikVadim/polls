@@ -48,23 +48,20 @@ public class QuestionServiceImpl implements QuestionService {
     private AnswerValidator answerValidator;
 
     @Override
-    public List<ViewQuestion> getAllQuestionByIdPoll(Integer idPoll) {
+    public List<ViewQuestion> getAllQuestionByIdPoll(int idPoll) {
         RestTemplate restTemplate = new RestTemplate();
-        Question[] questions = restTemplate.getForObject(backendServerUrl + "/api/question/poll?idPoll=" + idPoll, Question[].class);
-        List<ViewQuestion> viewQuestions = new ArrayList<>();
-//        for(Question question:questions){
-//            viewQuestions.add(questionConverter.convertQuestionToViewQuestionWithAnswer(question));
-//        }
-        viewQuestions = Arrays.stream(questions).
+        Question[] questions = restTemplate.getForObject(backendServerUrl + "/api/question/poll/" + idPoll,
+                Question[].class);
+        List<ViewQuestion> viewQuestions = Arrays.stream(questions).
                 map(question -> questionConverter.convertQuestionToViewQuestionWithAnswer(question))
                 .collect(Collectors.toList());
         return viewQuestions;
     }
 
     @Override
-    public ViewQuestion getById(Integer id) {
+    public ViewQuestion getById(int id) {
         RestTemplate restTemplate = new RestTemplate();
-        Question question = restTemplate.getForObject(backendServerUrl + "/api/question/id?id=" + id, Question.class);
+        Question question = restTemplate.getForObject(backendServerUrl + "/api/question/" + id, Question.class);
         return questionConverter.convertQuestionToViewQuestionWithAnswer(question);
     }
 
@@ -102,13 +99,13 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(int id) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + "/api/question/delete?id=" + id);
+        restTemplate.delete(backendServerUrl + "/api/question/" + id);
     }
 
     @Override
-    public void updateStatsQuestion(Integer questionId) {
+    public void updateStatsQuestion(int questionId) {
         List<Answer> answers = answerService.getAllAnswerByQuestionId(questionId);
         for (Answer answer : answers) {
             Stats stats = statsService.getByIdAnswer(answer.getId());
@@ -125,7 +122,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public List<ViewQuestion> getPollStats(Integer idPoll) {
+    public List<ViewQuestion> getPollStats(int idPoll) {
         List<ViewQuestion> questions = getAllQuestionByIdPoll(idPoll);
         List<ViewQuestion> viewQuestions = new ArrayList<>();
         for (ViewQuestion question : questions) {

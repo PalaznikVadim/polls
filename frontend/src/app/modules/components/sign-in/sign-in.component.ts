@@ -15,7 +15,6 @@ export class SignInComponent implements OnInit, OnDestroy {
   errorMassage: string;
   sub: any;
   signInForm: FormGroup;
-  // errors: Map<string, Array<string>>;
   errors: ErrorModel[];
 
   constructor(private  userService: UserService, private router: Router,private errorService:ErrorService) {
@@ -28,7 +27,6 @@ export class SignInComponent implements OnInit, OnDestroy {
     }
 
     this.errors = [];
-    //this.errors = new Map<string, Array<string>>();
     this.signInForm = new FormGroup({
       email: new FormControl("", [
           Validators.required,
@@ -43,12 +41,6 @@ export class SignInComponent implements OnInit, OnDestroy {
       ]),
       rememberMe: new FormControl()
     });
-    if(localStorage.getItem('rememberMe')){
-      const data=JSON.parse(localStorage.getItem('rememberMe'));
-      this.signInForm.controls['email'].setValue(data.email);
-      this.signInForm.controls['password'].setValue(data.password);
-      console.log(data);
-    }
   }
 
   ngOnDestroy(): void {
@@ -62,19 +54,20 @@ export class SignInComponent implements OnInit, OnDestroy {
     return result;
   }
 
-  rememberMe():void{
-    const user={email:this.signInForm.controls['email'].value,
-                password:this.signInForm.controls['password'].value};
-    if(this.signInForm.controls['rememberMe'].value){
-      localStorage.setItem('rememberMe',JSON.stringify(user));
-    }
-  }
+  // rememberMe():void{
+  //   const user={email:this.signInForm.controls['email'].value,
+  //               password:this.signInForm.controls['password'].value};
+  //   if(this.signInForm.controls['rememberMe'].value){
+  //     localStorage.setItem('rememberMe',JSON.stringify(user));
+  //   }
+  // }
 
   signInClick() {
+    this.errorMassage=null;
     this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,
       this.signInForm.controls['password'].value).subscribe(response => {
       if (response.user !== null) {
-        this.rememberMe();
+        // this.rememberMe();
         localStorage.setItem("token", response.token);
         this.userService.currUser = response.user;
         this.router.navigate(['/home']);

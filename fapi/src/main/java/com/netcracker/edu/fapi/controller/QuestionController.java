@@ -17,27 +17,27 @@ public class QuestionController {
     private QuestionService questionService;
 
 
-    @RequestMapping(value = "/poll",method = RequestMethod.GET)
-    public ResponseEntity<List<ViewQuestion>> getAllQuestionsByPollId(@RequestParam Integer idPoll){
+    @RequestMapping(value = "/poll/{idPoll}", method = RequestMethod.GET)
+    public ResponseEntity<List<ViewQuestion>> getAllQuestionsByPollId(@PathVariable int idPoll) {
         List<ViewQuestion> viewQuestions = questionService.getAllQuestionByIdPoll(idPoll);
         return ResponseEntity.ok(viewQuestions);
     }
 
-    @RequestMapping(value = "/id",method = RequestMethod.GET)
-    public ViewQuestion getQuestionById(@RequestParam String id){
-        ViewQuestion viewQuestion=questionService.getById(Integer.valueOf(id));
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ViewQuestion getQuestionById(@PathVariable int id) {
+        ViewQuestion viewQuestion = questionService.getById(id);
         return viewQuestion;
     }
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
-    @RequestMapping(value = "",method = RequestMethod.POST)
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ResponseEntity saveQuestion(@RequestBody ViewQuestion viewQuestion) {
         return questionService.save(viewQuestion);
     }
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
-    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-    public void deleteQuestion(@RequestParam Integer id){
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deleteQuestion(@PathVariable int id) {
         questionService.delete(id);
     }
 }

@@ -6,6 +6,7 @@ import com.netcracker.edu.backend.service.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,7 +21,7 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public Optional<Theme> findThemeById(Integer id) {
+    public Optional<Theme> findThemeById(int id) {
         return themeRepository.findById(id);
     }
 
@@ -30,19 +31,19 @@ public class ThemeServiceImpl implements ThemeService {
     }
 
     @Override
-    public String[] findAllTemplateThemes() {
+    public List<String> findAllTemplateThemes() {
         return themeRepository.findAllTemplateTheme();
     }
 
     @Override
     public Theme save(String theme) {
-        Theme themeEntity=new Theme();
+        Theme themeEntity = new Theme();
         themeEntity.setName(theme);
         return themeRepository.save(themeEntity);
     }
 
     @Override
-    public String[] findAllByIdUser(Integer idUser) {
+    public List<String> findAllByIdUser(int idUser) {
         return themeRepository.findAllByIdUser(idUser);
     }
 }

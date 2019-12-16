@@ -4,10 +4,12 @@ import {PollService} from "../poll.service";
 import {Injectable} from "@angular/core";
 
 @Injectable()
-export class PollGuardService implements CanActivate{
-  constructor(private router:Router,private pollService:PollService){}
+export class PollGuardService implements CanActivate {
+  constructor(private router: Router, private pollService: PollService) {
+  }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    console.log('poll',localStorage.getItem('token'));
     if (!this.hasPollId()) {
       this.router.navigate(['/home']);
       return false;
@@ -16,11 +18,10 @@ export class PollGuardService implements CanActivate{
   }
 
   private hasPollId() {
-    if (this.pollService.currPoll){
+    if (this.pollService.currPoll) {
       console.log(this.pollService.currPoll);
       return true;
-    }
-    else {
+    } else {
       console.log(this.pollService.currPoll);
       return false;
     }

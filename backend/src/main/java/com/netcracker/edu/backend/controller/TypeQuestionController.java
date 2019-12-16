@@ -20,12 +20,11 @@ public class TypeQuestionController {
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<TypeQuestion> getAllTypes() {
         List<TypeQuestion> typeQuestions = typeQuestionService.getAllTypeQuestion();
-        System.out.println(typeQuestions.toString());
         return typeQuestions;
     }
 
-    @RequestMapping(value = "/id", method = RequestMethod.GET)
-    public Optional<TypeQuestion> getTypeById(@RequestParam Integer id) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Optional<TypeQuestion> getTypeById(@PathVariable int id) {
         return typeQuestionService.getTypeById(id);
     }
 
@@ -35,9 +34,9 @@ public class TypeQuestionController {
     }
 
     @GetMapping("/all")
-    public String[] getAll() {
+    public List<Type> getAll() {
         return typeQuestionService.getAllType();
     }
 
-
+//return Arrays.asList(restTemplate.getForObject(backendServerUrl + "/api/type/all", String[].class));
 }

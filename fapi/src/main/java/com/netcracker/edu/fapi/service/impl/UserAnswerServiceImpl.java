@@ -5,14 +5,10 @@ import com.netcracker.edu.fapi.service.QuestionService;
 import com.netcracker.edu.fapi.service.UserAnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 
 @Service
@@ -25,30 +21,32 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     private QuestionService questionService;
 
     @Override
-    public ResponseEntity<UserAnswer[]> saveAll(List<UserAnswer> userAnswers) {
-        Set<Integer> questionIds=new HashSet<>();
-        for(UserAnswer userAnswer:userAnswers) {
+    public List<UserAnswer> saveAll(List<UserAnswer> userAnswers) {
+        Set<Integer> questionIds = new HashSet<>();
+        for (UserAnswer userAnswer : userAnswers) {
             questionIds.add(userAnswer.getIdQuestion());
             userAnswer.setDateTime(new Date());
         }
-        RestTemplate restTemplate=new RestTemplate();
-        ResponseEntity<UserAnswer[]> userAnswerList=restTemplate.postForEntity(backendServerUrl+"/api/userAnswer/all",userAnswers,UserAnswer[].class);
+        RestTemplate restTemplate = new RestTemplate();
+        UserAnswer[] userAnswerList = (restTemplate.postForEntity(backendServerUrl
+                + "/api/userAnswer/all", userAnswers, UserAnswer[].class)).getBody();
 
-        for(int id:questionIds) {//вынести в метод и запускать асинхронно
+        for (int id : questionIds) {
             questionService.updateStatsQuestion(id);
         }
-        return userAnswerList;
+        return Arrays.asList(userAnswerList);
     }
 
     @Override
-    public Integer countSelected( Integer idAnswer) {
-        RestTemplate restTemplate=new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl+"/api/userAnswer/count?idAnswer="+idAnswer,Integer.class);
+    public int countSelected(int idAnswer) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl + "/api/userAnswer/count?idAnswer=" + idAnswer, Integer.class);
     }
 
     @Override
-    public Integer countAllSelected(Integer idQuestion) {
-        RestTemplate restTemplate=new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl+"/api/userAnswer?idQuestion="+idQuestion,Integer.class);
+    public int countAllSelected(int idQuestion) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl + "/api/userAnswer?idQuestion=" +
+                idQuestion, Integer.class);
     }
 }

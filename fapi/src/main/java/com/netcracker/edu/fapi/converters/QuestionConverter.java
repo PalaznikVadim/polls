@@ -8,7 +8,6 @@ import com.netcracker.edu.fapi.service.AnswerService;
 import com.netcracker.edu.fapi.service.QuestionService;
 import com.netcracker.edu.fapi.service.TypeQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class QuestionConverter {
         viewQuestion.setIdPoll(question.getIdPoll());
         viewQuestion.setRequired(question.getRequired());
 
-        String type=typeQuestionService.getById(question.getIdType()).getType();
+        String type = typeQuestionService.getById(question.getIdType()).getType();
         viewQuestion.setType(type);
 
         List<Answer> answers = answerService.getAllAnswerByQuestionId(question.getId());
@@ -47,9 +46,9 @@ public class QuestionConverter {
         return viewQuestion;
     }
 
-    public Question convertViewQuestToQuestion(ViewQuestion viewQuestion){
+    public Question convertViewQuestToQuestion(ViewQuestion viewQuestion) {
 
-        Question question=new Question();
+        Question question = new Question();
 
         question.setId(viewQuestion.getId());
         question.setIdPoll(viewQuestion.getIdPoll());
@@ -68,7 +67,7 @@ public class QuestionConverter {
         viewQuestion.setIdPoll(question.getIdPoll());
         viewQuestion.setRequired(question.getRequired());
 
-        String type=typeQuestionService.getById(question.getIdType()).getType();
+        String type = typeQuestionService.getById(question.getIdType()).getType();
         viewQuestion.setType(type);
 
         List<Answer> answers = answerService.getAllAnswerByQuestionId(question.getId());
@@ -81,7 +80,7 @@ public class QuestionConverter {
         return viewQuestion;
     }
 
-    public ViewQuestion convertViewQuestionToViewQuestionWithAnswers(ViewQuestion viewQuestion){
+    public ViewQuestion convertViewQuestionToViewQuestionWithAnswers(ViewQuestion viewQuestion) {
         List<Answer> answers = answerService.getAllAnswerByQuestionId(viewQuestion.getId());
         List<ViewAnswer> viewAnswers = new ArrayList<>();
         for (Answer answer : answers) {

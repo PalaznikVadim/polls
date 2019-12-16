@@ -1,7 +1,6 @@
 package com.netcracker.edu.fapi.controller;
 
 
-import com.netcracker.edu.fapi.converters.QuestionConverter;
 import com.netcracker.edu.fapi.models.Stats;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import com.netcracker.edu.fapi.service.QuestionService;
@@ -21,20 +20,19 @@ public class StatsController {
 
     @Autowired
     private QuestionService questionService;
-    @Autowired
-    private QuestionConverter questionConverter;
+
     @Autowired
     private StatsService statsService;
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
-    @RequestMapping(value = "",method = RequestMethod.GET)
-    public List<ViewQuestion> getPollStats(@RequestParam Integer idPoll){
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @RequestMapping(value = "", method = RequestMethod.GET)
+    public List<ViewQuestion> getPollStats(@RequestParam int idPoll) {
         return questionService.getPollStats(idPoll);
     }
 
-    @Secured({"ROLE_USER","ROLE_ADMIN"})
-    @RequestMapping(value = "/stat",method = RequestMethod.GET)
-    public Stats getStat(@RequestParam Integer idAnswer){
+    @Secured({"ROLE_USER", "ROLE_ADMIN"})
+    @RequestMapping(value = "/stat", method = RequestMethod.GET)
+    public Stats getStat(@RequestParam int idAnswer) {
         return statsService.getByIdAnswer(idAnswer);
     }
 

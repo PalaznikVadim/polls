@@ -34,7 +34,6 @@ import {Interceptor} from "./services/interceptor";
 import {PollWithQuestionsComponent} from './modules/components/poll-with-questions/poll-with-questions.component';
 import {TopNavComponent} from './modules/components/top-nav/top-nav.component';
 import {UserListComponent} from "./modules/components/user-list/user-list.component";
-import {UserModel} from "./modules/models/user.model";
 import {AuthGuardService} from "./services/guards/guard.service";
 import {PollGuardService} from "./services/guards/poll.guard.service";
 import {AdminGuardService} from "./services/guards/admin.guard.service";
@@ -71,21 +70,22 @@ const appRoutes: Routes = [
 
 ];
 
-export function loadUser(http: HttpClient, userService: UserService, router: Router) {
+export function loadUser(http: HttpClient, userService: UserService) {
   return () => {
+    console.log('init');
     if (localStorage.getItem('token') != null) {
-      return http.get<any>('/api/user/loadByToken?token=' + localStorage.getItem('token'))
+      return http.get<any>('/api/user/' + localStorage.getItem('token'))
         .toPromise()
         .then((resp) => {
-         userService.currUser=resp;
-
-        },errorResponse=>{
+          userService.currUser = resp;
+          console.log(resp);
+        }, errorResponse => {
           if (errorResponse.status == '403') {
-            console.log(errorResponse);
-            localStorage.removeItem('token');
+            console.log('403', errorResponse);
+            console.log('load');
+            //localStorage.removeItem('token');
           } else {
-            console.log('12333',errorResponse);
-            //userService.currUser = resp;
+            console.log(errorResponse);
           }
         });
     }

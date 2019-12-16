@@ -13,8 +13,8 @@ public class StatsController {
     @Autowired
     private StatsService statsService;
 
-    @RequestMapping(value = "/answer",method = RequestMethod.GET)
-    public Stats getByIdAnswer(@RequestParam Integer idAnswer){
+    @RequestMapping(value = "/answer/{idAnswer}",method = RequestMethod.GET)
+    public Stats getByIdAnswer(@PathVariable int idAnswer){
         return statsService.getByIdAnswer(idAnswer);
     }
 

@@ -2,14 +2,20 @@ package com.netcracker.edu.backend.service;
 
 import com.netcracker.edu.backend.entity.Theme;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ThemeService {
 
     Iterable<Theme> findAll();
-    Optional<Theme> findThemeById(Integer id);
+
+    Optional<Theme> findThemeById(int id);
+
     Theme findThemeByName(String name);
-    String[] findAllTemplateThemes();
+
+    List<String> findAllTemplateThemes();
+
     Theme save(String theme);
-    String[] findAllByIdUser(Integer idUser);
+
+    List<String> findAllByIdUser(int idUser);
 }

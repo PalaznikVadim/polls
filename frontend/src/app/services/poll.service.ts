@@ -7,7 +7,6 @@ import {RestPageModel} from "../modules/models/rest-page.model";
 
 
 @Injectable()
-// Data service
 export class PollService {
   private page: RestPageModel;
   private _currPoll: PollModel;
@@ -18,13 +17,12 @@ export class PollService {
 
   set currPoll(value: PollModel) {
     this._currPoll = value;
-  } //todo create interface
+  }
 
 
   constructor(private http: HttpClient) {
   }
 
-  // Ajax request for billing account data
   getPollsPageByUserId(userId: number, select: string, theme: string, search: string,
                        page: number, size: number, sort: string, order: string): Observable<RestPageModel> {
     return this.http.get<RestPageModel>('/api/poll/user' + '?userId=' + userId + '&select=' + select + '&theme=' +
@@ -32,7 +30,7 @@ export class PollService {
   }
 
   getPollById(id: string) {
-    return this.http.get<PollModel>('/api/poll/id' + '?id=' + id);
+    return this.http.get<PollModel>('/api/poll/' + id);
   }
 
   savePoll(poll: PollModel): Observable<PollModel> {
@@ -40,7 +38,7 @@ export class PollService {
   }
 
   deletePoll(id: string): Observable<void> {
-    return this.http.delete<void>('/api/poll/delete?id=' + id);
+    return this.http.delete<void>('/api/poll/' + id);
   }
 
   getAllTemplatesByTheme(theme: string): Observable<PollModel[]> {

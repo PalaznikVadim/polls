@@ -58,7 +58,8 @@ export class RegistrationComponent implements OnInit,OnDestroy {
   }
 
   isControlInvalid(controlName: string, groupName?: string): boolean {
-    const control = groupName ? this.registrationForm.controls[groupName].controls[controlName] : this.registrationForm.controls[controlName];
+    const control = groupName ? this.registrationForm.controls[groupName].controls[controlName]
+      : this.registrationForm.controls[controlName];
     return control.invalid && control.touched;
   }
 
@@ -91,23 +92,6 @@ export class RegistrationComponent implements OnInit,OnDestroy {
     );
     console.log(this.errors);
   }
-
-  // checkErrorsForField(field:string):boolean{
-  //   for(let i=0;i<this.errors.length;i++) {
-  //     if (this.errors[i].field == field)
-  //       return true;
-  //   }
-  //   return false
-  // }
-  //
-  // outErrorsForField(fieldName:string):string[]{
-  //   let errors:string[]=[];
-  //   for(let i=0;i<this.errors.length;i++){
-  //     if(this.errors[i].field==fieldName)
-  //       errors.push(this.errors[i].defaultMessage);
-  //   }
-  //   return errors;
-  // }
 
   ngOnDestroy(): void {
     if(this.sub!=null)

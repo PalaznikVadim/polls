@@ -5,13 +5,11 @@ import org.springframework.http.ResponseEntity;
 
 public interface UserService {
 
-    ResponseEntity<?> findAll(String search, Integer page, Integer size, String sort, String order);
+    ResponseEntity<?> findAll(String search, int page, int size, String sort, String order);
 
     User save(User user);
 
-    User findById(Integer id);
-
-    User[] getAll();
+    User findById(int id);
 
     User getByEmail(String email);
 }

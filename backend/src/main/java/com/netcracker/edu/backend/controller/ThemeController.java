@@ -17,17 +17,17 @@ public class ThemeController {
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public List<Theme> getAllThemes() {
-        return  (List<Theme>)themeService.findAll();
+        return (List<Theme>) themeService.findAll();
     }
 
-    @RequestMapping(value = "/id", method = RequestMethod.GET)
-    public Optional<Theme> getThemeById(@RequestParam String id) {
-        return  themeService.findThemeById(Integer.valueOf(id));
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Optional<Theme> getThemeById(@PathVariable int id) {
+        return themeService.findThemeById(id);
     }
 
     @RequestMapping(value = "/name", method = RequestMethod.GET)
     public Theme getThemeByName(@RequestParam String name) {
-        return  themeService.findThemeByName(name);
+        return themeService.findThemeByName(name);
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -35,13 +35,13 @@ public class ThemeController {
         return themeService.save(theme);
     }
 
-    @RequestMapping(value = "/template",method = RequestMethod.GET)
-    public String[] getTemplateThemes(){
-        return  themeService.findAllTemplateThemes();
+    @RequestMapping(value = "/template", method = RequestMethod.GET)
+    public List<String> getTemplateThemes() {
+        return themeService.findAllTemplateThemes();
     }
 
-    @RequestMapping(value = "/userId",method = RequestMethod.GET)
-    public String[] getUserPollThemes(@RequestParam Integer userId){
+    @RequestMapping(value = "/user", method = RequestMethod.GET)
+    public List<String> getUserPollThemes(@RequestParam int userId) {
         return themeService.findAllByIdUser(userId);
     }
 }

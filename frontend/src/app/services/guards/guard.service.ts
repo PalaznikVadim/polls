@@ -9,19 +9,19 @@ export class AuthGuardService implements CanActivate {
   }
 
   public isAuthenticated(): boolean {
-    if (this.userService.currUser){
+    if (this.userService.currUser) {
       console.log(this.userService.currUser);
       return true;
-    }
-    else {
+    } else {
       console.log(this.userService.currUser);
       return false;
     }
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    console.log('guard',localStorage.getItem('token'));
     if (!this.isAuthenticated()) {
-     localStorage.setItem('err','Not authorized! Log in with your account');
+      localStorage.setItem('err', 'Not authorized! Log in with your account');
       this.router.navigate(['/']);
       return false;
     }

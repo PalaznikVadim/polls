@@ -15,52 +15,53 @@ import {ErrorService} from "../../../services/error.service";
   templateUrl: './poll-with-questions.component.html',
   styleUrls: ['./poll-with-questions.component.css']
 })
-export class PollWithQuestionsComponent implements OnInit,OnDestroy {
+export class PollWithQuestionsComponent implements OnInit, OnDestroy {
 
   modalRef: BsModalRef;
   config = {
     animated: true
   };
-  errors:ErrorModel[]=[];
-  isNew:boolean;
-  subs:any[];
-  countSub=0;
-  currRole:string;
+  errors: ErrorModel[] = [];
+  isNew: boolean;
+  subs: any[];
+  countSub = 0;
+  currRole: string;
   quest: QuestionModel;
-  answer:AnswerModel;
+  answer: AnswerModel;
 
-  idCurrQuest:number;
-  indexCurQuest:number;
+  idCurrQuest: number;
+  indexCurQuest: number;
   role: string;
 
 
-  constructor(private modalService: BsModalService,private questionService:QuestionService,private errorService:ErrorService,
-              private pollService:PollService,private answerService:AnswerService, private userService:UserService) { }
+  constructor(private modalService: BsModalService, private questionService: QuestionService, private errorService: ErrorService,
+              private pollService: PollService, private answerService: AnswerService, private userService: UserService) {
+  }
 
   ngOnInit() {
     console.log('ngOnInit()');
-    this.currRole=this.userService.currUser.role;
-    this.quest=new QuestionModel();
-    this.quest.answers=[];
-    this.subs=[];
-    this.subs[this.countSub++]=this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id)
+    this.currRole = this.userService.currUser.role;
+    this.quest = new QuestionModel();
+    this.quest.answers = [];
+    this.subs = [];
+    this.subs[this.countSub++] = this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id)
       .subscribe(questions => {
-      this.pollService.currPoll.questions=questions as QuestionModel[];
-    });
+        this.pollService.currPoll.questions = questions as QuestionModel[];
+      });
   }
 
 
-  addQuest(template: TemplateRef<any>){
-    this.isNew=true;
-    this.quest=new QuestionModel();
-    this.quest.textTitle='Enter question title';
-    this.quest.required='No';
-    this.quest.type='radio';
-    this.quest.idPoll=this.pollService.currPoll.id;
-    this.quest.answers=[] as AnswerModel[];
-    for(let i=0;i<3;i++) {
+  addQuest(template: TemplateRef<any>) {
+    this.isNew = true;
+    this.quest = new QuestionModel();
+    this.quest.textTitle = 'Enter question title';
+    this.quest.required = 'No';
+    this.quest.type = 'radio';
+    this.quest.idPoll = this.pollService.currPoll.id;
+    this.quest.answers = [] as AnswerModel[];
+    for (let i = 0; i < 3; i++) {
       this.answer = new AnswerModel();
-      this.answer.text = 'Answer'+(i+1);
+      this.answer.text = 'Answer' + (i + 1);
       this.quest.answers.push(this.answer);
     }
     console.log(this.quest.answers);
@@ -70,106 +71,107 @@ export class PollWithQuestionsComponent implements OnInit,OnDestroy {
 
   createQuestion() {
     console.log(this.quest.type);
-    this.questionService.saveQuestion(this.quest).subscribe(quest=>{
-        if(quest!=null){
-          this.pollService.currPoll.questions.push(quest);}
+    this.questionService.saveQuestion(this.quest).subscribe(quest => {
+        if (quest != null) {
+          this.pollService.currPoll.questions.push(quest);
+        }
         this.modalRef.hide()
-      },response => {
+      }, response => {
         this.parseErrorResponse(response as HttpErrorResponse);
       }
     );
   }
 
-  editQuest(question: QuestionModel,template) {
+  editQuest(question: QuestionModel, template) {
 
-    this.isNew=false;
-    this.quest=question;
+    this.isNew = false;
+    this.quest = question;
     this.modalRef = this.modalService.show(template);
   }
 
-  deleteQuest(id:number,i: number) {
-    this.questionService.deleteQuestion(id).subscribe(event=>{
-      this.pollService.currPoll.questions.splice(i,1);
+  deleteQuest(id: number, i: number) {
+    this.questionService.deleteQuestion(id).subscribe(event => {
+      this.pollService.currPoll.questions.splice(i, 1);
       this.modalRef.hide();
     });
   }
 
   addNewAnswer() {
-    this.answer=new AnswerModel();
-    this.answer.text='Answer';
+    this.answer = new AnswerModel();
+    this.answer.text = 'Answer';
     this.quest.answers.push(this.answer);
   }
 
-  deleteAnswer(index:number) {
-    if(this.quest.answers[index].id!=null){
+  deleteAnswer(index: number) {
+    if (this.quest.answers[index].id != null) {
       console.log(this.quest.answers[index].id);
-      this.answerService.deleteById(this.quest.answers[index].id).subscribe(event=>{
-        this.quest.answers.splice(index,1);
+      this.answerService.deleteById(this.quest.answers[index].id).subscribe(event => {
+        this.quest.answers.splice(index, 1);
       });
-    }else{
-      this.quest.answers.splice(index,1);
+    } else {
+      this.quest.answers.splice(index, 1);
     }
 
   }
 
-  openModal(template: TemplateRef<any>,id?:number,i?:number) {
-    this.idCurrQuest=id;
-    this.indexCurQuest=i;
+  openModal(template: TemplateRef<any>, id?: number, i?: number) {
+    this.idCurrQuest = id;
+    this.indexCurQuest = i;
     this.modalRef = this.modalService.show(template, {class: 'modal-sm'});
   }
 
   ngOnDestroy(): void {
-    for(let i=0;i<this.subs.length;i++){
+    for (let i = 0; i < this.subs.length; i++) {
       this.subs[i].unsubscribe();
     }
   }
 
   updateQuestion() {
-    this.subs[this.countSub++]=this.questionService.saveQuestion(this.quest).subscribe(quest => {
+    this.subs[this.countSub++] = this.questionService.saveQuestion(this.quest).subscribe(quest => {
         console.log(this.quest.type);
         if (quest != null) {
           this.quest = quest as QuestionModel;
           console.log(this.quest);
         }
         this.modalRef.hide();
-      },response => {
+      }, response => {
         this.parseErrorResponse(response as HttpErrorResponse);
       }
     );
   }
 
-  parseErrorResponse(response:HttpErrorResponse){
-    if(this.errors!=null)
-      this.errors=[];
+  parseErrorResponse(response: HttpErrorResponse) {
+    if (this.errors != null)
+      this.errors = [];
     let resError;
-    for(let i=0;i<response.error.length;i++){
-      resError=new ErrorModel();
-      resError.field=response.error[i].field;
-      resError.defaultMessage=response.error[i].defaultMessage;
-      resError.code=response.error[i].code;
-      resError.rejectedValue=response.error[i].rejectedValue;
+    for (let i = 0; i < response.error.length; i++) {
+      resError = new ErrorModel();
+      resError.field = response.error[i].field;
+      resError.defaultMessage = response.error[i].defaultMessage;
+      resError.code = response.error[i].code;
+      resError.rejectedValue = response.error[i].rejectedValue;
       this.errors.push(resError);
     }
     console.log(this.errors);
   }
 
-  submit(id:number){
+  submit(id: number) {
     console.log(id);
-    this.pollService.submitPoll(id).subscribe(poll=>{
-      let quests=this.pollService.currPoll.questions;
-      this.pollService.currPoll=poll;
-      this.pollService.currPoll.questions=quests;
+    this.pollService.submitPoll(id).subscribe(poll => {
+      let quests = this.pollService.currPoll.questions;
+      this.pollService.currPoll = poll;
+      this.pollService.currPoll.questions = quests;
     });
   }
 
-  checkErrorsForAnswerField(field:string,code:number,rejectedValue:string):boolean{
-    if(!this.isNew) {
+  checkErrorsForAnswerField(field: string, code: number, rejectedValue: string): boolean {
+    if (!this.isNew) {
       for (let i = 0; i < this.errors.length; i++) {
         if (this.errors[i].field == field && this.errors[i].code == code)
           return true;
       }
       return false
-    }else{
+    } else {
       for (let i = 0; i < this.errors.length; i++) {
         if (this.errors[i].field == field && this.errors[i].rejectedValue == rejectedValue)
           return true;
@@ -178,7 +180,7 @@ export class PollWithQuestionsComponent implements OnInit,OnDestroy {
     }
   }
 
-  outErrorsForAnswerField(fieldName:string,code:number,rejectedValue:string):string[] {
+  outErrorsForAnswerField(fieldName: string, code: number, rejectedValue: string): string[] {
     let errors: string[] = [];
     if (!this.isNew) {
       for (let i = 0; i < this.errors.length; i++) {
@@ -195,8 +197,8 @@ export class PollWithQuestionsComponent implements OnInit,OnDestroy {
   }
 
   confirm() {
-    this.subs[this.subs.length]=this.pollService.savePoll(this.pollService.currPoll).subscribe(poll=>{
-      this.pollService.currPoll.status=poll.status;
+    this.subs[this.subs.length] = this.pollService.savePoll(this.pollService.currPoll).subscribe(poll => {
+      this.pollService.currPoll.status = poll.status;
       this.modalRef.hide();
     });
   }

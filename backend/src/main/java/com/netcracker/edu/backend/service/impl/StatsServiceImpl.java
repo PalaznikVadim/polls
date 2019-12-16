@@ -14,7 +14,7 @@ public class StatsServiceImpl implements StatsService {
     private StatsRepository statsRepository;
 
     @Override
-    public Stats getByIdAnswer(Integer idAnswer) {
+    public Stats getByIdAnswer(int idAnswer) {
         return statsRepository.findByIdAnswer(idAnswer);
     }
 

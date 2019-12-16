@@ -13,8 +13,8 @@ public class AnswerConverter {
     @Autowired
     private StatsService statsService;
 
-    public ViewAnswer convertAnswerToViewAnswer(Answer answer){
-        ViewAnswer viewAnswer=new ViewAnswer();
+    public ViewAnswer convertAnswerToViewAnswer(Answer answer) {
+        ViewAnswer viewAnswer = new ViewAnswer();
 
         viewAnswer.setId(answer.getId());
         viewAnswer.setText(answer.getText());
@@ -23,9 +23,9 @@ public class AnswerConverter {
         return viewAnswer;
     }
 
-    public Answer convertViewAnswerToAnswer(ViewAnswer viewAnswer,Integer idQuestion){
+    public Answer convertViewAnswerToAnswer(ViewAnswer viewAnswer, int idQuestion) {
 
-        Answer answer=new Answer();
+        Answer answer = new Answer();
 
         answer.setId(viewAnswer.getId());
         answer.setText(viewAnswer.getText());
@@ -34,8 +34,8 @@ public class AnswerConverter {
         return answer;
     }
 
-    public ViewAnswer convertAnswerToViewAnswerWithStats(Answer answer){
-        ViewAnswer viewAnswer=new ViewAnswer();
+    public ViewAnswer convertAnswerToViewAnswerWithStats(Answer answer) {
+        ViewAnswer viewAnswer = new ViewAnswer();
 
         viewAnswer.setId(answer.getId());
         viewAnswer.setText(answer.getText());

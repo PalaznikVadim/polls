@@ -1,12 +1,10 @@
 package com.netcracker.edu.fapi.models.viewModels;
 
 
-
 import java.util.Date;
 import java.util.List;
 
 public class ViewPoll {
-
     private Integer id;
     private String name;
     private Integer idUser;

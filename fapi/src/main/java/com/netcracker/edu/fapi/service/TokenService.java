@@ -5,6 +5,8 @@ import org.springframework.http.ResponseEntity;
 
 public interface TokenService {
     ResponseEntity<?> authenticate(String email, String password);
+
     ResponseEntity<?> registration(User user);
+
     User loadByToken(String token);
 }

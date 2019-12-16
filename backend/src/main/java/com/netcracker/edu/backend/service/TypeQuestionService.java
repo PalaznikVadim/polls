@@ -9,9 +9,9 @@ import java.util.Optional;
 public interface TypeQuestionService {
     List<TypeQuestion> getAllTypeQuestion();
 
-    Optional<TypeQuestion> getTypeById(Integer id);
+    Optional<TypeQuestion> getTypeById(int id);
 
-    Integer getIdByType(Type type);
+    int getIdByType(Type type);
 
-    String[] getAllType();
+    List<Type> getAllType();
 }

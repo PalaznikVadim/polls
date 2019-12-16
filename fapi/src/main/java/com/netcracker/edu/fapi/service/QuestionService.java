@@ -1,16 +1,20 @@
 package com.netcracker.edu.fapi.service;
 
-import com.netcracker.edu.fapi.models.Question;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 
 public interface QuestionService {
-    List<ViewQuestion> getAllQuestionByIdPoll(Integer idPoll);
-    ViewQuestion getById(Integer id);
+    List<ViewQuestion> getAllQuestionByIdPoll(int idPoll);
+
+    ViewQuestion getById(int id);
+
     ResponseEntity<?> save(ViewQuestion question);
-    void delete(Integer id);
-    void updateStatsQuestion(Integer id);
-    List<ViewQuestion> getPollStats( Integer idPoll);
+
+    void delete(int id);
+
+    void updateStatsQuestion(int id);
+
+    List<ViewQuestion> getPollStats(int idPoll);
 }

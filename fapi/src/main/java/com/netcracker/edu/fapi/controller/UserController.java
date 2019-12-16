@@ -41,19 +41,15 @@ public class UserController {
         return tokenService.registration(user);
     }
 
-    @GetMapping("/id")
-    public User getUserById(@RequestParam String id) {
-        return userService.findById(Integer.valueOf(id));
+    @GetMapping("/")
+    public User getUserById(@PathVariable int id) {
+        return userService.findById(id);
     }
 
-    @Secured(value = {"ADMIN"})
-    @GetMapping("/all")
-    public User[] getAll() {
-        return userService.getAll();
-    }
 
-    @GetMapping("/loadByToken")
-    public User loadByToken(@RequestParam String token) {
+    @GetMapping("/{token}")
+    public User loadByToken(@PathVariable String token) {
+        System.out.println(token);
         return tokenService.loadByToken(token);
     }
 

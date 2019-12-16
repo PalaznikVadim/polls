@@ -8,7 +8,7 @@ import java.util.Collection;
 
 public class JwtUser implements UserDetails {
 
-    private final Integer id;
+    private final int id;
     private final String username;
     private final String name;
     private final String surname;
@@ -16,7 +16,7 @@ public class JwtUser implements UserDetails {
     private final boolean enabled;
     private final Collection<? extends GrantedAuthority> authorities;
 
-    public JwtUser(Integer id, String username, String name, String surname, String password,
+    public JwtUser(int id, String username, String name, String surname, String password,
                    boolean enabled, Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;

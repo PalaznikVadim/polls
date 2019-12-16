@@ -23,6 +23,6 @@ export class ThemeService {
   }
 
   getUserPollThemes(idUser: number): Observable<string[]> {
-    return this.http.get<string[]>('/api/theme/userId?userId=' + idUser);
+    return this.http.get<string[]>('/api/theme/user?userId=' + idUser);
   }
 }

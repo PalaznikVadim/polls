@@ -22,18 +22,18 @@ public class TypeQuestionServiceImpl implements TypeQuestionService {
     }
 
     @Override
-    public Optional<TypeQuestion> getTypeById(Integer id) {
+    public Optional<TypeQuestion> getTypeById(int id) {
         return typeQuestionRepository.findById(id);
     }
 
     @Override
-    public Integer getIdByType(Type type) {
+    public int getIdByType(Type type) {
 
         return typeQuestionRepository.findIdByType(type);
     }
 
     @Override
-    public String[] getAllType() {
+    public List<Type> getAllType() {
         return typeQuestionRepository.getAllType();
     }
 }

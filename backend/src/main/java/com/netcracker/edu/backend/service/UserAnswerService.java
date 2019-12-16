@@ -7,6 +7,8 @@ import java.util.List;
 public interface UserAnswerService {
 
     List<UserAnswer> saveAll(List<UserAnswer> userAnswers);
-    Integer getCountSelected(Integer idAnswer);
-    Integer getCountAllSelected(Integer idQuestion);
+
+    int getCountSelected(int idAnswer);
+
+    int getCountAllSelected(int idQuestion);
 }

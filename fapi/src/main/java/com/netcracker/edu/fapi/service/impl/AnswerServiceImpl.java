@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
 @Service
 public class AnswerServiceImpl implements AnswerService {
 
@@ -21,11 +22,12 @@ public class AnswerServiceImpl implements AnswerService {
     private QuestionService questionService;
 
     @Override
-    public List<Answer> getAllAnswerByQuestionId(Integer idQuestion) {
+    public List<Answer> getAllAnswerByQuestionId(int idQuestion) {
 
         RestTemplate restTemplate = new RestTemplate();
-        Answer[] answers=restTemplate.getForObject(backendServerUrl+"api/answer/question?id="+idQuestion,Answer[].class);
-        return answers==null ? Collections.emptyList() : Arrays.asList(answers);
+        Answer[] answers = restTemplate.getForObject(backendServerUrl + "api/answer/question?id=" +
+                idQuestion, Answer[].class);
+        return answers == null ? Collections.emptyList() : Arrays.asList(answers);
     }
 
     @Override
@@ -35,16 +37,16 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        Answer answer =getById(id);
+    public void deleteById(int id) {
+        Answer answer = getById(id);
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + "/api/answer/delete?id=" + id);
+        restTemplate.delete(backendServerUrl + "/api/answer/" + id);
         questionService.updateStatsQuestion(answer.getIdQuestion());
     }
 
     @Override
-    public Answer getById(Integer id) {
-        RestTemplate restTemplate=new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl+"/api/answer/id?id="+id,Answer.class);
+    public Answer getById(int id) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.getForObject(backendServerUrl + "/api/answer/" + id, Answer.class);
     }
 }

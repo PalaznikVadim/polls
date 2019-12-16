@@ -4,8 +4,9 @@ import com.netcracker.edu.backend.entity.UserAnswer;
 import org.springframework.data.repository.CrudRepository;
 
 
-public interface UserAnswerRepository extends CrudRepository<UserAnswer,Integer> {
+public interface UserAnswerRepository extends CrudRepository<UserAnswer, Integer> {
 
-    Integer countUserAnswerByIdAnswer(int idAnswer);
-    Integer countUserAnswerByIdQuestion(int idQuestion);
+    int countUserAnswerByIdAnswer(int idAnswer);
+
+    int countUserAnswerByIdQuestion(int idQuestion);
 }

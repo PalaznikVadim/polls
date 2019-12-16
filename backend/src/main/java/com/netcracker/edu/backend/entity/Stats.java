@@ -1,7 +1,5 @@
 package com.netcracker.edu.backend.entity;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -24,7 +22,7 @@ public class Stats {
     }
 
     @Basic
-    @Column(name = "id_answer",unique = true)
+    @Column(name = "id_answer", unique = true)
     public int getIdAnswer() {
         return idAnswer;
     }

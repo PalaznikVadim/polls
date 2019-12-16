@@ -16,25 +16,24 @@ public class QuestionController {
     @Autowired
     private QuestionService questionService;
 
-    @RequestMapping(value = "/poll",method = RequestMethod.GET)
-    public ResponseEntity<List<Question>> getAllQuestionsByPollId(@RequestParam String idPoll){
-        List<Question> questions = questionService.getAllQuestionByIdPoll(Integer.valueOf(idPoll));
+    @RequestMapping(value = "/poll/{idPoll}", method = RequestMethod.GET)
+    public ResponseEntity<List<Question>> getAllQuestionsByPollId(@PathVariable int idPoll) {
+        List<Question> questions = questionService.getAllQuestionByIdPoll(idPoll);
         return ResponseEntity.ok(questions);
     }
 
-    @RequestMapping(value = "/id",method = RequestMethod.GET)
-    public Optional<Question> getQuestionById(@RequestParam Integer id){
-//        Optional<Question> question=questionService.getById(Integer.valueOf(id));
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Optional<Question> getQuestionById(@PathVariable int id) {
         return questionService.getById(id);
     }
 
-    @RequestMapping(value = "",method = RequestMethod.POST)
-    public Question saveQuestion(@RequestBody Question question){
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public Question saveQuestion(@RequestBody Question question) {
         return questionService.save(question);
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.DELETE)
-    public void deleteQuestion(@RequestParam Integer id){
-        questionService.delete(Integer.valueOf(id));
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deleteQuestion(@PathVariable int id) {
+        questionService.delete(id);
     }
 }

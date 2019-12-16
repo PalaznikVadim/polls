@@ -6,8 +6,11 @@ import java.util.List;
 import java.util.Optional;
 
 public interface QuestionService {
-    List<Question> getAllQuestionByIdPoll(Integer idPoll);
-    Optional<Question> getById(Integer id);
+    List<Question> getAllQuestionByIdPoll(int idPoll);
+
+    Optional<Question> getById(int id);
+
     Question save(Question question);
-    void delete(Integer id);
+
+    void delete(int id);
 }

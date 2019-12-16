@@ -16,8 +16,8 @@ public class AnswerServiceImpl implements AnswerService {
     private AnswerRepository answerRepository;
 
     @Override
-    public Answer[] getAllAnswerByQuestionId(Integer idQuestion) {
-        return  answerRepository.findAllByIdQuestion(idQuestion);
+    public List<Answer> getAllAnswerByQuestionId(int idQuestion) {
+        return answerRepository.findAllByIdQuestion(idQuestion);
     }
 
     @Override
@@ -26,7 +26,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public void deleteById(Integer id) {
+    public void deleteById(int id) {
         answerRepository.deleteById(id);
     }
 
@@ -36,7 +36,7 @@ public class AnswerServiceImpl implements AnswerService {
     }
 
     @Override
-    public Optional<Answer> getById(Integer id) {
+    public Optional<Answer> getById(int id) {
         return answerRepository.findById(id);
     }
 

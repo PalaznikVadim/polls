@@ -27,18 +27,19 @@ public class QuestionValidator implements Validator {
         ViewQuestion question = (ViewQuestion) object;
 
         if (question.getTextTitle().length() > 60 || question.getTextTitle().length() < 2)
-            errors.rejectValue("textTitle", String.valueOf(question.getId()), "Incorrect length field(3 <...< 60 charaсters)");
+            errors.rejectValue("textTitle", String.valueOf(question.getId()),
+                    "Incorrect length field(3 <...< 60 charaсters)");
 
-        List<String> typesOfQuestion=typeQuestionService.getAll();
-        if(!typesOfQuestion.contains(question.getType())){
-            errors.rejectValue("type",null,"This type is not found from the available");
+        List<String> typesOfQuestion = typeQuestionService.getAll();
+        if (!typesOfQuestion.contains(question.getType())) {
+            errors.rejectValue("type", null, "This type is not found from the available");
         }
 
-        List<String> reqs= Arrays.asList("Yes","No");
-        if(!reqs.contains(question.getRequired())){
-            errors.rejectValue("required",null,"This required is not found from the available");
+        List<String> reqs = Arrays.asList("Yes", "No");
+        if (!reqs.contains(question.getRequired())) {
+            errors.rejectValue("required", null,
+                    "This required is not found from the available");
         }
-
 
 
     }

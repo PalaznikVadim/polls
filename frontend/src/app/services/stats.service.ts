@@ -4,10 +4,11 @@ import {Observable} from "rxjs";
 import {QuestionModel} from "../modules/models/question.model";
 
 @Injectable()
-export class StatsService{
-  constructor(private http:HttpClient) {}
+export class StatsService {
+  constructor(private http: HttpClient) {
+  }
 
-  public getPollStats(idPoll:number):Observable<QuestionModel[]>{
-    return this.http.get<QuestionModel[]>("/api/stats?idPoll="+idPoll);
+  public getPollStats(idPoll: number): Observable<QuestionModel[]> {
+    return this.http.get<QuestionModel[]>("/api/stats?idPoll=" + idPoll);
   }
 }

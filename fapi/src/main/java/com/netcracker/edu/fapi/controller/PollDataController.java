@@ -21,26 +21,20 @@ public class PollDataController {
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping("/user")
-    public Page<ViewPoll> getPolls(@RequestParam Integer userId, String select, String theme, String substr, int page, int size, String sort, String order) {
+    public Page<ViewPoll> getPolls(@RequestParam int userId, String select, String theme, String substr,
+                                   int page, int size, String sort, String order) {
         return pollService.getPolls(userId, select, theme, substr, page, size, sort, order);
-        //return pollService.findAllByUserId(userId,page,size,sort,order);
     }
 
-//    @RequestMapping("/search/{substr}")
-//    public Page<ViewPoll> searchPollBySubstr(@PathVariable String substr,@RequestParam Integer idUser, Integer page,Integer size,String sort,String order){
-//        return pollService.searchBySubstr(substr,idUser,page,size,sort,order);
-//    }
-
-
-    @RequestMapping("/id")
+    @RequestMapping("/{id}")
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    public ViewPoll getPollById(@RequestParam String id) {
-        return pollService.findById(Integer.valueOf(id));
+    public ViewPoll getPollById(@PathVariable int id) {
+        return pollService.findById(id);
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<?> savePoll(@RequestBody ViewPoll viewPoll /*todo server validation*/) {
+    public ResponseEntity<?> savePoll(@RequestBody ViewPoll viewPoll) {
         return pollService.save(viewPoll);
     }
 
@@ -51,9 +45,9 @@ public class PollDataController {
     }
 
     @Secured({"ROLE_USER", "ROLE_ADMIN"})
-    @RequestMapping(value = "/delete", method = RequestMethod.DELETE)
-    public void deletePoll(@RequestParam String id) {
-        pollService.deletePoll(Integer.valueOf(id));
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deletePoll(@PathVariable int id) {
+        pollService.deletePoll(id);
     }
 
     @Secured({"ROLE_USER"})
@@ -64,7 +58,7 @@ public class PollDataController {
 
     @Secured({"ROLE_USER"})
     @RequestMapping(value = "/submit/{id}", method = RequestMethod.POST)
-    public ViewPoll submitPoll(@PathVariable Integer id) {
+    public ViewPoll submitPoll(@PathVariable int id) {
         return pollService.submitPoll(id);
     }
 

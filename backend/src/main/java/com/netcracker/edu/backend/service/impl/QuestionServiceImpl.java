@@ -17,12 +17,12 @@ public class QuestionServiceImpl implements QuestionService {
     private QuestionRepository questionRepository;
 
     @Override
-    public List<Question> getAllQuestionByIdPoll(Integer idPoll) {
+    public List<Question> getAllQuestionByIdPoll(int idPoll) {
         return questionRepository.findAllByIdPoll(idPoll);
     }
 
     @Override
-    public Optional<Question> getById(Integer id) {
+    public Optional<Question> getById(int id) {
         return questionRepository.findById(id);
     }
 
@@ -32,7 +32,7 @@ public class QuestionServiceImpl implements QuestionService {
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(int id) {
         questionRepository.deleteById(id);
     }
 }

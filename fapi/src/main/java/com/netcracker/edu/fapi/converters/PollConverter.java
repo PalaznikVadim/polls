@@ -2,17 +2,13 @@ package com.netcracker.edu.fapi.converters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.netcracker.edu.fapi.models.Poll;
-import com.netcracker.edu.fapi.models.Question;
 import com.netcracker.edu.fapi.models.viewModels.ViewPoll;
-import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
-import com.netcracker.edu.fapi.service.QuestionService;
 import com.netcracker.edu.fapi.service.ThemeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.function.Function;
 
@@ -23,16 +19,16 @@ public class PollConverter {
     private ThemeService themeService;
 
 
-    public Poll convertViewPollToPoll(ViewPoll viewPoll){
-        Poll poll=new Poll();
+    public Poll convertViewPollToPoll(ViewPoll viewPoll) {
+        Poll poll = new Poll();
 
-        if(viewPoll.getDate()!=null)
+        if (viewPoll.getDate() != null)
             poll.setDataTime(viewPoll.getDate());
         else
             poll.setDataTime(new Date());
 
         poll.setDescription(viewPoll.getDescription());
-        if (viewPoll.getId()!=null)
+        if (viewPoll.getId() != null)
             poll.setId(viewPoll.getId());
         poll.setIdTheme(themeService.findThemeByName(viewPoll.getTheme()).getId());
         poll.setIdUser(viewPoll.getIdUser());
@@ -43,8 +39,8 @@ public class PollConverter {
         return poll;
     }
 
-    public ViewPoll convertPollToViewPoll(Poll poll){
-        ViewPoll viewPoll=new ViewPoll();
+    public ViewPoll convertPollToViewPoll(Poll poll) {
+        ViewPoll viewPoll = new ViewPoll();
 
         viewPoll.setDate(poll.getDataTime());
         viewPoll.setDescription(poll.getDescription());
@@ -59,13 +55,13 @@ public class PollConverter {
         return viewPoll;
     }
 
-    public Function<List<Poll>, List<ViewPoll>> collectionTransform=polls -> {
+    public Function<List<Poll>, List<ViewPoll>> collectionTransform = polls -> {
         ObjectMapper m = new ObjectMapper();
-        List<ViewPoll> viewPolls=new ArrayList<>();
-        for(int i=0;i<polls.size();i++){
-            viewPolls.add(convertPollToViewPoll(m.convertValue(polls.get(i),Poll.class)));
+        List<ViewPoll> viewPolls = new ArrayList<>();
+        for (int i = 0; i < polls.size(); i++) {
+            viewPolls.add(convertPollToViewPoll(m.convertValue(polls.get(i), Poll.class)));
         }
-         return viewPolls;
+        return viewPolls;
     };
 
 }

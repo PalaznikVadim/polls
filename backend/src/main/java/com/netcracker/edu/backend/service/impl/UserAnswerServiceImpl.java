@@ -20,12 +20,12 @@ public class UserAnswerServiceImpl implements UserAnswerService {
     }
 
     @Override
-    public Integer getCountSelected(Integer idAnswer) {
+    public int getCountSelected(int idAnswer) {
         return userAnswerRepository.countUserAnswerByIdAnswer(idAnswer);
     }
 
     @Override
-    public Integer getCountAllSelected(Integer idQuestion) {
+    public int getCountAllSelected(int idQuestion) {
         return userAnswerRepository.countUserAnswerByIdQuestion(idQuestion);
     }
 }

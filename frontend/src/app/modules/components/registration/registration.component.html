@@ -22,7 +22,8 @@
         </div>
         <div class="form-group">
           <label for="inputSurname">Surname</label>
-          <input id="inputSurname" type="text" class="form-control" name="surname" placeholder="Surname" formControlName="surname">
+          <input id="inputSurname" type="text" class="form-control" name="surname" placeholder="Surname"
+                 formControlName="surname">
           <div *ngIf="isControlInvalid('surname')" class="alert alert-danger">
             Incorrect lenght field (2-20 charachter, A-z, possible use "-")
           </div>
@@ -34,7 +35,7 @@
         </div>
         <div class="form-group">
           <label for="inputDOB">Date of Birth</label>
-          <input id="inputDOB" formControlName="DOB" name="DOB" type="date"  class="form-control " >
+          <input id="inputDOB" formControlName="DOB" name="DOB" type="date" class="form-control ">
           <div *ngIf="errorService.checkErrorsForField('dateOfBirth',errors)">
             <div *ngFor="let error of errorService.outErrorsForField('dateOfBirth',errors)" class="alert alert-danger">
               {{error}}
@@ -50,7 +51,8 @@
             Incorrect format email (Example: cat1@gmail.com)
           </div>
           <div *ngIf="errorService.checkErrorsForField('email',errors)">
-            <div *ngFor="let error of errorService.outErrorsForField('email',errors)" class="alert alert-danger">
+            <div *ngFor="let error of errorService.outErrorsForField('email',errors)"
+                 class="alert alert-danger">
               {{error}}
             </div>
           </div>
@@ -59,26 +61,32 @@
         <div formGroupName="passwords">
           <div class="form-group">
             <label for="inputPassword">Enter password</label>
-            <input id="inputPassword" formControlName="password" type="password" name="password" class="form-control" placeholder="Password" #password1>
+            <input id="inputPassword" formControlName="password" type="password" name="password" class="form-control"
+                   placeholder="Password" #password1>
           </div>
           <div class="form-group">
             <label for="inputPassword">Repeat password</label>
-            <input type="password" formControlName="confirmPassword" name="confirmPwd" class="form-control" placeholder="Repeat password" #password2>
+            <input type="password" formControlName="confirmPassword" name="confirmPwd" class="form-control"
+                   placeholder="Repeat password" #password2>
           </div>
-          <div *ngIf="(isControlInvalid('password', 'passwords')|| isControlInvalid('confirmPassword', 'passwords'))"
+          <div *ngIf="(isControlInvalid('password', 'passwords')
+          || isControlInvalid('confirmPassword', 'passwords'))"
                class="alert alert-danger">
-              Password needs to be more than 5 characters(until 20 char)
+            Password needs to be more than 5 characters(until 20 char)
           </div>
-          <div class="alert alert-danger" *ngIf="password1.value !== password2.value" >
+          <div class="alert alert-danger" *ngIf="password1.value !== password2.value">
             Passwords don't match
           </div>
           <div *ngIf="errorService.checkErrorsForField('password',errors)">
-            <div *ngFor="let error of errorService.outErrorsForField('password',errors)" class="alert alert-danger">
+            <div *ngFor="let error of errorService.outErrorsForField('password',errors)"
+                 class="alert alert-danger">
               {{error}}
             </div>
           </div>
         </div>
-        <button type="submit" class="btn btn-primary mt-5 btn-block" [disabled]="((!registrationForm.valid) || (password1.value !== password2.value))">Register</button>
+        <button type="submit" class="btn btn-primary mt-5 btn-block"
+                [disabled]="((!registrationForm.valid) || (password1.value !== password2.value))">Register
+        </button>
       </form>
     </div>
   </div>

@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService {
         return userRepository.findByEmailAndPassword(email, password);
     }
 
-    public Page<User> findAll(String search, Integer page,Integer size,String sort,String order) {
-        return userRepository.findAllByRole(search,createPageable(page,size,sort,order));
+    public Page<User> findAll(String search, int page, int size, String sort, String order) {
+        return userRepository.findAllByRole(search, createPageable(page, size, sort, order));
     }
 
     @Override
@@ -38,17 +38,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUserById(Integer id) {
+    public Optional<User> findUserById(int id) {
         return userRepository.findById(id);
     }
 
-    private Pageable createPageable(Integer page, Integer size, String sort, String order){
+    private Pageable createPageable(int page, int size, String sort, String order) {
         Pageable pageable;
-        System.out.println("page="+page+" size="+size+" sort="+sort+" order="+order);
-        if(order.toLowerCase().contains("asc")) {
-            pageable = PageRequest.of(Integer.valueOf(page), size, Sort.by(sort).ascending());
-        }else{
-            pageable=PageRequest.of(Integer.valueOf(page), size, Sort.by(sort).descending());
+        System.out.println("page=" + page + " size=" + size + " sort=" + sort + " order=" + order);
+        if (order.toLowerCase().contains("asc")) {
+            pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
+        } else {
+            pageable = PageRequest.of(page, size, Sort.by(sort).descending());
         }
         return pageable;
     }

@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface ThemeService {
     List<Theme> findAll();
-    Theme findThemeById(Integer id);
+
+    Theme findThemeById(int id);
+
     Theme findThemeByName(String name);
-    String[] findAllTemplateThemes();
+
+    List<String> findAllTemplateThemes();
+
     ResponseEntity<?> save(String theme);
-    String[] getUserPollThemes(Integer idUser);
+
+    List<String> getUserPollThemes(int idUser);
 }

@@ -14,24 +14,24 @@ public class JwtUserFactory {
     public JwtUserFactory() {
     }
 
-    public static JwtUser create(User user){
+    public static JwtUser create(User user) {
 
         return new JwtUser(
-          user.getId(),
-          user.getEmail(),
-          user.getName(),
-          user.getSurname(),
-          user.getPassword(),
+                user.getId(),
+                user.getEmail(),
+                user.getName(),
+                user.getSurname(),
+                user.getPassword(),
                 true,
                 mapToGrantedAuthorities(new ArrayList<>(Arrays.asList("ROLE_" + user.getRole().toUpperCase())))
 
         );
     }
 
-    private static List<GrantedAuthority> mapToGrantedAuthorities(List<String> userRoles){
-        return userRoles.stream().map(role->
+    private static List<GrantedAuthority> mapToGrantedAuthorities(List<String> userRoles) {
+        return userRoles.stream().map(role ->
                 new SimpleGrantedAuthority(role)
-                ).collect(Collectors.toList());
+        ).collect(Collectors.toList());
     }
 
 }

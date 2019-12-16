@@ -15,18 +15,18 @@ import {ErrorService} from "../../../services/error.service";
   templateUrl: './new-poll-title.component.html',
   styleUrls: ['./new-poll-title.component.css']
 })
-export class NewPollTitleComponent implements OnInit,OnDestroy {
+export class NewPollTitleComponent implements OnInit, OnDestroy {
 
-  role:string;
-  poll:PollModel;
-  themes:ThemeModel[];
-  subs:any[];
-  countSubs=0;
-  newTheme:string;
-  errors:ErrorModel[]=[];
+  role: string;
+  poll: PollModel;
+  themes: ThemeModel[];
+  subs: any[];
+  countSubs = 0;
+  newTheme: string;
+  errors: ErrorModel[] = [];
 
-  constructor(private modalService: BsModalService, private themeService:ThemeService,private pollService:PollService,
-              private userService:UserService,private router: Router,private errorService:ErrorService) {
+  constructor(private modalService: BsModalService, private themeService: ThemeService, private pollService: PollService,
+              private userService: UserService, private router: Router, private errorService: ErrorService) {
   }
 
   modalRef: BsModalRef;
@@ -35,16 +35,16 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   };
 
   ngOnInit() {
-    this.subs=[];
-    this.role=this.userService.currUser.role;
-    this.subs[this.countSubs++]=this.themeService.getAllTheme().subscribe(value=> {
+    this.subs = [];
+    this.role = this.userService.currUser.role;
+    this.subs[this.countSubs++] = this.themeService.getAllTheme().subscribe(value => {
       this.themes = value as ThemeModel[];
 
       if (this.pollService.currPoll == null) {
         this.poll = new PollModel();
         this.poll.theme = this.themes[0].name;
       } else {
-        this.poll=this.pollService.currPoll;
+        this.poll = this.pollService.currPoll;
       }
     });
   }
@@ -54,7 +54,7 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   }
 
   addPoll() {
-    if(this.poll.id==null) {
+    if (this.poll.id == null) {
       this.poll.idUser = this.userService.currUser.id;
       if (this.userService.currUser.role == 'admin')
         this.poll.shared = 'Yes';
@@ -63,18 +63,18 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
       this.poll.status = 'active';
     }
     console.log(this.poll);
-    this.subs[this.countSubs++]=this.pollService.savePoll(this.poll).subscribe(value => {
-      localStorage.setItem('index',(0).toString());
-      this.pollService.currPoll=value;
-      this.router.navigate(['/creation_poll']);
-    },response=>{
-        if(this.errors!=null)
-          this.errors=[];
+    this.subs[this.countSubs++] = this.pollService.savePoll(this.poll).subscribe(value => {
+        localStorage.setItem('index', (0).toString());
+        this.pollService.currPoll = value;
+        this.router.navigate(['creation_poll']);
+      }, response => {
+        if (this.errors != null)
+          this.errors = [];
         let resError;
-        for(let i=0;i<response.error.length;i++){
-          resError=new ErrorModel();
-          resError.field=(response as HttpErrorResponse).error[i].field;
-          resError.defaultMessage=(response as HttpErrorResponse).error[i].defaultMessage;
+        for (let i = 0; i < response.error.length; i++) {
+          resError = new ErrorModel();
+          resError.field = (response as HttpErrorResponse).error[i].field;
+          resError.defaultMessage = (response as HttpErrorResponse).error[i].defaultMessage;
           this.errors.push(resError);
         }
       }
@@ -82,16 +82,27 @@ export class NewPollTitleComponent implements OnInit,OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if(this.subs!=null)
-      for (let i=0;i<this.subs.length;i++)
+    if (this.subs != null)
+      for (let i = 0; i < this.subs.length; i++)
         this.subs[i].unsubscribe();
 
   }
 
   addNewTheme(newTheme: string) {
-    this.subs[this.countSubs++]=this.themeService.save(newTheme).subscribe(theme=>{
+    this.subs[this.countSubs++] = this.themeService.save(newTheme).subscribe(theme => {
       this.themes.push(theme);
       this.modalRef.hide();
+    }, errorResponse => {
+      this.errors = [];
+      const errors = errorResponse.error;
+      for (let key in errors) {
+        for (let i = 0; i < errors[key].length; i++) {
+          const errorResponse = new ErrorModel();
+          errorResponse.field = key;
+          errorResponse.defaultMessage = errors[key][i];
+          this.errors.push(errorResponse);
+        }
+      }
     });
   }
 }

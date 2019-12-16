@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {PollService} from "../../../services/poll.service";
 
 @Component({
@@ -8,11 +8,13 @@ import {PollService} from "../../../services/poll.service";
 })
 export class GenerateLinkComponent implements OnInit {
 
-  constructor(private pollService:PollService) { }
+  constructor(private pollService: PollService) {
+  }
 
   ngOnInit() {
 
   }
+
   public copyToClipboard(): void {
     const inputElement = document.getElementById('inputLink');
     (<any>inputElement).select();

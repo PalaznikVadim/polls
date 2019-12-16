@@ -22,7 +22,7 @@ export class UserService {
   }
 
   getAllUsers(search: string, page: number, size: number, sort: string, order: string): Observable<RestPageModel> {
-    return this.http.get<RestPageModel>('/api/user/?search=' + search + '&page=' + page + '&size=' + size +
+    return this.http.get<RestPageModel>('/api/user?search=' + search + '&page=' + page + '&size=' + size +
       '&sort=' + sort + '&order=' + order);
   }
 

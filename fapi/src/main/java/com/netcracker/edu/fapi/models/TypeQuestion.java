@@ -8,10 +8,10 @@ public class TypeQuestion {
     public TypeQuestion() {
     }
 
-    public TypeQuestion(int id, String type,String description) {
+    public TypeQuestion(int id, String type, String description) {
         this.id = id;
         this.type = type;
-        this.description=description;
+        this.description = description;
     }
 
     public int getId() {

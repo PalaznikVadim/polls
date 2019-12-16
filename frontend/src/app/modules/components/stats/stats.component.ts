@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {PollModel} from "../../models/poll.model";
 import {QuestionModel} from "../../models/question.model";
-import {QuestionService} from "../../../services/question.service";
-import {AnswerService} from "../../../services/answer.service";
-import {UserAnswerService} from "../../../services/user-answer.service";
 import {StatsService} from "../../../services/stats.service";
 import {PollService} from "../../../services/poll.service";
 

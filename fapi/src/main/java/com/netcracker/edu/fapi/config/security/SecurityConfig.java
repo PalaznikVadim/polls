@@ -19,9 +19,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtTokenProvider jwtTokenProvider;
 
-    private static final String ADMIN_ENDPOINT = "api/";
-    private static final String SINGIN_ENDPOINT = "";
-
     @Autowired
     public SecurityConfig(JwtTokenProvider jwtTokenProvider) {
         this.jwtTokenProvider = jwtTokenProvider;
@@ -35,6 +32,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+
         httpSecurity
                 .httpBasic().disable()
                 .csrf().disable()
@@ -42,7 +40,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/api/user/signin", "/api/user/registration", "/api/poll", "/api/userAnswer/all",
-                        "/api/question/poll", "/api/user/loadByToken").permitAll()
+                        "/api/question/poll/{idPoll}", "/api/user/{token}").permitAll()
                 //.antMatchers().hasRole("admin")
                 .anyRequest().authenticated()
                 .and()

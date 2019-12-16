@@ -31,7 +31,7 @@ public class PollValidator implements Validator {
 
 
         List<Theme> themes = themeService.findAll();
-        Long count = themes.stream().map(theme -> theme.getName()).filter(theme -> theme.equals(poll.getTheme())).count();
+        long count = themes.stream().map(theme -> theme.getName()).filter(theme -> theme.equals(poll.getTheme())).count();
         if (count == 0)
             errors.rejectValue("theme", null, "This theme is not found from the available");
 

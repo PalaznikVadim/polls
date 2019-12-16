@@ -37,12 +37,8 @@ public class TokenServiceImpl implements TokenService {
     @Autowired
     private UserValidator userValidator;
 
-
-
-
-
     @Override
-    public ResponseEntity<?> authenticate(String email,String password) {
+    public ResponseEntity<?> authenticate(String email, String password) {
         Map<String, List<String>> errors = validateEmailAndPassword(email, password);
         if (errors.size() != 0) {
             return ResponseEntity.badRequest().body(errors);
@@ -60,7 +56,7 @@ public class TokenServiceImpl implements TokenService {
 
                 Map<Object, Object> response = new HashMap<>();
                 response.put("username", username);
-                response.put("user",user);
+                response.put("user", user);
                 response.put("token", token);
 
                 return ResponseEntity.ok(response);
@@ -87,36 +83,39 @@ public class TokenServiceImpl implements TokenService {
     }
 
     @Override
-    public User loadByToken(String token){
-
+    public User loadByToken(String token) {
         return userService.getByEmail(jwtTokenProvider.getUsername(token));
     }
 
-    private Map<String,List<String>> validateEmailAndPassword(String email, String password){
-        Map<String,List<String>> errors=new HashMap<String, List<String>>();
-        List<String> emailErrors=new ArrayList<>();
-        List<String> passwordErrors=new ArrayList<>();
-        String regExEmail="^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
-                "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-        if(!email.matches(regExEmail)){
+    private Map<String, List<String>> validateEmailAndPassword(String email, String password) {
+        Map<String, List<String>> errors = new HashMap<String, List<String>>();
+        List<String> emailErrors = new ArrayList<>();
+        List<String> passwordErrors = new ArrayList<>();
+        String regExEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
+                "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,4})$";
+        if (!email.matches(regExEmail)) {
             emailErrors.add("Incorrect format email (example: cat@gmail.com)");
         }
-        if(email.length()>25){
+        if (email.length() > 25) {
             emailErrors.add("Incorrect email length (length<26)");
         }
 
-        if(password.length()>25){
+        if (password.length() > 25) {
             passwordErrors.add("Incorrect password length (length<26)");
         }
 
-        if(password.contains(" ")){
+        if (password == "") {
+            passwordErrors.add("Password is empty!");
+        }
+
+        if (password.contains(" ")) {
             passwordErrors.add("Password has whitespaces");
         }
 
-        if(emailErrors.size()!=0)
-            errors.put("email",emailErrors);
-        if(passwordErrors.size()!=0)
-            errors.put("password",passwordErrors);
+        if (emailErrors.size() != 0)
+            errors.put("email", emailErrors);
+        if (passwordErrors.size() != 0)
+            errors.put("password", passwordErrors);
 
         return errors;
     }

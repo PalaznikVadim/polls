@@ -15,7 +15,8 @@
     </ul>
     <ul class="navbar-nav mr-0 ml-auto">
       <li class="nav-item active">
-        <button type="button" class="btn btn-outline-light" (click)="exit()"><i class="fas fa-sign-out-alt"></i> Exit</button>
+        <button type="button" class="btn btn-outline-light" (click)="exit()"><i class="fas fa-sign-out-alt"></i> Exit
+        </button>
       </li>
     </ul>
   </div>
@@ -51,7 +52,8 @@
                   value="drafts">Drafts
           </option>
           <option *ngIf="userService.currUser?.role=='user'||idUser!=userService.currUser?.id"
-                  value="activePolls">Polls with link</option>
+                  value="activePolls">Polls with link
+          </option>
         </select>
       </div>
     </div>
@@ -138,9 +140,11 @@
         </div>
         <div *ngIf="idUser!=userService.currUser.id" class="btn-group btn-block">
           <button type="button" class="btn btn-sm btn-light mr-1" (click)="goToPollQuestion(poll.id)">
-            <i class="fas fa-eye"></i> View</button>
+            <i class="fas fa-eye"></i> View
+          </button>
           <button type="button" class="btn btn-sm btn-light" (click)="goToStat(poll.id)">
-            <i class="fas fa-signal"></i> Stats</button>
+            <i class="fas fa-signal"></i> Stats
+          </button>
         </div>
       </div>
     </div>

@@ -4,6 +4,7 @@ import com.netcracker.edu.fapi.models.Stats;
 
 public interface StatsService {
 
-    Stats getByIdAnswer(Integer id);
+    Stats getByIdAnswer(int id);
+
     Stats save(Stats stats);
 }

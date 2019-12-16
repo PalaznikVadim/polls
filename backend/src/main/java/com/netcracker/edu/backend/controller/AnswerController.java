@@ -5,7 +5,6 @@ import com.netcracker.edu.backend.service.AnswerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -17,32 +16,30 @@ public class AnswerController {
     private AnswerService answerService;
 
 
-    @RequestMapping(value = "/question",method = RequestMethod.GET)
-    public List<Answer> getAllAnswersByQuestionId(@RequestParam String id){
-        Answer[] answers = answerService.getAllAnswerByQuestionId(Integer.valueOf(id));
-        return Arrays.asList(answers);
+    @RequestMapping(value = "/question", method = RequestMethod.GET)
+    public List<Answer> getAllAnswersByQuestionId(@RequestParam int id) {
+        List<Answer> answers = answerService.getAllAnswerByQuestionId(id);
+        return answers;
     }
 
-    @RequestMapping(value = "",method = RequestMethod.POST)
-    public Answer saveAnswer(@RequestBody Answer answer){
-        System.out.println(answer.toString());
-        Answer answ=answerService.saveAnswer(answer);
-
+    @RequestMapping(value = "", method = RequestMethod.POST)
+    public Answer saveAnswer(@RequestBody Answer answer) {
+        Answer answ = answerService.saveAnswer(answer);
         return answ;
     }
 
-    @RequestMapping(value = "/all",method = RequestMethod.POST)
-    public Iterable<Answer> saveAllAnswer(@RequestBody List<Answer> answers){
+    @RequestMapping(value = "/all", method = RequestMethod.POST)
+    public Iterable<Answer> saveAllAnswer(@RequestBody List<Answer> answers) {
         return answerService.saveAllAnswers(answers);
     }
 
-    @RequestMapping(value = "delete",method = RequestMethod.DELETE)
-    public void deleteAnswer(@RequestParam String id){
-        answerService.deleteById(Integer.valueOf(id));
+    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    public void deleteAnswer(@PathVariable int id) {
+        answerService.deleteById(id);
     }
 
-    @RequestMapping(value = "/id",method = RequestMethod.GET)
-    public Optional<Answer> getById(@RequestParam Integer id){
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public Optional<Answer> getById(@PathVariable int id) {
         return answerService.getById(id);
     }
 }

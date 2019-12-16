@@ -5,8 +5,11 @@ import com.netcracker.edu.fapi.models.TypeQuestion;
 import java.util.List;
 
 public interface TypeQuestionService {
-    TypeQuestion[] getAllTypes();
-    TypeQuestion getById(Integer id);
-    Integer getIdByType(String id);
+    List<TypeQuestion> getAllTypes();
+
+    TypeQuestion getById(int id);
+
+    int getIdByType(String type);
+
     List<String> getAll();
 }

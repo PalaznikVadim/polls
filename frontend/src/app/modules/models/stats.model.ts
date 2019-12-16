@@ -1,4 +1,4 @@
-export class StatsModel{
-  public count:number;
-  public percent:number;
+export class StatsModel {
+  public count: number;
+  public percent: number;
 }

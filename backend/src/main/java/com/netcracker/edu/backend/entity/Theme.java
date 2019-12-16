@@ -9,7 +9,7 @@ public class Theme {
     private String name;
 
     @Id
-    @GeneratedValue(strategy =GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     public int getId() {
         return id;
@@ -20,7 +20,7 @@ public class Theme {
     }
 
     @Basic
-    @Column(name = "name",unique = true)
+    @Column(name = "name", unique = true)
     public String getName() {
         return name;
     }

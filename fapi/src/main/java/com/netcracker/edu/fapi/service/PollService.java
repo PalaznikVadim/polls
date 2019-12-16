@@ -10,28 +10,29 @@ import java.util.List;
 
 public interface PollService {
 
-    ViewPoll findById(Integer id);
+    ViewPoll findById(int id);
 
     List<ViewPoll> findAllTemplateByTheme(String theme);
 
     ResponseEntity<?> save(ViewPoll poll);
 
-    void deletePoll(Integer id);
+    void deletePoll(int id);
 
     ViewPoll findByLink(String link);
 
-    //Page<ViewPoll> searchBySubstr(String substr,Integer idUser,Integer page,Integer size,String sort, String order);
     ViewPoll clonePoll(ClonePoll clonePoll);
 
-    ViewPoll submitPoll(Integer id);
+    ViewPoll submitPoll(int id);
 
-    Page<ViewPoll> findAllByUserId(Integer userId, String theme, String substr, int page, int size, String sort, String order);
+    Page<ViewPoll> findAllByUserId(int userId, String theme, String substr,
+                                   int page, int size, String sort, String order);
 
-    Page<ViewPoll> findDraftsByUserId(Integer idUser, String theme, String substr, Integer page, Integer size, String sort, String order);
+    Page<ViewPoll> findDraftsByUserId(int idUser, String theme, String substr,
+                                      int page, int size, String sort, String order);
 
-    //Page<ViewPoll> findPollsByTheme(String theme, String substr, Integer idUser, Integer page, Integer size, String sort, String order);
+    Page<ViewPoll> findActivePollsByUserId(int idUser, String theme, String substr,
+                                           int page, int size, String sort, String order);
 
-    Page<ViewPoll> findActivePollsByUserId(Integer idUser, String theme, String substr, Integer page, Integer size, String sort, String order);
-
-    Page<ViewPoll> getPolls(Integer userId, String select, String theme, String substr, int page, int size, String sort, String order);
+    Page<ViewPoll> getPolls(int userId, String select, String theme, String substr,
+                            int page, int size, String sort, String order);
 }

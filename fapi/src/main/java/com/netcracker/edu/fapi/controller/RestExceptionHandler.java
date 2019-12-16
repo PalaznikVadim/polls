@@ -14,16 +14,16 @@ import java.util.Map;
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(JwtAuthenticationException.class)
-    protected ResponseEntity<?> handleInvalidToken(JwtAuthenticationException ex, WebRequest request){
-        Map<String,String> error=new HashMap<>();
-        error.put("error","JWT token is expired or invalid");
+    protected ResponseEntity<?> handleInvalidToken(JwtAuthenticationException ex, WebRequest request) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "JWT token is expired or invalid");
         return ResponseEntity.status(403).body(error);
     }
 
     @ExceptionHandler(ExpiredJwtException.class)
-    protected ResponseEntity<?> handleExpiredToken(ExpiredJwtException ex,WebRequest request){
-        Map<String,String> error=new HashMap<>();
-        error.put("error","JWT token is expired or invalid");
+    protected ResponseEntity<?> handleExpiredToken(ExpiredJwtException ex, WebRequest request) {
+        Map<String, String> error = new HashMap<>();
+        error.put("error", "JWT token is expired or invalid");
         return ResponseEntity.status(403).body(error);
     }
 

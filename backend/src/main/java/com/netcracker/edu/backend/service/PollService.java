@@ -7,19 +7,22 @@ import java.util.List;
 import java.util.Optional;
 
 public interface PollService {
-    Optional<Poll> findPollById(Integer id);
+    Optional<Poll> findPollById(int id);
 
-    Page<Poll> findAllByUserId(Integer userId, String theme, String substr, Integer page, Integer size, String sort, String order);
+    Page<Poll> findAllByUserId(int userId, String theme, String substr, int page,
+                               int size, String sort, String order);
 
     List<Poll> findAllTemplateByTheme(String theme);
 
     Poll save(Poll poll);
 
-    void delete(Integer id);
+    void delete(int id);
 
     Poll findByLink(String link);
 
-    Page<Poll> findDraftsByUserId(Integer idUser, String theme, String substr, Integer page, Integer size, String sort, String order);
+    Page<Poll> findDraftsByUserId(int idUser, String theme, String substr,
+                                  int page, int size, String sort, String order);
 
-    Page<Poll> findActivePollsByUserId(Integer idUser, String theme, String substr, Integer page, Integer size, String sort, String order);
+    Page<Poll> findActivePollsByUserId(int idUser, String theme, String substr,
+                                       int page, int size, String sort, String order);
 }

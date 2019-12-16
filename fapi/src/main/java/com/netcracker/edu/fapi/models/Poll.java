@@ -16,7 +16,8 @@ public class Poll {
     public Poll() {
     }
 
-    public Poll(int id, String name, int idUser, int idTheme, String description, String link, Date date, String status, String shared) {
+    public Poll(int id, String name, int idUser, int idTheme, String description, String link,
+                Date date, String status, String shared) {
         this.id = id;
         this.name = name;
         this.idUser = idUser;

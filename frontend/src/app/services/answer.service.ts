@@ -9,6 +9,6 @@ export class AnswerService {
   }
 
   deleteById(id: number): Observable<void> {
-    return this.http.delete<void>('api/answer/delete?id=' + id);
+    return this.http.delete<void>('api/answer/' + id);
   }
 }

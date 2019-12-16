@@ -6,9 +6,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface AnswerService {
-    Answer[] getAllAnswerByQuestionId(Integer idQuestion);
+    List<Answer> getAllAnswerByQuestionId(int idQuestion);
+
     Answer saveAnswer(Answer answer);
-    void deleteById(Integer id);
+
+    void deleteById(int id);
+
     Iterable<Answer> saveAllAnswers(List<Answer> answers);
-    Optional<Answer> getById(Integer id);
+
+    Optional<Answer> getById(int id);
 }

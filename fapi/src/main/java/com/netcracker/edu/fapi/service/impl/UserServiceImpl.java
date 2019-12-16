@@ -15,10 +15,8 @@ public class UserServiceImpl implements UserService {
     private String backendServerUrl;
 
 
-
-
     @Override
-    public ResponseEntity<?> findAll(String search, Integer page, Integer size, String sort, String order) {
+    public ResponseEntity<?> findAll(String search, int page, int size, String sort, String order) {
         RestTemplate restTemplate = new RestTemplate();
         Page<User> users = restTemplate.getForObject(backendServerUrl + "/api/user?search=" + search +
                 "&page=" + page + "&size=" + size + "&sort=" + sort + "&order=" + order, RestPageImpl.class);
@@ -32,32 +30,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-//        DataBinder dataBinder = new DataBinder(user);
-//        dataBinder.addValidators(userValidator);
-//        dataBinder.validate();
-//
-//        if (dataBinder.getBindingResult().hasErrors()) {
-//            List<ObjectError> errorList = dataBinder.getBindingResult().getAllErrors();
-//            return ResponseEntity.badRequest().body(errorList);
-//        } else {
-//            user.setPassword(passwordEncoder.encode(user.getPassword()));
-            RestTemplate restTemplate = new RestTemplate();
-            user = restTemplate.postForEntity(backendServerUrl + "/api/user", user, User.class).getBody();
-            return user;
-//        }
-    }
-
-    @Override
-    public User findById(Integer id) {
         RestTemplate restTemplate = new RestTemplate();
-        User user = restTemplate.getForObject(backendServerUrl + "api/user/id?id=" + id, User.class);
+        user = restTemplate.postForEntity(backendServerUrl + "/api/user", user, User.class).getBody();
         return user;
     }
 
     @Override
-    public User[] getAll() {
+    public User findById(int id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/user/all", User[].class);
+        User user = restTemplate.getForObject(backendServerUrl + "api/user/" + id, User.class);
+        return user;
     }
 
     @Override

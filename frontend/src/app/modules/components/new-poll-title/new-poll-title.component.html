@@ -58,6 +58,11 @@
     <label>Title theme</label>
     <input type="text" id="inputTheme" [(ngModel)]="newTheme" class="form-control" aria-describedby="form-text"
            placeholder="Theme" required maxlength="20">
+    <div *ngIf="errorService.checkErrorsForField('themeName',errors)">
+      <div *ngFor="let error of errorService.outErrorsForField('themeName',errors)" class="alert alert-danger">
+        {{error}}
+      </div>
+    </div>
   </div>
   <div class="modal-footer">
     <button [disabled]="!newTheme" type="button" class="btn btn-primary" (click)="addNewTheme(newTheme)">Create</button>
