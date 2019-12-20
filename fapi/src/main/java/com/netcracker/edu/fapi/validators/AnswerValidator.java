@@ -15,8 +15,10 @@ public class AnswerValidator implements Validator {
     @Override
     public void validate(Object target, Errors errors) {
         ViewAnswer answer = (ViewAnswer) (target);
-
-        if (answer.getText().length() > 60)
-            errors.rejectValue("text", String.valueOf(answer.getId()), "Incorrect length the answer!(<60 character)");
+        answer.setText(answer.getText().trim());
+        if (answer.getText().length() > 60 || answer.getText().length() < 1) {
+            errors.rejectValue("text", String.valueOf(answer.getId()),
+                    "Incorrect length the answer!(1<..<60 character)");
+        }
     }
 }

@@ -64,8 +64,8 @@ export class SignInComponent implements OnInit, OnDestroy {
 
   signInClick() {
     this.errorMassage=null;
-    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value,
-      this.signInForm.controls['password'].value).subscribe(response => {
+    this.sub = this.userService.getUserByEmailAndPassword(this.signInForm.controls['email'].value.trim(),
+      this.signInForm.controls['password'].value.trim()).subscribe(response => {
       if (response.user !== null) {
         // this.rememberMe();
         localStorage.setItem("token", response.token);

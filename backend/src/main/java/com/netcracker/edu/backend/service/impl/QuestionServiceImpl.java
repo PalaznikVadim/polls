@@ -1,6 +1,7 @@
 package com.netcracker.edu.backend.service.impl;
 
 import com.netcracker.edu.backend.entity.Question;
+import com.netcracker.edu.backend.entity.QuestionWithAnswerCount;
 import com.netcracker.edu.backend.repository.QuestionRepository;
 import com.netcracker.edu.backend.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,10 @@ public class QuestionServiceImpl implements QuestionService {
     @Override
     public void delete(int id) {
         questionRepository.deleteById(id);
+    }
+
+    @Override
+    public List<QuestionWithAnswerCount> getDTO() {
+        return questionRepository.getQuestionStat();
     }
 }

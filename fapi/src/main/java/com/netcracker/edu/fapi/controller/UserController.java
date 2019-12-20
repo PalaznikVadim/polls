@@ -49,7 +49,6 @@ public class UserController {
 
     @GetMapping("/{token}")
     public User loadByToken(@PathVariable String token) {
-        System.out.println(token);
         return tokenService.loadByToken(token);
     }
 

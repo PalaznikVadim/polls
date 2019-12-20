@@ -13,54 +13,47 @@ import {PollService} from "../../../services/poll.service";
   templateUrl: './poll.component.html',
   styleUrls: ['./poll.component.css']
 })
-export class PollComponent implements OnInit,OnDestroy
-{
+export class PollComponent implements OnInit, OnDestroy {
 
   quests: QuestionModel[];
-  userAnswers:UserAnswerModel[];
+  userAnswers: UserAnswerModel[];
   userAnswer: UserAnswerModel;
   subs: any[];
   countSubs = 0;
   errorMessage: string;
+  idPoll:number;
 
-  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private answerService: AnswerService,  private userAnswerService: UserAnswerService,private pollService:PollService, private router: Router) {
+  constructor(private formBuilder: FormBuilder, private questionService: QuestionService, private answerService: AnswerService, private userAnswerService: UserAnswerService, private pollService: PollService, private router: Router) {
   }
 
   ngOnInit() {
     this.subs = [];
-    this.userAnswers=[];
-    // this.subs[this.countSubs++] = this.typesService.getAllTypes().subscribe(types => {
-    //   this.typesService.types = types;
-
-      this.subs[this.countSubs++]=this.questionService.getAllQuestionByPollId(this.pollService.currPoll.id).subscribe(quest => {
-        this.quests = quest;
-
-        for (let i = 0; i < this.quests.length; i++) {
-          if ((this.quests[i].type) == 'radio') {
-            this.quests[i].user_answers = [null];
-          } else {
-            this.quests[i].user_answers = [];
-            for (let j = 0; j < this.quests[i].answers.length; j++) {
-              this.quests[i].user_answers[j] = false;
-            }
+    this.userAnswers = [];
+    this.idPoll=Number(localStorage.getItem('idCurrPoll'));
+    this.subs[this.countSubs++] = this.questionService.getAllQuestionByPollId(this.idPoll).subscribe(quest => {
+      this.quests = quest;
+      for (let i = 0; i < this.quests.length; i++) {
+        if ((this.quests[i].type) == 'radio') {
+          this.quests[i].user_answers = [null];
+        } else {
+          this.quests[i].user_answers = [];
+          for (let j = 0; j < this.quests[i].answers.length; j++) {
+            this.quests[i].user_answers[j] = false;
           }
         }
+      }
     });
   }
 
   submit() {
     if (this.checkRequiredAnswers()) {
-      console.log(this.quests)
       for (let i = 0; i < this.quests.length; i++) {
         this.handleAnswer(this.quests[i]);
       }
-    this.userAnswerService.saveAllUserAnswer(this.userAnswers).subscribe(event=>{
-      console.log(this.userAnswers);
-      this.router.navigate(['/lastPagePoll']);
-    });
-
-
-
+      this.userAnswerService.saveAllUserAnswer(this.userAnswers).subscribe(event => {
+        localStorage.removeItem('idCurrPoll');
+        this.idPoll=null;
+      });
     }
   }
 

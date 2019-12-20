@@ -1,6 +1,7 @@
 package com.netcracker.edu.backend.controller;
 
 import com.netcracker.edu.backend.entity.Question;
+import com.netcracker.edu.backend.entity.QuestionWithAnswerCount;
 import com.netcracker.edu.backend.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,4 +37,10 @@ public class QuestionController {
     public void deleteQuestion(@PathVariable int id) {
         questionService.delete(id);
     }
-}
+
+    @RequestMapping("/withAnswerCount")
+    public List<QuestionWithAnswerCount> getQuestionWithAnswerCount(){
+        return questionService.getDTO();
+    }
+
+ }

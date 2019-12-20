@@ -1,5 +1,6 @@
 package com.netcracker.edu.fapi.security.jwt;
 
+import com.netcracker.edu.fapi.consts.FapiConsts;
 import com.netcracker.edu.fapi.security.JwtUserDetailsService;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,7 +74,7 @@ public class JwtTokenProvider {
             }
             return true;
         } catch (JwtException | IllegalArgumentException e) {
-            throw new JwtAuthenticationException("JWT token is expired or invalid");
+            throw new JwtAuthenticationException(FapiConsts.TOKEN_ERROR_MESSAGE);
 
         }
     }
@@ -81,7 +82,7 @@ public class JwtTokenProvider {
     public String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader("Authorization");
         if (bearerToken != null && bearerToken.startsWith("Bearer_")) {
-            return bearerToken.substring(7, bearerToken.length());
+            return bearerToken.substring(7);
         }
         return null;
     }

@@ -8,18 +8,19 @@ import {PollService} from "../../../services/poll.service";
 })
 export class GenerateLinkComponent implements OnInit {
 
+  link: string;
+
   constructor(private pollService: PollService) {
   }
 
   ngOnInit() {
-
+    this.link = 'localhost:4301/poll/' + this.pollService.currPoll.link;
   }
 
-  public copyToClipboard(): void {
-    const inputElement = document.getElementById('inputLink');
-    (<any>inputElement).select();
-    document.execCommand('copy');
-    inputElement.blur();
-  }
+  // public copyToClipboard(): void {
+  //   const hElement = document.getElementById('link');
+  //   console.log(hElement.innerText.);
+  //
+  // }
 
 }

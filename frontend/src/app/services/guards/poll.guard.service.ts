@@ -9,8 +9,8 @@ export class PollGuardService implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('poll',localStorage.getItem('token'));
     if (!this.hasPollId()) {
+      localStorage.setItem('err','Without a selected poll, access actions are not available');
       this.router.navigate(['/home']);
       return false;
     }

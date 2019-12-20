@@ -58,4 +58,10 @@ export class ListTemplatesComponent implements OnInit {
       this.router.navigate(['newPoll']);
     });
   }
+
+  exit() {
+    localStorage.removeItem('token');
+    this.userService.currUser=null;
+    this.router.navigate(['/']);
+  }
 }

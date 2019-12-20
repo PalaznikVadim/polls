@@ -9,14 +9,14 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppComponent} from "./app.component";
 import {HTTP_INTERCEPTORS, HttpClient, HttpClientModule, HttpResponse} from "@angular/common/http";
 import {Ng4LoadingSpinnerModule} from "ng4-loading-spinner";
-import {Router, RouterModule, Routes} from "@angular/router";
+import {RouterModule, Routes} from "@angular/router";
 import {SignInComponent} from './modules/components/sign-in/sign-in.component';
 import {RegistrationComponent} from './modules/components/registration/registration.component';
 import {NewPollTitleComponent} from './modules/components/new-poll-title/new-poll-title.component';
 import {GenerateLinkComponent} from './modules/components/generate-link/generate-link.component';
 import {PollService} from "./services/poll.service";
 import {PollComponent} from './modules/components/poll/poll.component';
-import {AccordionModule, ButtonsModule, PaginationModule, TabsModule} from "ngx-bootstrap";
+import {AccordionModule, AlertModule, ButtonsModule, PaginationModule, TabsModule} from "ngx-bootstrap";
 import {FirstPagePollComponent} from './modules/components/first-page-poll/first-page-poll.component';
 import {LastPagePollComponent} from './modules/components/last-page-poll/last-page-poll.component';
 import {StatsComponent} from './modules/components/stats/stats.component';
@@ -39,17 +39,22 @@ import {PollGuardService} from "./services/guards/poll.guard.service";
 import {AdminGuardService} from "./services/guards/admin.guard.service";
 import {UserGuardService} from "./services/guards/user.guard.service";
 import {SelectedUserGuard} from "./services/guards/selectedUserGuard";
+import { TableQuestionsWithAnswerCountComponent } from './modules/components/table-questions-with-answer-count/table-questions-with-answer-count.component';
+import {ClipboardModule} from "ngx-clipboard";
+import { MessComponentComponent } from './modules/components/mess-component/mess-component.component';
+import {NotAuthGuardService} from "./services/guards/notAuth.guard.service";
+import {PolledGuardService} from "./services/guards/polled.guard";
 
 
 const appRoutes: Routes = [
-  {path: "", component: SignInComponent},
-  {path: "registration", component: RegistrationComponent},
+  {path: "", component: SignInComponent,canActivate:[NotAuthGuardService]},
+  {path: "registration", component: RegistrationComponent,canActivate:[NotAuthGuardService]},
   {path: "newPoll", component: NewPollTitleComponent,canActivate:[AuthGuardService]},
-  {path: 'poll', component: PollComponent},
-  {path: 'firstPagePoll/:link', component: FirstPagePollComponent},
+  {path: 'poll', component: PollComponent, canActivate:[PolledGuardService]},
+  {path: 'poll/:link', component: FirstPagePollComponent},
   {path: 'lastPagePoll', component: LastPagePollComponent},
   {path: 'stats', component: StatsComponent, canActivate: [PollGuardService]},
-  {path: 'pollLink', component: GenerateLinkComponent, canActivate: [PollGuardService, UserGuardService]},
+  {path: 'pollLink', component: GenerateLinkComponent, canActivate: [UserGuardService, PollGuardService]},
   {path: 'userTable', component: UserListComponent, canActivate: [AuthGuardService, AdminGuardService]},
   {path: 'creatingByTemplate', component: ListTemplatesComponent, canActivate: [AuthGuardService, UserGuardService]},
   {path: 'home', component: PageWithPollsComponent, canActivate: [AuthGuardService]},
@@ -58,14 +63,16 @@ const appRoutes: Routes = [
     component: PageWithPollsComponent,
     canActivate: [AuthGuardService, AdminGuardService, SelectedUserGuard]
   },
-  {path: 'creation_poll', component: PollWithQuestionsComponent, canActivate: [PollGuardService, UserGuardService]},
-  {path: 'templateCreation', component: PollWithQuestionsComponent, canActivate: [PollGuardService, AdminGuardService]},
+  {path: 'creation_poll', component: PollWithQuestionsComponent, canActivate: [UserGuardService, PollGuardService]},
+  {path: 'templateCreation', component: PollWithQuestionsComponent, canActivate: [AdminGuardService, PollGuardService]},
   {
     path: 'viewUserPoll',
     component: PollWithQuestionsComponent,
-    canActivate: [SelectedUserGuard, PollGuardService, AdminGuardService]
+    canActivate: [AdminGuardService, SelectedUserGuard, PollGuardService]
   },
+  {path:'questionTable',component:TableQuestionsWithAnswerCountComponent,canActivate:[AdminGuardService]},
   {path: "**", component: ErrorPageComponent}
+
 
 
 ];
@@ -109,6 +116,8 @@ export function loadUser(http: HttpClient, userService: UserService) {
     PageWithPollsComponent,
     PollWithQuestionsComponent,
     TopNavComponent,
+    TableQuestionsWithAnswerCountComponent,
+    MessComponentComponent,
 
   ],
   imports: [
@@ -124,7 +133,9 @@ export function loadUser(http: HttpClient, userService: UserService) {
     ButtonsModule.forRoot(),
     AccordionModule.forRoot(),
     TabsModule.forRoot(),
-    PaginationModule.forRoot()
+    PaginationModule.forRoot(),
+    ClipboardModule,
+    AlertModule.forRoot()
   ],
   providers: [
     PollService,
@@ -140,6 +151,9 @@ export function loadUser(http: HttpClient, userService: UserService) {
     AdminGuardService,
     UserGuardService,
     SelectedUserGuard,
+    NotAuthGuardService,
+    PolledGuardService,
+    ClipboardModule,
     {
       provide: APP_INITIALIZER,
       useFactory: loadUser,

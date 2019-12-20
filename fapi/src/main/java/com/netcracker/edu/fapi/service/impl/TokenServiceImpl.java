@@ -88,6 +88,7 @@ public class TokenServiceImpl implements TokenService {
     }
 
     private Map<String, List<String>> validateEmailAndPassword(String email, String password) {
+
         Map<String, List<String>> errors = new HashMap<String, List<String>>();
         List<String> emailErrors = new ArrayList<>();
         List<String> passwordErrors = new ArrayList<>();

@@ -6,12 +6,12 @@
         </button>
       </li>
     </ul>
-    <form *ngIf="userService.currUser.role!='admin'||userService.idSelectedUser"
+    <form *ngIf="(userService.currUser.role!='admin'||userService.idSelectedUser)&&pollService?.currPoll.link"
           class="form-inline mt-2 mt-md-0">
       <button [class.active]="isCreatePage" class="btn btn-outline-light ml-1" (click)="goToQuestions()">
         <i class="fas fa-cogs"></i> Poll</button>
       <button [class.active]="isLinkPage" *ngIf="userService.currUser.role=='user'"
-              class="btn btn-outline-light ml-1" routerLink="/pollLink"><i class="fas fa-link"></i> Сollecting answers
+              class="btn btn-outline-light ml-1" routerLink="/pollLink"><i class="fas fa-link"></i> Link
       </button>
       <button [class.active]="isStatsPage" class="btn btn-outline-light ml-1" routerLink="/stats">
         <i class="fas fa-signal"></i> Stats

@@ -1,5 +1,6 @@
 package com.netcracker.edu.backend.service.impl;
 
+import com.netcracker.edu.backend.consts.BackendConsts;
 import com.netcracker.edu.backend.entity.Poll;
 import com.netcracker.edu.backend.repository.PollRepository;
 import com.netcracker.edu.backend.service.PollService;
@@ -29,7 +30,7 @@ public class PollServiceImpl implements PollService {
     public Page<Poll> findAllByUserId(int userId, String theme, String substr, int page, int size,
                                       String sort, String order) {
         Pageable pageable = createPageable(page, size, sort, order);
-        if (theme.equals("all")) {
+        if (theme.equals(BackendConsts.ALL)) {
             theme = null;
         }
         return pollRepository.findPollsByIdUser(userId, theme, substr, pageable);
@@ -60,7 +61,7 @@ public class PollServiceImpl implements PollService {
     public Page<Poll> findDraftsByUserId(int idUser, String theme, String substr,
                                          int page, int size, String sort, String order) {
         Pageable pageable = createPageable(page, size, sort, order);
-        if (theme.equals("all"))
+        if (theme.equals(BackendConsts.ALL))
             theme = null;
         return pollRepository.findDraftsByUserId(theme, substr, idUser, pageable);
     }
@@ -68,7 +69,7 @@ public class PollServiceImpl implements PollService {
     @Override
     public Page<Poll> findActivePollsByUserId(int idUser, String theme, String substr,
                                               int page, int size, String sort, String order) {
-        if (theme.equals("all"))
+        if (theme.equals(BackendConsts.ALL))
             theme = null;
         Pageable pageable = createPageable(page, size, sort, order);
         return pollRepository.findActivePollsByUserId(theme, substr, idUser, pageable);
@@ -76,7 +77,7 @@ public class PollServiceImpl implements PollService {
 
     private Pageable createPageable(int page, int size, String sort, String order) {
         Pageable pageable;
-        if (order.toLowerCase().contains("asc")) {
+        if (order.toLowerCase().contains(BackendConsts.ASC)) {
             pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());

@@ -25,6 +25,11 @@ public class PollValidator implements Validator {
     public void validate(Object target, Errors errors) {
         ViewPoll poll = (ViewPoll) target;
 
+        poll.setName(poll.getName().trim());
+        if(poll.getDescription()!=null) {
+            poll.setDescription(poll.getDescription().trim());
+        }
+
         if (poll.getName().length() > 20 || poll.getName().length() < 1) {
             errors.rejectValue("name", null, "Incorrect length field(1 <...< 20 charaсters)");
         }

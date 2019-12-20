@@ -7,7 +7,7 @@
         description
       </div>
       <button *ngIf="currRole!='admin'" class="btn btn-success float-right"
-              [disabled]="pollService.currPoll.questions?.length==0" (click)="submit(pollService.currPoll.id)">
+              [disabled]="pollService.currPoll.questions?.length==0" (click)="submit(templateSubmitConfirm)">
         Submit poll
       </button>
     </div>
@@ -48,11 +48,13 @@
         <li *ngFor="let answer of quest.answers" class="alert alert-info mb-1"><span>{{answer.text}}</span></li>
       </ul>
     </div>
-    <div *ngIf="!userService.idSelectedUser" class="ml-auto mr-0 col-3">
-      <button class="btn btn-outline-info" (click)="editQuest(quest,modalAddQuest)">
+    <div *ngIf="!userService.idSelectedUser" class="float-right col-3">
+      <button class="btn btn-outline-info ml-3" [hidden]="pollService.currPoll?.link"
+              (click)="editQuest(quest,modalAddQuest)">
         <i class="fas fa-pencil-alt"></i> Edit
       </button>
-      <button class='btn btn-outline-danger ml-2 mr-0' (click)="openModal(template,quest.id,i)">
+      <button class='btn btn-outline-danger ml-1 float-right' (click)="openModal(template,quest.id,i)"
+      [disabled]="pollService.currPoll?.link&&pollService.currPoll.questions?.length==1">
         <i class="fas fa-trash-alt"></i> Delete
       </button>
     </div>
@@ -99,7 +101,7 @@
       <li *ngFor="let answer of quest.answers;let i = index" class="form-inline">
         <input type="text" class="form-control mr-sm-2 col-10 " [(ngModel)]="quest.answers[i].text" #text="ngModel"
                required maxlength="60">
-        <button class="btn btn-outline-danger my-2 my-sm-0 mr-sm-0 " (click)="deleteAnswer(i)">
+        <button class="btn btn-outline-danger my-2 my-sm-0 mr-sm-0 " [disabled]="quest.answers.length==1" (click)="deleteAnswer(i)">
           <i class="fas fa-trash-alt"></i>
         </button>
         <div *ngIf="checkErrorsForAnswerField('text',answer.id,answer.text)">
@@ -111,13 +113,22 @@
         </div>
       </li>
     </ul>
-    <button class="btn btn-outline-success my-2 my-sm-0" (click)="addNewAnswer()">
+    <button class="btn btn-outline-success my-2 my-sm-0" [disabled]="quest.answers.length==7" (click)="addNewAnswer()">
       <i class="fas fa-plus"></i> Add answer
     </button>
+    <div *ngIf="!quest?.answers.length" class="alert alert-danger">
+      Creating a question without answer options is prohibited
+    </div>
+    <div *ngIf="errorService.checkErrorsForField('withoutAnswer',errors)">
+      <div class="alert alert-danger"
+           *ngFor="let error of errorService.outErrorsForField('withoutAnswer',errors)">{{error}}</div>
+    </div>
   </div>
   <div class="modal-footer">
-    <button *ngIf="isNew" type="button" class="btn btn-primary" (click)="createQuestion()">Create</button>
-    <button *ngIf="!isNew" type="button" class="btn btn-primary" (click)="updateQuestion()">Update</button>
+    <button *ngIf="isNew" [disabled]="!quest?.answers.length" type="button" class="btn btn-primary"
+            (click)="createQuestion()">Create</button>
+    <button *ngIf="!isNew" [disabled]="!quest?.answers.length" type="button" class="btn btn-primary"
+            (click)="updateQuestion()">Update</button>
   </div>
 </ng-template>
 
@@ -134,6 +145,15 @@
   <div class="modal-body text-center">
     <p>Do you want to change status this poll?</p>
     <button type="button" class="btn btn-default" (click)="confirm()">Yes</button>
+    <button type="button" class="btn btn-primary" (click)="modalRef.hide()">No</button>
+  </div>
+</ng-template>
+
+<ng-template #templateSubmitConfirm>
+  <div class="modal-body text-center">
+    Do you want to change link this poll? <h6 class="red-text">All respondents with an old link will
+    lose access to this poll!</h6>
+    <button type="button" class="btn btn-default" (click)="generateLink()">Yes</button>
     <button type="button" class="btn btn-primary" (click)="modalRef.hide()">No</button>
   </div>
 </ng-template>

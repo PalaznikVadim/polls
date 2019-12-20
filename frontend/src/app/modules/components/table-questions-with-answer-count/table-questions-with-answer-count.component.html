@@ -1,0 +1,31 @@
+<div class="row justify-content-center">
+  <div class="col-10">
+    <div class="mt-3 p-2 rounded bg-light">
+      <h4>Question table</h4>
+      <table class="table table-striped">
+        <thead>
+          <th scope="col-1">
+            <div class="btn"><b>#</b></div>
+          </th>
+          <th scope="col-3">
+            <div><b>ID</b></div>
+          </th>
+          <th scope="col-3">
+            <div><b>Title</b></div>
+          </th>
+          <th scope="col-3">
+            <div><b>Answer count</b></div>
+          </th>
+        </thead>
+        <tbody>
+        <tr *ngFor="let question of questions;let j=index;">
+          <th class="row justify-content-center">{{j+1}}</th>
+          <th>{{question.id}}</th>
+          <th>{{question.title}}</th>
+          <th>{{question.count}}</th>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

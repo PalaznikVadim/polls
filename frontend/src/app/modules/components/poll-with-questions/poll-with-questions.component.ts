@@ -64,8 +64,7 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
       this.answer.text = 'Answer' + (i + 1);
       this.quest.answers.push(this.answer);
     }
-    console.log(this.quest.answers);
-
+    this.errors=[];
     this.modalRef = this.modalService.show(template);
   }
 
@@ -77,7 +76,8 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
         }
         this.modalRef.hide()
       }, response => {
-        this.parseErrorResponse(response as HttpErrorResponse);
+      console.log(response);
+        this.parseErrorResponse(response);
       }
     );
   }
@@ -135,18 +135,24 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
         }
         this.modalRef.hide();
       }, response => {
-        this.parseErrorResponse(response as HttpErrorResponse);
+      console.log(response);
+        this.parseErrorResponse(response);
       }
     );
   }
 
   parseErrorResponse(response: HttpErrorResponse) {
-    if (this.errors != null)
+    if (this.errors.length!=0) {
       this.errors = [];
+    }
     let resError;
     for (let i = 0; i < response.error.length; i++) {
       resError = new ErrorModel();
-      resError.field = response.error[i].field;
+      if(response.error[i].objectName!='withoutAnswer') {
+        resError.field = response.error[i].field;
+      }else {
+        resError.field = response.error[i].objectName;
+      }
       resError.defaultMessage = response.error[i].defaultMessage;
       resError.code = response.error[i].code;
       resError.rejectedValue = response.error[i].rejectedValue;
@@ -155,13 +161,25 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
     console.log(this.errors);
   }
 
-  submit(id: number) {
-    console.log(id);
-    this.pollService.submitPoll(id).subscribe(poll => {
+  generateLink(){
+    const link=this.pollService.currPoll.link;
+    this.pollService.submitPoll(this.pollService.currPoll.id).subscribe(poll => {
       let quests = this.pollService.currPoll.questions;
       this.pollService.currPoll = poll;
       this.pollService.currPoll.questions = quests;
+      if(link) {
+        this.modalRef.hide();
+      }
     });
+  }
+
+  submit(templateSubmitConfirm: TemplateRef<any>) {
+    if(this.pollService.currPoll.link){
+      this.modalRef = this.modalService.show(templateSubmitConfirm);
+    }else{
+      this.generateLink();
+    }
+
   }
 
   checkErrorsForAnswerField(field: string, code: number, rejectedValue: string): boolean {
@@ -184,13 +202,15 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
     let errors: string[] = [];
     if (!this.isNew) {
       for (let i = 0; i < this.errors.length; i++) {
-        if (this.errors[i].field == fieldName && this.errors[i].rejectedValue == rejectedValue)
+        if (this.errors[i].field == fieldName && this.errors[i].rejectedValue == rejectedValue) {
           errors.push(this.errors[i].defaultMessage);
+        }
       }
     } else {
       for (let i = 0; i < this.errors.length; i++) {
-        if (this.errors[i].field == fieldName && this.errors[i].rejectedValue == rejectedValue)
+        if (this.errors[i].field == fieldName && this.errors[i].rejectedValue == rejectedValue) {
           errors.push(this.errors[i].defaultMessage);
+        }
       }
     }
     return errors;

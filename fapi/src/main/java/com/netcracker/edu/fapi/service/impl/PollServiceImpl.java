@@ -1,5 +1,6 @@
 package com.netcracker.edu.fapi.service.impl;
 
+import com.netcracker.edu.fapi.consts.FapiConsts;
 import com.netcracker.edu.fapi.converters.PollConverter;
 import com.netcracker.edu.fapi.converters.QuestionConverter;
 import com.netcracker.edu.fapi.models.Answer;
@@ -183,13 +184,6 @@ public class PollServiceImpl implements PollService {
     @Override
     public Page<ViewPoll> getPolls(int userId, String select, String theme, String substr,
                                    int page, int size, String sort, String order) {
-//        if (select.toLowerCase().equals("all")) {
-//            return findAllByUserId(userId, theme, substr, page, size, sort, order);
-//        } else if (select.toLowerCase().equals("drafts")) {
-//            return findDraftsByUserId(userId, theme, substr, page, size, sort, order);
-//        } else if (select.toLowerCase().equals("activePolls".toLowerCase())) {
-//            return findActivePollsByUserId(userId, theme, substr, page, size, sort, order);
-//        }
 
         switch (select){
             case "drafts":
@@ -205,7 +199,7 @@ public class PollServiceImpl implements PollService {
 
     private Pageable createPageable(int page, int size, String sort, String order) {
         Pageable pageable;
-        if (order.toLowerCase().contains("asc")) {
+        if (order.toLowerCase().contains(FapiConsts.ASC)) {
             pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());

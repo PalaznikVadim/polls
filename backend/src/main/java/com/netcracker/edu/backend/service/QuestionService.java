@@ -1,6 +1,7 @@
 package com.netcracker.edu.backend.service;
 
 import com.netcracker.edu.backend.entity.Question;
+import com.netcracker.edu.backend.entity.QuestionWithAnswerCount;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +14,6 @@ public interface QuestionService {
     Question save(Question question);
 
     void delete(int id);
+
+    List<QuestionWithAnswerCount> getDTO();
 }

@@ -1,5 +1,6 @@
 package com.netcracker.edu.backend.service.impl;
 
+import com.netcracker.edu.backend.consts.BackendConsts;
 import com.netcracker.edu.backend.entity.User;
 import com.netcracker.edu.backend.repository.UserRepository;
 import com.netcracker.edu.backend.service.UserService;
@@ -44,8 +45,7 @@ public class UserServiceImpl implements UserService {
 
     private Pageable createPageable(int page, int size, String sort, String order) {
         Pageable pageable;
-        System.out.println("page=" + page + " size=" + size + " sort=" + sort + " order=" + order);
-        if (order.toLowerCase().contains("asc")) {
+        if (order.toLowerCase().contains(BackendConsts.ASC)) {
             pageable = PageRequest.of(page, size, Sort.by(sort).ascending());
         } else {
             pageable = PageRequest.of(page, size, Sort.by(sort).descending());

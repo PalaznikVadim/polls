@@ -15,6 +15,7 @@
   </div>
 </nav>
 <div class="container">
+  <app-mess-component></app-mess-component>
   <div class="row justify-content-center">
     <div class="col-sm-2">
       <select [(ngModel)]="order" (change)="getUsers(1)" class="custom-select" size="1">
@@ -26,7 +27,7 @@
       <form class="form-inline row">
         <input type="text" class="form-control col-md-6" placeholder="Search" name="search" [(ngModel)]="search"
                required>
-        <button class="btn btn-success col-md-3" [disabled]="!search" (click)="getUsers(1)">Search</button>
+        <button class="btn btn-success col-md-3" [disabled]="!search.trim()" (click)="getUsers(1)">Search</button>
       </form>
     </div>
   </div>

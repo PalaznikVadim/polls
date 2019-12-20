@@ -25,6 +25,7 @@ public class QuestionValidator implements Validator {
     @Override
     public void validate(Object object, Errors errors) {
         ViewQuestion question = (ViewQuestion) object;
+        question.setTextTitle(question.getTextTitle().trim());
 
         if (question.getTextTitle().length() > 60 || question.getTextTitle().length() < 2)
             errors.rejectValue("textTitle", String.valueOf(question.getId()),

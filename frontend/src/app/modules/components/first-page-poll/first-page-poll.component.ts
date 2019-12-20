@@ -23,6 +23,7 @@ export class FirstPagePollComponent implements OnInit {
     this.subs=[];
     this.subs[this.countSubs++]=this.pollService.getPollByLink(this.pollLink).subscribe(poll=>{
       this.pollService.currPoll=poll;
+      localStorage.setItem('idCurrPoll',poll.id.toString());
     },
       error => {
         console.log(error);

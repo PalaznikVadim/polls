@@ -16,8 +16,8 @@ import {map, tap} from "rxjs/operators";
 export class PageWithPollsComponent implements OnInit, OnDestroy {
 
   private subs: any;
-  private indexCurrPoll: number;//?
-  private idCurrPoll: number;//?
+  private indexCurrPoll: number;
+  private idCurrPoll: number;
   private polls: PollModel[];
   private page: RestPageModel;
   private currentPage: number;
@@ -46,7 +46,6 @@ export class PageWithPollsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.select = 'all';
     this.search = '';
     this.currentPage = 1;
@@ -136,7 +135,7 @@ export class PageWithPollsComponent implements OnInit, OnDestroy {
   getPolls(page: number) {
     this.currentPage = page;
     this.subs[this.subs.length] = this.pollService.getPollsPageByUserId(this.idUser, this.select,
-      this.theme, this.search, this.currentPage - 1, this.size, this.sort, this.order)
+      this.theme, this.search.trim(), this.currentPage - 1, this.size, this.sort, this.order)
       .pipe(
         tap((pageResponse: RestPageModel) => {
           this.page = pageResponse;
@@ -175,6 +174,7 @@ export class PageWithPollsComponent implements OnInit, OnDestroy {
 
   exit() {
     localStorage.removeItem('token');
+    this.userService.currUser=null;
     this.router.navigate(['/']);
   }
 

@@ -1,10 +1,10 @@
-import {UserService} from "../user.service";
-import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
-import {Observable} from "rxjs";
 import {Injectable} from "@angular/core";
+import {ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot} from "@angular/router";
+import {UserService} from "../user.service";
+import {Observable} from "rxjs";
 
 @Injectable()
-export class AuthGuardService implements CanActivate {
+export class NotAuthGuardService implements CanActivate {
   constructor(private userService: UserService, public router: Router) {
   }
 
@@ -19,9 +19,9 @@ export class AuthGuardService implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    if (!this.isAuthenticated()) {
-      localStorage.setItem('err', 'Not authorized! Log in with your account');
-      this.router.navigate(['/']);
+    if (this.isAuthenticated()) {
+      localStorage.setItem('err', '');
+      this.router.navigate(['/home']);
       return false;
     }
     return true;

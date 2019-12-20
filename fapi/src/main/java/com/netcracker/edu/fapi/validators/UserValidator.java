@@ -28,7 +28,11 @@ public class UserValidator implements Validator {
     @Override
     public void validate(Object obj, Errors errors) {
         User user = (User) obj;
-        System.out.println("date" + user.getDateOfBirth());
+
+        user.setName(user.getName().trim());
+        user.setSurname(user.getSurname().trim());
+        user.setPassword(user.getPassword().trim());
+
 
         String regExEmail = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" +
                 "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";

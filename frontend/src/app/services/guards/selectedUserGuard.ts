@@ -9,8 +9,9 @@ export class SelectedUserGuard implements CanActivate {
   }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
-    console.log('selected',localStorage.getItem('token'));
+    console.log('selected', localStorage.getItem('token'));
     if (!this.hasSelectedUser()) {
+      localStorage.setItem('err', 'To view the profile you must select a user');
       this.router.navigate(['/userTable']);
       return false;
     }

@@ -23,6 +23,7 @@
 </nav>
 
 <div class="container">
+  <app-mess-component></app-mess-component>
   <div class="row mb-4 item">
     <div class="col-3 ml-0 mr-auto">
       <button *ngIf="userService.currUser?.role=='user'" type="button" class="btn btn-success float-left"
@@ -36,7 +37,7 @@
       <form class="form-inline row">
         <input type="text" class="form-control col-6" placeholder="Search" name="search" [(ngModel)]="search"
                required>
-        <button class="btn btn-success col-3" [disabled]="!search" (click)="getPolls(1)">
+        <button class="btn btn-success col-3" [disabled]="!search.trim()" (click)="getPolls(1)">
           <i class="fas fa-search"></i> Search
         </button>
       </form>
@@ -132,7 +133,8 @@
             <i class="fas fa-pencil-alt"></i> Edit
           </button>
           <button *ngIf="userService.currUser.role!='admin'" type="button" class="btn btn-sm btn-light"
-                  (click)="transferToStats(poll?.id,i)"><i class="fas fa-signal"></i> Stats
+                  (click)="transferToStats(poll?.id,i)" [disabled]="!poll?.link">
+            <i class="fas fa-signal"></i> Stats
           </button>
           <button type="button" class="btn btn-sm btn-danger" name="deletePoll"
                   (click)="confirm(templateConfirm,poll?.id,i)"><i class="far fa-trash-alt"></i> Delete
@@ -142,7 +144,7 @@
           <button type="button" class="btn btn-sm btn-light mr-1" (click)="goToPollQuestion(poll.id)">
             <i class="fas fa-eye"></i> View
           </button>
-          <button type="button" class="btn btn-sm btn-light" (click)="goToStat(poll.id)">
+          <button type="button" class="btn btn-sm btn-light" (click)="goToStat(poll.id)" [disabled]="!poll?.link">
             <i class="fas fa-signal"></i> Stats
           </button>
         </div>

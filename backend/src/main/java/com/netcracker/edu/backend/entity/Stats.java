@@ -7,8 +7,8 @@ import java.util.Objects;
 public class Stats {
     private int id;
     private int idAnswer;
-    private Integer count;
-    private Double percent;
+    private int count;
+    private double percent;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +37,7 @@ public class Stats {
         return count;
     }
 
-    public void setCount(Integer count) {
+    public void setCount(int count) {
         this.count = count;
     }
 
@@ -47,7 +47,7 @@ public class Stats {
         return percent;
     }
 
-    public void setPercent(Double percent) {
+    public void setPercent(double percent) {
         this.percent = percent;
     }
 

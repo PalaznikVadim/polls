@@ -6,6 +6,10 @@ export class AnswerModel {
   public idQuestion:number;
   public stats:StatsModel;
 
+  setText(text:string){
+    this.text=text.trim();
+  }
+
   constructor() {
   }
 }

@@ -62,7 +62,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   getUsers(page:number) {
     this.currentPage=page;
-    this.subs[this.subs.length] = this.userService.getAllUsers(this.search, this.currentPage - 1, this.size,
+    this.subs[this.subs.length] = this.userService.getAllUsers(this.search.trim(), this.currentPage - 1, this.size,
       this.sort, this.order).subscribe(page => {
       this.page = page as RestPageModel;
       this.users = this.page.content;
@@ -78,6 +78,7 @@ export class UserListComponent implements OnInit, OnDestroy {
 
   exit() {
     localStorage.removeItem('token');
+    this.userService.currUser=null;
     this.router.navigate(['/']);
   }
 }

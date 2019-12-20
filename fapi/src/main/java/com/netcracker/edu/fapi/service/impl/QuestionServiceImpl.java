@@ -5,6 +5,7 @@ import com.netcracker.edu.fapi.converters.QuestionConverter;
 import com.netcracker.edu.fapi.models.Answer;
 import com.netcracker.edu.fapi.models.Question;
 import com.netcracker.edu.fapi.models.Stats;
+import com.netcracker.edu.fapi.models.viewModels.QuestionWithAnswerCount;
 import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import com.netcracker.edu.fapi.service.AnswerService;
@@ -74,15 +75,23 @@ public class QuestionServiceImpl implements QuestionService {
         dataBinder.addValidators(questionValidator);
         dataBinder.validate();
 
-        if (dataBinder.getBindingResult().hasErrors())
+        if (dataBinder.getBindingResult().hasErrors()) {
             errorList.addAll(dataBinder.getBindingResult().getAllErrors());
+        }
 
-        for (ViewAnswer viewAnswer : viewAnswers) {
-            dataBinder = new DataBinder(viewAnswer);
-            dataBinder.addValidators(answerValidator);
-            dataBinder.validate();
-            if (dataBinder.getBindingResult().hasErrors())
-                errorList.addAll(dataBinder.getBindingResult().getAllErrors());
+        if(viewAnswers.size()!=0) {
+            for (ViewAnswer viewAnswer : viewAnswers) {
+                dataBinder = new DataBinder(viewAnswer);
+                dataBinder.addValidators(answerValidator);
+                dataBinder.validate();
+                if (dataBinder.getBindingResult().hasErrors()) {
+                    errorList.addAll(dataBinder.getBindingResult().getAllErrors());
+                }
+            }
+        }else{
+            errorList.add(
+                    new ObjectError("withoutAnswer",
+                            "Creating a question without answer options is prohibited"));
         }
 
         if (errorList.size() != 0) {
@@ -129,5 +138,13 @@ public class QuestionServiceImpl implements QuestionService {
             viewQuestions.add(questionConverter.convertViewQuestionToViewQuestionWithAnswers(question));
         }
         return viewQuestions;
+    }
+
+    @Override
+    public List<QuestionWithAnswerCount> getQuestionWithAnswerCount() {
+        RestTemplate restTemplate = new RestTemplate();
+
+        return Arrays.asList(restTemplate.getForObject(backendServerUrl +
+                "/api/question/withAnswerCount",QuestionWithAnswerCount[].class));
     }
 }

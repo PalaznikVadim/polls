@@ -1,5 +1,6 @@
 package com.netcracker.edu.fapi.service;
 
+import com.netcracker.edu.fapi.models.viewModels.QuestionWithAnswerCount;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import org.springframework.http.ResponseEntity;
 
@@ -17,4 +18,6 @@ public interface QuestionService {
     void updateStatsQuestion(int id);
 
     List<ViewQuestion> getPollStats(int idPoll);
+
+    List<QuestionWithAnswerCount> getQuestionWithAnswerCount();
 }

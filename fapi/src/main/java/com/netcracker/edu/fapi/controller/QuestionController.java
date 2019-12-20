@@ -1,5 +1,6 @@
 package com.netcracker.edu.fapi.controller;
 
+import com.netcracker.edu.fapi.models.viewModels.QuestionWithAnswerCount;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import com.netcracker.edu.fapi.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,5 +40,12 @@ public class QuestionController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteQuestion(@PathVariable int id) {
         questionService.delete(id);
+    }
+
+
+    @Secured({"ROLE_ADMIN"})
+    @RequestMapping(value = "/withAnswerCount")
+    public List<QuestionWithAnswerCount> getQuestionWithAnswerCount(){
+        return questionService.getQuestionWithAnswerCount();
     }
 }

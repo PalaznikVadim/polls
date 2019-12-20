@@ -20,7 +20,6 @@ public class StatsServiceImpl implements StatsService {
 
     @Override
     public Stats save(Stats stats) {
-        System.out.println(stats.toString());
         return statsRepository.save(stats);
     }
 }

@@ -5,9 +5,10 @@
     <div class="col-md-8 justify-content-center ">
       <form *ngIf="pollService.currPoll.link!=null;" class="form-inline row">
         <h1 class="h3 mb-3 font-weight-normal">Copy and send your respondents the link:</h1>
-        <input type="text" id="inputLink" class="form-control col-sm-9"
-               value="localhost:4301/firstPagePoll/{{pollService.currPoll.link}}" required autofocus>
-        <button class="btn btn-lg btn-primary col-sm-3" (click)="copyToClipboard()" type="submit">Copy</button>
+<!--        <input type="text" id="inputLink" class="form-control col-sm-9" -->
+<!--               value="localhost:4301/firstPagePoll/{{pollService.currPoll.link}}" required autofocus>-->
+        <h3 id="link">{{link}}</h3>
+        <button class="btn btn-lg btn-primary col-sm-3 ml-2" ngxClipboard [cbContent]="link" >Copy</button>
       </form>
       <div *ngIf="pollService.currPoll.link==null" class="text-center"><h2>This poll has been saved as draft.</h2></div>
     </div>

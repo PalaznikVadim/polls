@@ -56,17 +56,22 @@ export class NewPollTitleComponent implements OnInit, OnDestroy {
   addPoll() {
     if (this.poll.id == null) {
       this.poll.idUser = this.userService.currUser.id;
-      if (this.userService.currUser.role == 'admin')
+      if (this.userService.currUser.role == 'admin') {
         this.poll.shared = 'Yes';
-      else
+      }else {
         this.poll.shared = 'No';
+      }
       this.poll.status = 'active';
     }
     console.log(this.poll);
     this.subs[this.countSubs++] = this.pollService.savePoll(this.poll).subscribe(value => {
         localStorage.setItem('index', (0).toString());
         this.pollService.currPoll = value;
-        this.router.navigate(['creation_poll']);
+        if(this.userService.currUser.role=='user') {
+          this.router.navigate(['creation_poll']);
+        }else {
+          this.router.navigate(['templateCreation'])
+        }
       }, response => {
         if (this.errors != null)
           this.errors = [];
