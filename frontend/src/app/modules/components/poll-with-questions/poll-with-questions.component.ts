@@ -54,17 +54,18 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
   addQuest(template: TemplateRef<any>) {
     this.isNew = true;
     this.quest = new QuestionModel();
-    this.quest.textTitle = 'Enter question title';
     this.quest.required = 'No';
     this.quest.type = 'radio';
     this.quest.idPoll = this.pollService.currPoll.id;
     this.quest.answers = [] as AnswerModel[];
     for (let i = 0; i < 3; i++) {
       this.answer = new AnswerModel();
-      this.answer.text = 'Answer' + (i + 1);
       this.quest.answers.push(this.answer);
     }
-    this.errors=[];
+
+    console.log(this.quest);
+
+    this.errors = [];
     this.modalRef = this.modalService.show(template);
   }
 
@@ -76,7 +77,7 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
         }
         this.modalRef.hide()
       }, response => {
-      console.log(response);
+        console.log(response);
         this.parseErrorResponse(response);
       }
     );
@@ -98,13 +99,11 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
 
   addNewAnswer() {
     this.answer = new AnswerModel();
-    this.answer.text = 'Answer';
     this.quest.answers.push(this.answer);
   }
 
   deleteAnswer(index: number) {
     if (this.quest.answers[index].id != null) {
-      console.log(this.quest.answers[index].id);
       this.answerService.deleteById(this.quest.answers[index].id).subscribe(event => {
         this.quest.answers.splice(index, 1);
       });
@@ -135,22 +134,22 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
         }
         this.modalRef.hide();
       }, response => {
-      console.log(response);
+        console.log(response);
         this.parseErrorResponse(response);
       }
     );
   }
 
   parseErrorResponse(response: HttpErrorResponse) {
-    if (this.errors.length!=0) {
+    if (this.errors.length != 0) {
       this.errors = [];
     }
     let resError;
     for (let i = 0; i < response.error.length; i++) {
       resError = new ErrorModel();
-      if(response.error[i].objectName!='withoutAnswer') {
+      if (response.error[i].objectName != 'withoutAnswer') {
         resError.field = response.error[i].field;
-      }else {
+      } else {
         resError.field = response.error[i].objectName;
       }
       resError.defaultMessage = response.error[i].defaultMessage;
@@ -161,22 +160,22 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
     console.log(this.errors);
   }
 
-  generateLink(){
-    const link=this.pollService.currPoll.link;
+  generateLink() {
+    const link = this.pollService.currPoll.link;
     this.pollService.submitPoll(this.pollService.currPoll.id).subscribe(poll => {
       let quests = this.pollService.currPoll.questions;
       this.pollService.currPoll = poll;
       this.pollService.currPoll.questions = quests;
-      if(link) {
+      if (link) {
         this.modalRef.hide();
       }
     });
   }
 
   submit(templateSubmitConfirm: TemplateRef<any>) {
-    if(this.pollService.currPoll.link){
+    if (this.pollService.currPoll.link) {
       this.modalRef = this.modalService.show(templateSubmitConfirm);
-    }else{
+    } else {
       this.generateLink();
     }
 
@@ -214,6 +213,18 @@ export class PollWithQuestionsComponent implements OnInit, OnDestroy {
       }
     }
     return errors;
+  }
+
+  isValidQuest(): boolean {
+    if (!this.quest.textTitle||!this.quest.textTitle.trim().length){
+      return false;
+    }
+    for (let i=0;i<this.quest.answers.length;i++) {
+      if (!this.quest.answers[i].text||!this.quest.answers[i].text.trim().length) {
+        return false;
+      }
+    }
+    return true;
   }
 
   confirm() {

@@ -64,8 +64,8 @@
 <ng-template #modalAddQuest>
   <div class="modal-header">
     <div class="col-11">
-      <input [(ngModel)]="quest.textTitle" type="text" class="form-control mr-sm-2" value="..." required maxlength="60"
-             #textTitle="ngModel">
+      <input [(ngModel)]="quest.textTitle" type="text" class="form-control mr-sm-2 focus" placeholder="Enter question title"
+             required maxlength="60" #textTitle="ngModel" >
       <div [hidden]="textTitle.valid || textTitle.untouched" class="alert alert-danger">
         Incorrect length field( ..< 45 charaсters)*front
       </div>
@@ -100,9 +100,9 @@
     <ul>
       <li *ngFor="let answer of quest.answers;let i = index" class="form-inline">
         <input type="text" class="form-control mr-sm-2 col-10 " [(ngModel)]="quest.answers[i].text" #text="ngModel"
-               required maxlength="60">
-        <button class="btn btn-outline-danger my-2 my-sm-0 mr-sm-0 " [disabled]="quest.answers.length==1" (click)="deleteAnswer(i)">
-          <i class="fas fa-trash-alt"></i>
+               required maxlength="60" placeholder="Enter answer">
+        <button class="btn btn-outline-danger my-2 my-sm-0 mr-sm-0 " [disabled]="quest.answers.length==2"
+                (click)="deleteAnswer(i)"><i class="fas fa-trash-alt"></i>
         </button>
         <div *ngIf="checkErrorsForAnswerField('text',answer.id,answer.text)">
           <div class="alert alert-danger"
@@ -125,9 +125,9 @@
     </div>
   </div>
   <div class="modal-footer">
-    <button *ngIf="isNew" [disabled]="!quest?.answers.length" type="button" class="btn btn-primary"
+    <button *ngIf="isNew" [disabled]="!isValidQuest()" type="button" class="btn btn-primary"
             (click)="createQuestion()">Create</button>
-    <button *ngIf="!isNew" [disabled]="!quest?.answers.length" type="button" class="btn btn-primary"
+    <button *ngIf="!isNew" [disabled]="!isValidQuest()" type="button" class="btn btn-primary"
             (click)="updateQuestion()">Update</button>
   </div>
 </ng-template>

@@ -10,17 +10,6 @@ import java.util.Objects;
 public class TypeQuestion {
     private int id;
     private Type type;
-    private String description;
-
-    @Basic
-    @Column(name = "description")
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -63,7 +52,6 @@ public class TypeQuestion {
         return "TypeQuestion{" +
                 "id=" + id +
                 ", type=" + type +
-                ", description='" + description + '\'' +
                 '}';
     }
 }

@@ -5,7 +5,6 @@ import com.netcracker.edu.fapi.models.Question;
 import com.netcracker.edu.fapi.models.viewModels.ViewAnswer;
 import com.netcracker.edu.fapi.models.viewModels.ViewQuestion;
 import com.netcracker.edu.fapi.service.AnswerService;
-import com.netcracker.edu.fapi.service.QuestionService;
 import com.netcracker.edu.fapi.service.TypeQuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,8 +17,6 @@ public class QuestionConverter {
 
     @Autowired
     private TypeQuestionService typeQuestionService;
-    @Autowired
-    private QuestionService questionService;
     @Autowired
     private AnswerService answerService;
     @Autowired

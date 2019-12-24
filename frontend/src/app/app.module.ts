@@ -18,7 +18,6 @@ import {PollService} from "./services/poll.service";
 import {PollComponent} from './modules/components/poll/poll.component';
 import {AccordionModule, AlertModule, ButtonsModule, PaginationModule, TabsModule} from "ngx-bootstrap";
 import {FirstPagePollComponent} from './modules/components/first-page-poll/first-page-poll.component';
-import {LastPagePollComponent} from './modules/components/last-page-poll/last-page-poll.component';
 import {StatsComponent} from './modules/components/stats/stats.component';
 import {UserService} from "./services/user.service";
 import {ThemeService} from "./services/theme.service";
@@ -52,7 +51,6 @@ const appRoutes: Routes = [
   {path: "newPoll", component: NewPollTitleComponent,canActivate:[AuthGuardService]},
   {path: 'poll', component: PollComponent, canActivate:[PolledGuardService]},
   {path: 'poll/:link', component: FirstPagePollComponent},
-  {path: 'lastPagePoll', component: LastPagePollComponent},
   {path: 'stats', component: StatsComponent, canActivate: [PollGuardService]},
   {path: 'pollLink', component: GenerateLinkComponent, canActivate: [UserGuardService, PollGuardService]},
   {path: 'userTable', component: UserListComponent, canActivate: [AuthGuardService, AdminGuardService]},
@@ -108,7 +106,6 @@ export function loadUser(http: HttpClient, userService: UserService) {
     GenerateLinkComponent,
     PollComponent,
     FirstPagePollComponent,
-    LastPagePollComponent,
     StatsComponent,
     UserListComponent,
     ListTemplatesComponent,

@@ -32,7 +32,6 @@ public class UserController {
 
     @GetMapping("/signin")
     public ResponseEntity<?> getUserByEmail(@RequestParam String email, @RequestParam String password) {
-
         return tokenService.authenticate(email, password);
     }
 
